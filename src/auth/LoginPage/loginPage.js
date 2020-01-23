@@ -59,7 +59,7 @@ class LoginPage extends React.Component {
 
     render() {
         const {classes} = this.props;
-        console.log(this.props)
+        console.log('jjjjj',this.props)
         return (
             <div>
                 <Formik
@@ -68,9 +68,10 @@ class LoginPage extends React.Component {
                     password: ''
                 }}
                 onSubmit={(values)=> {
-                    const { dispatch } = this.props;
+                    const { dispatch, history } = this.props;
                     if (values) {
                         dispatch(userActions.login(values.username, values.password));
+                        history.push('/dashboard')
                     }
                           }}
 

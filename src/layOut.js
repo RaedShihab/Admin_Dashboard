@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import SideBar from './sideBar'
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { 
         AppBar,
         Toolbar,

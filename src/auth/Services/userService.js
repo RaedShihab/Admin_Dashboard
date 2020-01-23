@@ -1,6 +1,6 @@
 // import config from 'config';
 import { authHeader } from '../Helpers/authHeader';
-import {apiUrl} from '../../api';
+// import {apiUrl} from '../../api';
 
 export const userService = {
     login,
