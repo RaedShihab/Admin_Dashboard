@@ -102,7 +102,7 @@ const useStyles = makeStyles(theme => ({
         {/* <Divider /> */}
         <List>
             <ListItem button>
-              <ListItemIcon><a href="/dashboard"><DashboardIcon/></a></ListItemIcon>
+              <ListItemIcon><a href="/"><DashboardIcon/></a></ListItemIcon>
               <ListItemText primary={'Dashboard'} />
             </ListItem>
         </List>
