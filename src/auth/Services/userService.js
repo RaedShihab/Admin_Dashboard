@@ -1,5 +1,6 @@
 // import config from 'config';
 import { authHeader } from '../Helpers/authHeader';
+import {apiUrl} from '../../api';
 
 export const userService = {
     login,
@@ -14,6 +15,7 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
+    // return fetch(`${apiUrl}/api/login/email`, requestOptions)
     return fetch(`/users/authenticate`, requestOptions)
         .then(handleResponse)
         .then(user => {

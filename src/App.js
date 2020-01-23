@@ -6,6 +6,9 @@ import { history } from './auth/Helpers/history';
 import { alertActions } from './auth/Actions/alertAction';
 import { PrivateRoute } from './auth/Components/privateRoutes';
 import { HomePage } from './auth/HomePage/homePage';
+import UserTable from './view/userList/usersTable';
+import Adduser from './view/userList/addUser/addUser';
+import UserUpdate from './view/userList/updateUser/infoForm'
 import LoginPage from './auth/LoginPage/loginPage';
 
 class App extends React.Component {
@@ -31,6 +34,9 @@ class App extends React.Component {
                         <Router history={history}>
                             <div>
                                 <PrivateRoute exact path="/" component={HomePage} />
+                                <PrivateRoute exact path="/users" component={UserTable} />
+                                <PrivateRoute exact path="/users/add-user" component={Adduser} />
+                                <PrivateRoute exact path="/users/update/:id" component={UserUpdate} />
                                 <Route path="/login" component={LoginPage} />
                             </div>
                         </Router>
