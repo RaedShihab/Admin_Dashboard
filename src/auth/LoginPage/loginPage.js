@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import {Container, Box, Grid, Link, Avatar, Typography} from '@material-ui/core';
+import {Radio , FormControlLabel, FormControl, FormLabel, RadioGroup, Paper} from '@material-ui/core';
+import { withTranslation, Trans } from "react-i18next";
 import { userActions } from '../Actions/userAcion';
 import { withStyles } from '@material-ui/core/styles';
 import LockIcon from '@material-ui/icons/Lock';
@@ -47,21 +49,36 @@ function Copyright() {
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
+    group: {
+      display: 'inline-block',
+      marginLeft: 90
+    }
   }));
 
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+          value: "en"
+        };
         // reset login status
         this.props.dispatch(userActions.logout());
     }
-
+  
+    handleChange = event => {
+      console.log("selected val is ", event.target.value);
+      let newlang = event.target.value;
+      this.setState(prevState => ({ value: newlang }));
+      console.log("state value is", newlang);
+      this.props.i18n.changeLanguage(newlang);
+    };
     render() {
-        const {classes} = this.props;
+        const {classes, t, i18n} = this.props;
         console.log('jjjjj',this.props)
         return (
             <div>
+              <Grid item xs={12}>
+                 </Grid>
                 <Formik
                 initialValues={{
                     username: '',
@@ -72,9 +89,8 @@ class LoginPage extends React.Component {
                     if (values) {
                         dispatch(userActions.login(values.username, values.password));
                         history.push('/dashboard')
-                    }
+                        }
                           }}
-
                           render={
                             (props)=> {
                               return <div className={classes.paper}>
@@ -82,18 +98,43 @@ class LoginPage extends React.Component {
                                     <LockIcon />
                                   </Avatar>
                                   <Typography component="h1" variant="h5">
-                                    Sign in
+                                  {t(
+                                      "Sign in"
+                                    )} 
                                   </Typography>
                               <form className={classes.form} onSubmit={props.handleSubmit}>
                                       <Container component="main" maxWidth="xs">
                                       <CssBaseline />
+                                      <FormControl
+                                      component="fieldset"
+                                      className={classes.formControl}
+                                    >
+                                      <RadioGroup
+                                        aria-label="Gender"
+                                        name="gender1"
+                                        className={classes.group}
+                                        // value={this.state.value}
+                                        onChange={this.handleChange}
+                                      >
+                                        <FormControlLabel
+                                          value="en"
+                                          control={<Radio />}
+                                          label="English"
+                                        />
+                                        <FormControlLabel
+                                          value="ar"
+                                          control={<Radio />}
+                                          label="Arabic"
+                                        />
+                                      </RadioGroup>
+                                    </FormControl>
                                       <TextField
                                        variant="outlined"
                                        margin="normal"
                                        required
                                        fullWidth
                                        helperText={(props.errors.username && props.touched.username) && props.errors.username}
-                                       label="Email Address"
+                                       label={t("User Name")}
                                        name="username"
                                         onChange={props.handleChange}
                                       />
@@ -103,7 +144,7 @@ class LoginPage extends React.Component {
                                        required
                                        fullWidth
                                        helperText={(props.errors.password && props.touched.password) && props.errors.password}
-                                       label="Password"
+                                       label={t("Passowrd")}
                                        name="password"
                                        onChange={props.handleChange}
                                       />
@@ -114,17 +155,17 @@ class LoginPage extends React.Component {
                                         fullWidth
                                         className={classes.submit}
                                       >
-                                        Sign In
+                                        {t("Sign in")}
                                       </Button>
                                       <Grid container>
                                   <Grid item xs>
                                     <Link href="#" variant="body2">
-                                      Forgot password? 
+                                      {t("Forgot password")}
                                     </Link>
                                   </Grid>
                                   <Grid item>
                                     <Link href="#" variant="body2">
-                                      {"Don't have an account? Sign Up"}
+                                      {t("Don't have an account? Sign Up")}
                                     </Link>
                                   </Grid>
                                </Grid>
@@ -153,6 +194,7 @@ function mapStateToProps(state) {
 const connectedLoginPage = compose(
     withStyles(useStyles),
     connect(mapStateToProps),
+    withTranslation("translations")
   )(LoginPage);
 
   export default connectedLoginPage;
