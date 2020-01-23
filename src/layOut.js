@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { withTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import SideBar from './sideBar'
@@ -10,6 +11,8 @@ import {
         Typography,
         IconButton, 
       } from '@material-ui/core';
+      import {Radio , FormControlLabel, RadioGroup} from '@material-ui/core';
+
 import LanguageIcon from '@material-ui/icons/Language';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -76,10 +79,24 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  group: {
+    display: 'inline-block',
+    marginLeft: 90,
+  }
 }));
 
  function LayOut(props) {
   const classes = useStyles();
+  const [value, setValue] = useState({
+    lang: "en"
+  })
+  const handleChange = event => {
+    console.log("selected val is ", event.target.value);
+    let newlang = event.target.value;
+    setValue(prevState => ({ lang: newlang }));
+    console.log("state value is", newlang);
+    props.i18n.changeLanguage(newlang);
+  };
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     if(open)  {setOpen(false);}
@@ -143,7 +160,7 @@ const useStyles = makeStyles(theme => ({
             <LanguageIcon />
           </IconButton>
           <Typography stayle={{marginLeft: 10}} variant="h6" noWrap>
-            Mini variant drawer
+            Admin Dashboard
           </Typography>
           <IconButton
           style={{position: 'absolute', right: logOutIconPos.right}}
@@ -153,6 +170,25 @@ const useStyles = makeStyles(theme => ({
           >
             <Link style={{color: 'white'}} to="/login"><ExitToAppIcon/></Link>
           </IconButton>
+          <RadioGroup
+            aria-label="Gender"
+            name="gender1"
+            className={classes.group}
+            value={value}
+            onChange={handleChange}
+          >
+            <FormControlLabel
+              value="en"
+              control={<Radio />}
+              label="English"
+              color="inheri"
+            />
+            <FormControlLabel
+              value="ar"
+              control={<Radio />}
+              label="Arabic"
+            />
+          </RadioGroup>
         </Toolbar>
       </AppBar>
       <SideBar open={open}/>
@@ -178,9 +214,9 @@ const useStyles = makeStyles(theme => ({
 //     logout: ()=> dispatch(LOGOUT_ACTION())
 //   }
 // }
-export default (LayOut);
+export default withTranslation('translations')(LayOut);
 
-
+// export default withStyles(styles)(translate("translations")(App));
 
 
 

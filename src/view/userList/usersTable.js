@@ -1,18 +1,22 @@
 import React from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
+import { withTranslation } from "react-i18next";
+import {Link} from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteUser from './DeleteUser'
-import LayOut from '../../layOut'
-import {TableRow, Typography, Button, Container, Avatar, } from '@material-ui/core';
-import {Link} from 'react-router-dom'
+import DeleteUser from './DeleteUser';
+import LayOut from '../../layOut';
+import {TableRow, 
+  Typography, 
+  Button, 
+  Avatar, 
+  withStyles, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead,
+  Paper,
+} from '@material-ui/core';
 
-import InputIcon from '@material-ui/icons/Input'
-import Paper from '@material-ui/core/Paper';
 import ApiService from '../../services/apis'
 
 const StyledTableCell = withStyles(theme => ({
@@ -33,18 +37,6 @@ const StyledTableRow = withStyles(theme => ({
   },
 }))(TableRow);
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 const useStyles = ({
   table: {
     minWidth: 700,
@@ -55,7 +47,6 @@ const useStyles = ({
       textAlign: 'center'
   }
 });
-// const classes = useStyles();
 
 class CustomizedTables extends React.Component {
   state= {
@@ -65,28 +56,27 @@ class CustomizedTables extends React.Component {
     ApiService.fetchUsers().then(res => this.setState({users: res.data}))
   }
   render() {
-    console.log(this.state.users)
-    const {classes} = this.props
+    const {classes, t} = this.props
     return(
       <LayOut>
         <TableContainer component={Paper}>
       <div >
       <Typography className={classes.title} variant="h5" component="h2">
-          User Table
+          {t("User Table")}
           <Button className={classes.title} variant="contained" color="primary" href="/users/add-user">
-            ADD USER
+            {t("ADD USER")}
           </Button>
         </Typography>
       </div>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell align="right">User Name</StyledTableCell>
-            <StyledTableCell align="right">Email</StyledTableCell>
-            <StyledTableCell align="right">Phone</StyledTableCell>
-            <StyledTableCell align="right">Edit</StyledTableCell>
-            <StyledTableCell align="right">Delete</StyledTableCell>
+            <StyledTableCell>{t("Name")}</StyledTableCell>
+            <StyledTableCell align="right">{t("User Name")}</StyledTableCell>
+            <StyledTableCell align="right">{t("Email")}</StyledTableCell>
+            <StyledTableCell align="right">{t("Phone")}</StyledTableCell>
+            <StyledTableCell align="right">{t("Edit")}</StyledTableCell>
+            <StyledTableCell align="right">{t("Delete")}</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -128,4 +118,4 @@ class CustomizedTables extends React.Component {
     );
   }
 }
-  export default withStyles(useStyles)(CustomizedTables)
+export default withStyles(useStyles)(withTranslation("translations")(CustomizedTables));

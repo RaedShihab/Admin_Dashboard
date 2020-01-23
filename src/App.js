@@ -16,6 +16,7 @@ import AddPost from './view/posts/addPost/infoForm';
 import updatePost from './view/posts/updatePost/infoForm';
 
 import LoginPage from './auth/LoginPage/loginPage';
+import { Button } from '@material-ui/core';
 
 class App extends React.Component {
     constructor(props) {

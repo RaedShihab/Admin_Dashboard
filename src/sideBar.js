@@ -1,6 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import { withTranslation } from "react-i18next";
+
 import { Drawer,
     List,
     ListItem, 
@@ -77,6 +79,7 @@ const useStyles = makeStyles(theme => ({
 
  const SideBar = (props)=> {
         const classes = useStyles();
+        const {t} = props;
         // const theme = useTheme();
          return(
             <Drawer
@@ -103,31 +106,30 @@ const useStyles = makeStyles(theme => ({
         <List>
             <ListItem button>
               <ListItemIcon><a href="/"><DashboardIcon/></a></ListItemIcon>
-              <ListItemText primary={'Dashboard'} />
+              <ListItemText primary={t('Dashboard')} />
             </ListItem>
         </List>
         {/* <Divider /> */}
         <List>
             <ListItem button>
               <ListItemIcon><a href="/users"><PeopleIcon/></a></ListItemIcon>
-              <ListItemText primary={'Users'} />
+              <ListItemText primary={t('Users')} />
             </ListItem>
         </List>
         <List>
             <ListItem button>
               <ListItemIcon><a href="/posts"><PostAddIcon/></a></ListItemIcon>
-              <ListItemText primary={'Posts'} />
+              <ListItemText primary={t('Posts')} />
             </ListItem>
         </List>
         <List>
             <ListItem button>
               <ListItemIcon><a href="/posts"><PostAddIcon/></a></ListItemIcon>
-              <ListItemText primary={'Users'} />
+              <ListItemText primary={t('Users')} />
             </ListItem>
         </List>
       </Drawer>
          );
      }
 
-     export default SideBar;
-  
+     export default (withTranslation("translations")(SideBar));

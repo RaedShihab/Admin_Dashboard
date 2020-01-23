@@ -6,8 +6,8 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import {Container, Box, Grid, Link, Avatar, Typography} from '@material-ui/core';
-import {Radio , FormControlLabel, FormControl, FormLabel, RadioGroup, Paper} from '@material-ui/core';
-import { withTranslation, Trans } from "react-i18next";
+import {Radio , FormControlLabel, FormControl, RadioGroup} from '@material-ui/core';
+import { withTranslation } from "react-i18next";
 import { userActions } from '../Actions/userAcion';
 import { withStyles } from '@material-ui/core/styles';
 import LockIcon from '@material-ui/icons/Lock';
@@ -73,7 +73,7 @@ class LoginPage extends React.Component {
       this.props.i18n.changeLanguage(newlang);
     };
     render() {
-        const {classes, t, i18n} = this.props;
+        const {classes, t} = this.props;
         console.log('jjjjj',this.props)
         return (
             <div>
