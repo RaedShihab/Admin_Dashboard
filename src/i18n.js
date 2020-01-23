@@ -1,40 +1,15 @@
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import {engTranslation, arabTranslation} from  './local';
 
 i18n.use(LanguageDetector).init({
   // we init with resources
   resources: {
     en: {
-      translations: {
-        Introduction: "Introduction",
-        "Sign in":
-          "Sign in",
-        username: "User Name",
-        "User Name": "User Name",
-        passowrd: "Passowrd",
-        "Passowrd": "Passowrd",
-        forget_password: "Forgot password",
-        "Forgot password": "Forgot password",
-        signUp: "Don't have an account? Sign Up",
-        "Don't have an account? Sign Up": "Don't have an account? Sign Up"
-      }
+      translations: engTranslation
     },
     ar: {
-      translations: {
-        Introduction: "Introduction",
-        "Sign in":
-          "تسجيل الدخول",
-        username: "User Name",
-        "User Name":
-          "أدخل أسم المستخدم",
-          passowrd: "Passowrd",
-        "Passowrd": "رمز المرور",
-        forget_password: "Forgot password",
-        "Forgot password": "نسيت طلمة المرور؟",
-        signUp: "Don't have an account? Sign Up",
-        "Don't have an account? Sign Up": "ليس لديك حساب؟ سجل من هنا"
-
-      }
+      translations: arabTranslation
     }
   },
   fallbackLng: "en",
