@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable linebreak-style */
 import React from 'react';
+import { withTranslation } from "react-i18next";
 import {TextField, Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
@@ -8,11 +9,11 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import LayOut from '../../../layOut'
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string('Enter a name').required('Pleaes add a post')
-  .min(2, 'Seems a bit short...')
-  .max(300, 'We prefer insecure system, try a shorter password.')
-});
+// const validationSchema = Yup.object().shape({
+//   name: Yup.string('Enter a name').required(t('pleaes_add_post'))
+//   .min(2, 'Seems a bit short...')
+//   .max(300, 'We prefer insecure system, try a shorter password.')
+// });
 
 class InfoForm extends React.Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class InfoForm extends React.Component {
    };
 
    render() {
+     const {t} = this.props
      return (
        <div>
          <Formik
@@ -139,10 +141,14 @@ class InfoForm extends React.Component {
                </LayOut>
              }
            }
-           validationSchema={validationSchema}
+           validationSchema={Yup.object().shape({
+            name: Yup.string('Enter a name').required(t('pleaes_add_post'))
+            .min(2, 'Seems a bit short...')
+            .max(300, 'We prefer insecure system, try a shorter password.')
+          })}
          />
        </div>
      );
    }
 }
-export default InfoForm
+export default withTranslation("translations")(InfoForm);

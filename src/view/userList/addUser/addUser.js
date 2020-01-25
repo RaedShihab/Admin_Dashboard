@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { withTranslation } from "react-i18next";
 import LayOut from '../../../layOut'
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -19,17 +20,6 @@ const useStyles = (theme => ({
     margin: '80px 0px 0px 0px'
   }
 }));
-const validationSchema = Yup.object().shape({
-  name: Yup.string('Enter a name').required('Name is required')
-  .min(2, 'Seems a bit short...')
-  .max(10, 'We prefer insecure system, try a shorter password.'),
-  email: Yup.string('Enter your email')
-    .email('Enter a valid email')
-    .required('Email is required'),
-    password: Yup.string().required('Password is required'),
-    password_confirmation: Yup.string()
-       .oneOf([Yup.ref('password'), null], 'Passwords must match')
-});
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -50,9 +40,8 @@ class UserForm extends React.Component {
     })
   };
   render() {
-    // const {classes} = this.props 
+    const {t} = this.props;
     return (
-      <LayOut>
         <div>
       <Formik
         initialValues={{
@@ -66,16 +55,32 @@ class UserForm extends React.Component {
           this.setState({
             showLoading:true
           })
+          axios.post('https://jsonplaceholder.typicode.com/users', data)
+                 .then(res =>{
+                   console.log(res)
+                   this.setState({
+                     showLoading: false,
+                     openSnackSucc: true,
+                   })
+                 })
+                 .catch(err => {
+                   console.log(err)
+                   this.setState({
+                     openSnackErr:true,
+                     showLoading: false,
+                   })
+                 })
         }
         }
         render={(props=> {
-          return <form
+          return <LayOut>
+           <form
             form
             onSubmit={props.handleSubmit}
                  >
             <React.Fragment>
               <Typography style={{marginBottom: 10}} variant='h5'>
-                     Add User
+                    {t("add_user")}
               </Typography>
               <Grid
                 container
@@ -90,7 +95,7 @@ class UserForm extends React.Component {
                     autoComplete="fname"
                     fullWidth
                     helperText={(props.errors.name && props.touched.name) && props.errors.name}
-                    label="User Name"
+                    label={t("user_name")}
                     name="name"
                     onChange={props.handleChange}
                   />
@@ -104,7 +109,7 @@ class UserForm extends React.Component {
                     autoComplete="fname"
                     fullWidth
                     helperText={(props.errors.email && props.touched.name) && props.errors.email}
-                    label="Email"
+                    label={t("email")}
                     name="email"
                     onChange={props.handleChange}
                   />
@@ -115,10 +120,11 @@ class UserForm extends React.Component {
                   xs={12}
                 >
                   <TextField
+                  type='password'
                     autoComplete="fname"
                     fullWidth
                     helperText={(props.errors.password && props.touched.password) && props.errors.password}
-                    label="Password"
+                    label={t("password")}
                     name="password"
                     onChange={props.handleChange}
                   />
@@ -129,10 +135,11 @@ class UserForm extends React.Component {
                   xs={12}
                 >
                   <TextField
+                  type='password'
                     autoComplete="fname"
                     fullWidth
                     helperText={(props.errors.password_confirmation && props.touched.password_confirmation) && props.errors.password_confirmation}
-                    label="Password Confirmation"
+                    label={t("password_confirmation")}
                     name="password_confirmation"
                     onChange={props.handleChange}
                   />
@@ -144,7 +151,7 @@ class UserForm extends React.Component {
                 type="submit"
                 variant="contained"
               >
-                {!this.state.showLoading&&'add'} 
+                {!this.state.showLoading&&t('add')} 
                 {this.state.showLoading&&<CircularProgress
                   color="inherit"
                   size={23}
@@ -161,7 +168,7 @@ class UserForm extends React.Component {
                     severity="success"
                     style={{backgroundColor: 'green', color: 'white'}}
                   >
-                    The User Has Added Successfuly
+                    {t("the_user_has_added_successfuly")}
                   </Alert>
                 </Snackbar>
                 <Snackbar
@@ -174,18 +181,29 @@ class UserForm extends React.Component {
                     severity="error"
                     style={{backgroundColor: 'red', color: 'white'}}
                   >
-                    Please, Try Again.
+                    {t("please_try_again")}
                   </Alert>
                 </Snackbar>
               </div>
             </React.Fragment>
           </form>
+          </LayOut>
         })}
-        validationSchema={validationSchema}
+        validationSchema={Yup.object().shape({
+          name: Yup.string('Enter a name').required(t('name_is_required'))
+          .min(2, 'Seems a bit short...')
+          .max(10, 'We prefer insecure system, try a shorter password.'),
+          email: Yup.string('Enter your email')
+            .email('Enter a valid email')
+            .required(t("emailRequired")),
+            password: Yup.string().required(t('password_is_required')),
+            password_confirmation: Yup.string()
+               .oneOf([Yup.ref('password'), null], t('passwords_must_match'))
+        })}
       />
     </div>
-      </LayOut>
     );
   }
 }
-  export default withStyles(useStyles)(UserForm);
+
+export default withStyles(useStyles)(withTranslation("translations")(UserForm));

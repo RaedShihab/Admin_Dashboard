@@ -6,17 +6,18 @@ import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import LayOut from '../../../layOut'
+import LayOut from '../../../layOut';
+import { withTranslation } from "react-i18next";
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-const validationSchema = Yup.object().shape({
-  name: Yup.string('Enter a name').required('Name is required'),
-  email: Yup.string('Enter your email')
-    .email('Enter a valid email')
-    .required('Email is required'),
-  phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Phone Number is required'),
-  location: Yup.string('Enter your adress').required('The address is required'),
-});
+// const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+// const validationSchema = Yup.object().shape({
+//   name: Yup.string('Enter a name').required('Name is required'),
+//   email: Yup.string('Enter your email')
+//     .email('Enter a valid email')
+//     .required('Email is required'),
+//   phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Phone Number is required'),
+//   location: Yup.string('Enter your adress').required('The address is required'),
+// });
 
 class InfoForm extends React.Component {
   constructor(props) {
@@ -40,22 +41,23 @@ class InfoForm extends React.Component {
    };
 
    render() {
+     const {t}  = this.props
      console.log('llll',this.props)
      return (
        <div>
          <Formik
            initialValues={{
-             name: '',
-             email:'',
-             phone:'',
-             location:''
+            name:'',
+            email:'',
+            password:'',
+            password_confirmation:''
            }}
            onSubmit = {
              values=> {
                this.setState({
                  showLoading:true
                })
-               axios.post('https://jsonplaceholder.typicode.com/users', values)
+               axios.put('https://jsonplaceholder.typicode.com/users', values)
                  .then(res =>{
                    console.log(res)
                    this.setState({
@@ -78,7 +80,7 @@ class InfoForm extends React.Component {
                   <form onSubmit={props.handleSubmit}>
                  <React.Fragment>
                  <Typography style={{marginBottom: 10}} variant='h5'>
-                     Update The User
+                     {t("update_the_user")}
                    </Typography>
                    <Grid
                      container
@@ -90,13 +92,13 @@ class InfoForm extends React.Component {
                        xs={12}
                      >
                        <TextField
-                         autoComplete="fname"
-                         fullWidth
-                         helperText={(props.errors.name && props.touched.name) && props.errors.name}
-                         label="User Name"
-                         name="name"
-                         onChange={props.handleChange}
-                       />
+                    autoComplete="fname"
+                    fullWidth
+                    helperText={(props.errors.name && props.touched.name) && props.errors.name}
+                    label={t("user_name")}
+                    name="name"
+                    onChange={props.handleChange}
+                  />
                      </Grid>
                      <Grid
                        item
@@ -104,15 +106,13 @@ class InfoForm extends React.Component {
                        xs={12}
                      >
                        <TextField
-                         autoComplete="fname"
-                         fullWidth
-                         helperText={(props.errors.email && props.touched.name) && props.errors.email}
-                         id="Email"
-                         label="Email"
-                         name="email"
-                         onBlur={props.handleBlur}
-                         onChange={props.handleChange}
-                       />
+                    autoComplete="fname"
+                    fullWidth
+                    helperText={(props.errors.email && props.touched.name) && props.errors.email}
+                    label={t("email")}
+                    name="email"
+                    onChange={props.handleChange}
+                  />
                      </Grid>
                      <Grid
                        item
@@ -120,15 +120,14 @@ class InfoForm extends React.Component {
                        xs={12}
                      >
                        <TextField
-                         autoComplete="fname"
-                         fullWidth
-                         helperText={(props.errors.phone && props.touched.phone) && props.errors.phone}
-                         id="firstName"
-                         label="Phon Number"
-                         name="phone"
-                         onBlur={props.handleBlur}
-                         onChange={props.handleChange}
-                       />
+                        type='password'
+                        autoComplete="fname"
+                        fullWidth
+                        helperText={(props.errors.password && props.touched.password) && props.errors.password}
+                        label={t("password")}
+                        name="password"
+                        onChange={props.handleChange}
+                  />
                      </Grid>
                      <Grid
                        item
@@ -136,15 +135,14 @@ class InfoForm extends React.Component {
                        xs={12}
                      >
                        <TextField
-                         autoComplete="fname"
-                         fullWidth
-                         helperText={(props.errors.location && props.touched.location) && props.errors.location}
-                         id="firstName"
-                         label="Location"
-                         name="location"
-                         onBlur={props.handleBlur}
-                         onChange={props.handleChange}
-                       />
+                        type='password'
+                        autoComplete="fname"
+                        fullWidth
+                        helperText={(props.errors.password_confirmation && props.touched.password_confirmation) && props.errors.password_confirmation}
+                        label={t("password_confirmation")}
+                        name="password_confirmation"
+                        onChange={props.handleChange}
+                  />
                      </Grid>
                    </Grid>
                    <Button
@@ -153,7 +151,7 @@ class InfoForm extends React.Component {
                      type="submit"
                      variant="contained"
                    >
-                     {!this.state.showLoading&&'update'} 
+                     {!this.state.showLoading&&t('update')} 
                      {this.state.showLoading&&<CircularProgress
                        color="inherit"
                        size={23}
@@ -170,7 +168,7 @@ class InfoForm extends React.Component {
                          severity="success"
                          style={{backgroundColor: 'green', color: 'white'}}
                        >
-                       The User Has Updated Successfuly
+                      {t("the_user_has_updated_successfuly")}
                        </Alert>
                      </Snackbar>
                      <Snackbar
@@ -183,7 +181,7 @@ class InfoForm extends React.Component {
                          severity="error"
                          style={{backgroundColor: 'red', color: 'white'}}
                        >
-                       Please, Try Again.
+                       {t("please_try_again")}
                        </Alert>
                      </Snackbar>
                    </div>
@@ -192,10 +190,20 @@ class InfoForm extends React.Component {
                </LayOut>
              }
            }
-           validationSchema={validationSchema}
+           validationSchema={Yup.object().shape({
+            name: Yup.string('Enter a name').required(t('name_is_required'))
+            .min(2, 'Seems a bit short...')
+            .max(10, 'We prefer insecure system, try a shorter password.'),
+            email: Yup.string('Enter your email')
+              .email('Enter a valid email')
+              .required(t("emailRequired")),
+              password: Yup.string().required(t('password_is_required')),
+              password_confirmation: Yup.string()
+                 .oneOf([Yup.ref('password'), null], t('passwords_must_match'))
+          })}
          />
        </div>
      );
    }
 }
-export default InfoForm
+export default withTranslation("translations")(InfoForm);
