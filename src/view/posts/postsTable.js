@@ -1,5 +1,6 @@
-import React from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import React from 'react'; 
+import { withTranslation } from "react-i18next";
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,9 +9,8 @@ import TableHead from '@material-ui/core/TableHead';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteUser from './DeletePosts'
 import LayOut from '../../layOut';
-import {TableRow, Typography, Button, Container, Avatar, } from '@material-ui/core';
+import {TableRow, Typography, Button, Avatar, Dialog, DialogTitle,} from '@material-ui/core';
 import {Link} from 'react-router-dom'
-import InputIcon from '@material-ui/icons/Input'
 import Paper from '@material-ui/core/Paper';
 import ApiService from '../../services/apis'
 
@@ -32,18 +32,6 @@ const StyledTableRow = withStyles(theme => ({
   },
 }))(TableRow);
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 const useStyles = ({
   table: {
     minWidth: 700,
@@ -54,38 +42,49 @@ const useStyles = ({
       textAlign: 'center'
   }
 });
-// const classes = useStyles();
 
 class PostsTable extends React.Component {
   state= {
-    posts: []
+    posts: [],
+    open: false
   }
   componentDidMount() {
-    ApiService.fetchPosts().then(res =>
-       this.setState({posts: res.data}))
+    this.setState({open: true})
+    ApiService.fetchPosts().then(res =>{
+      this.setState({open: false})
+       this.setState({posts: res.data})
+      }
+       )
   }
   render() {
-    const {classes} = this.props
+    const {classes, t} = this.props
     return(
       <LayOut>
+        <Dialog
+        open={this.state.open}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title"> Please Wait...</DialogTitle>
+      </Dialog>
         <TableContainer component={Paper}>
       <div >
       <Typography className={classes.title} variant="h5" component="h2">
-          Posts Table
+          {t("posts_table")}
           <Button className={classes.title} variant="contained" color="primary" href="/posts/add-post">
-            ADD POST
+            {t("add_post")}
           </Button>
         </Typography>
       </div>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Post Number</StyledTableCell>
-            <StyledTableCell align="right">User ID</StyledTableCell>
-            <StyledTableCell align="right">Title</StyledTableCell>
-            <StyledTableCell align="right">Post</StyledTableCell>
-            <StyledTableCell align="right">Edit</StyledTableCell>
-            <StyledTableCell align="right">Delete</StyledTableCell>
+            <StyledTableCell>{t("post_number")}</StyledTableCell>
+            <StyledTableCell align="right">{t("user_id")}</StyledTableCell>
+            <StyledTableCell align="right">{t("title")}</StyledTableCell>
+            <StyledTableCell align="right">{t("the_post")}</StyledTableCell>
+            <StyledTableCell align="right">{t("edit")}</StyledTableCell>
+            <StyledTableCell align="right">{t("delete")}</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -127,4 +126,4 @@ class PostsTable extends React.Component {
     );
   }
 }
-  export default withStyles(useStyles)(PostsTable)
+  export default withStyles(useStyles)(withTranslation('translations')(PostsTable))

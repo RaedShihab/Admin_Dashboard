@@ -1,15 +1,21 @@
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import {engTranslation, arabTranslation} from  './local';
+// import XHR from "i18next-xhr-backend";
 
-i18n.use(LanguageDetector).init({
+import Arab from  './local/ar/index';
+import {eng} from  './local/en/translation.js';
+
+i18n
+//  .use(XHR)
+ .use(LanguageDetector).init({
+  
   // we init with resources
   resources: {
     en: {
-      translations: engTranslation
+      translations: eng
     },
     ar: {
-      translations: arabTranslation
+      translations: Arab
     }
   },
   fallbackLng: "en",
@@ -22,13 +28,14 @@ i18n.use(LanguageDetector).init({
   keySeparator: false, // we use content as keys
 
   interpolation: {
-    escapeValue: false, // not needed for react!!
+    // escapeValue: false, // not needed for react!!
     formatSeparator: ","
   },
 
   react: {
     wait: true
   }
+  // have a common namespace used around the full app
 });
 
 export default i18n;

@@ -1,10 +1,11 @@
 import React from 'react';
-import axios from 'axios';
-import {Button, DialogTitle, Dialog, Snackbar, CircularProgress, Avatar} from '@material-ui/core';
+import axios from 'axios'; 
+import { withTranslation } from "react-i18next";
+import {Button, DialogTitle, Dialog, Snackbar, CircularProgress} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Alert } from '@material-ui/lab';
 
-class DeleteUser extends React.Component {
+class DeletePost extends React.Component {
   state = {
     openDelete: false,
     openSnackSucc: false,
@@ -45,6 +46,7 @@ class DeleteUser extends React.Component {
   }
 
   render() {
+    const {t} = this.props
     return (
       <div>
         <Snackbar
@@ -57,7 +59,7 @@ class DeleteUser extends React.Component {
             severity="success"
             style={{backgroundColor: 'green', color: 'white'}}
           >
-                       The Post Has Deleted Successfuly
+                       {t("the_post_has_deleted_successfuly")}
           </Alert>
         </Snackbar>
 
@@ -69,19 +71,18 @@ class DeleteUser extends React.Component {
             backgroundColor: '#dee1fa',
           }}
         >
-              delete
         </DeleteIcon>
         <Dialog
           onEnter={console.log('Hey.')}
           open={this.state.openDelete}
         >
-          <DialogTitle>Are you sure you want to delete this post?</DialogTitle>
+          <DialogTitle>{t("are_you_sure_delete")}</DialogTitle>
           <Button
             onClick={this.deleteUser}
             style={{backgroundColor:'red', color: 'white', marginBottom: 3}}
             variant="contained"
           >
-            {!this.state.showLoading&&'delete'} 
+            {!this.state.showLoading&&t('delete')} 
             {this.state.showLoading && <CircularProgress
               color="inherit"
               size={23}
@@ -94,7 +95,7 @@ class DeleteUser extends React.Component {
             })}
             variant="contained"
           >
-          cancele
+          {t("cancele")}
           </Button>
         </Dialog>
       </div>
@@ -102,4 +103,4 @@ class DeleteUser extends React.Component {
   }
 }
 
-export default DeleteUser;
+export default withTranslation('translations')(DeletePost);

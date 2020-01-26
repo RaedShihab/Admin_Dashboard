@@ -1,16 +1,11 @@
-/* eslint-disable no-console */
-/* eslint-disable linebreak-style */
 import React from 'react';
+import { withTranslation } from "react-i18next"
 import {TextField, Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import LayOut from '../../../layOut'
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string('Enter a name').required('Please add a post')
-});
 
 class InfoForm extends React.Component {
   constructor(props) {
@@ -33,6 +28,7 @@ class InfoForm extends React.Component {
    };
 
    render() {
+     const {t} = this.props
      return (
        <div>
          <Formik
@@ -66,7 +62,7 @@ class InfoForm extends React.Component {
                  <form onSubmit={props.handleSubmit}>
                  <React.Fragment>
                    <Typography style={{marginBottom: 10}} variant='h5'>
-                     Update a post
+                     {t("update_post")}
                    </Typography>
                    <Grid
                      container
@@ -98,7 +94,7 @@ class InfoForm extends React.Component {
                      type="submit"
                      variant="contained"
                    >
-                     {!this.state.showLoading&&'update'} 
+                     {!this.state.showLoading&&t('update')} 
                      {this.state.showLoading&&<CircularProgress
                        color="inherit"
                        size={23}
@@ -115,7 +111,7 @@ class InfoForm extends React.Component {
                          severity="success"
                          style={{backgroundColor: 'green', color: 'white'}}
                        >
-                       The Post Has Updated Successfuly
+                       {t("The_post_has_updated_successfuly")}
                        </Alert>
                      </Snackbar>
                      <Snackbar
@@ -128,7 +124,7 @@ class InfoForm extends React.Component {
                          severity="error"
                          style={{backgroundColor: 'red', color: 'white'}}
                        >
-                       Please, Try Again.
+                       {t("please_try_again")}
                        </Alert>
                      </Snackbar>
                    </div>
@@ -137,10 +133,12 @@ class InfoForm extends React.Component {
                </LayOut>
              }
            }
-           validationSchema={validationSchema}
+           validationSchema={ Yup.object().shape({
+            name: Yup.string('Enter a name').required(t('pleaes_add_post'))
+          })}
          />
        </div>
      );
    }
 }
-export default InfoForm
+export default withTranslation('translations')(InfoForm)

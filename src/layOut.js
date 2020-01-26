@@ -11,8 +11,6 @@ import {
         Typography,
         IconButton, 
       } from '@material-ui/core';
-      import {Radio , FormControlLabel, RadioGroup} from '@material-ui/core';
-
 import LanguageIcon from '@material-ui/icons/Language';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -90,11 +88,23 @@ const useStyles = makeStyles(theme => ({
   const [value, setValue] = useState({
     lang: "en"
   })
-  const handleChange = event => {
-    console.log("selected val is ", event.target.value);
-    let newlang = event.target.value;
-    setValue(prevState => ({ lang: newlang }));
-    console.log("state value is", newlang);
+  const goRtl = () => {
+    let newRtl = rtl.direction === "ltr" ? "rtl" : "ltr";
+    setRtl({
+      direction: newRtl
+    });
+    let newTheme = theme1.direction === "ltr" ? "rtl" : "ltr";
+    setTheme({
+      direction: newTheme
+    });
+    let newLogoutPos = logOutIconPos.right === 0 ? '93%' : 0;    
+    setLogOutIconPos({
+      right: newLogoutPos
+    });
+    let newlang = value.lang === 'ar' ? 'en' : 'ar';    
+    setValue({
+      lang: newlang
+    });
     props.i18n.changeLanguage(newlang);
   };
   const [open, setOpen] = React.useState(false);
@@ -108,20 +118,6 @@ const useStyles = makeStyles(theme => ({
   const [logOutIconPos, setLogOutIconPos] = useState({
     right: 0
    });
-  const goRtl = () => {
-    let newRtl = rtl.direction === "ltr" ? "rtl" : "ltr";
-    setRtl({
-      direction: newRtl
-    });
-    let newTheme = theme1.direction === "ltr" ? "rtl" : "ltr";
-    setTheme({
-      direction: newTheme
-    });
-    let newLogoutPos = logOutIconPos.right === 0 ? 1350 : 0;    
-    setLogOutIconPos({
-      right: newLogoutPos
-    });
-  };
 
   const [theme1, setTheme] = useState({
     direction: 'ltr',
@@ -160,7 +156,7 @@ const useStyles = makeStyles(theme => ({
             <LanguageIcon />
           </IconButton>
           <Typography stayle={{marginLeft: 10}} variant="h6" noWrap>
-            Admin Dashboard
+            {props.t("admin_dashboard")}
           </Typography>
           <IconButton
           style={{position: 'absolute', right: logOutIconPos.right}}
@@ -170,25 +166,6 @@ const useStyles = makeStyles(theme => ({
           >
             <Link style={{color: 'white'}} to="/login"><ExitToAppIcon/></Link>
           </IconButton>
-          <RadioGroup
-            aria-label="Gender"
-            name="gender1"
-            className={classes.group}
-            value={value}
-            onChange={handleChange}
-          >
-            <FormControlLabel
-              value="en"
-              control={<Radio />}
-              label="English"
-              color="inheri"
-            />
-            <FormControlLabel
-              value="ar"
-              control={<Radio />}
-              label="Arabic"
-            />
-          </RadioGroup>
         </Toolbar>
       </AppBar>
       <SideBar open={open}/>

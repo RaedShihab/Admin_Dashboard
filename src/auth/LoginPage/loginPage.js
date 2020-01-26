@@ -26,11 +26,6 @@ function Copyright() {
       </Typography>
     );
   }
-  const validationSchema = Yup.object().shape({
-    username: Yup.string('Enter your User Name')
-      .required('User Name is required'),
-    password: Yup.string().required('Password is required')
-  });
   const useStyles = (theme => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -99,7 +94,7 @@ class LoginPage extends React.Component {
                                   </Avatar>
                                   <Typography component="h1" variant="h5">
                                   {t(
-                                      "Sign in"
+                                      "sign_in"
                                     )} 
                                   </Typography>
                               <form className={classes.form} onSubmit={props.handleSubmit}>
@@ -134,7 +129,7 @@ class LoginPage extends React.Component {
                                        required
                                        fullWidth
                                        helperText={(props.errors.username && props.touched.username) && props.errors.username}
-                                       label={t("User Name")}
+                                       label={t("user_name")}
                                        name="username"
                                         onChange={props.handleChange}
                                       />
@@ -144,7 +139,7 @@ class LoginPage extends React.Component {
                                        required
                                        fullWidth
                                        helperText={(props.errors.password && props.touched.password) && props.errors.password}
-                                       label={t("Passowrd")}
+                                       label={t("passowrd")}
                                        name="password"
                                        onChange={props.handleChange}
                                       />
@@ -155,17 +150,17 @@ class LoginPage extends React.Component {
                                         fullWidth
                                         className={classes.submit}
                                       >
-                                        {t("Sign in")}
+                                        {t("sign_in")}
                                       </Button>
                                       <Grid container>
                                   <Grid item xs>
                                     <Link href="#" variant="body2">
-                                      {t("Forgot password")}
+                                      {t("forgot_password")}
                                     </Link>
                                   </Grid>
                                   <Grid item>
                                     <Link href="#" variant="body2">
-                                      {t("Don't have an account? Sign Up")}
+                                      {t("dont_have_an_account_sign_up")}
                                     </Link>
                                   </Grid>
                                </Grid>
@@ -177,7 +172,11 @@ class LoginPage extends React.Component {
                               </div>
                             }
                           }
-                          validationSchema={validationSchema}
+                          validationSchema={Yup.object().shape({
+                            username: Yup.string('Enter your User Name')
+                              .required (t('name_is_required')),
+                            password: Yup.string().required(t('password_is_required'))
+                          })}
                 />
             </div>
         );

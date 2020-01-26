@@ -106,26 +106,26 @@ const useStyles = makeStyles(theme => ({
         <List>
             <ListItem button>
               <ListItemIcon><a href="/"><DashboardIcon/></a></ListItemIcon>
-              <ListItemText primary={t('Dashboard')} />
+              <ListItemText primary={t('dashboard')} />
             </ListItem>
         </List>
         {/* <Divider /> */}
         <List>
             <ListItem button>
               <ListItemIcon><a href="/users"><PeopleIcon/></a></ListItemIcon>
-              <ListItemText primary={t('Users')} />
+              <ListItemText primary={t('users')} />
             </ListItem>
         </List>
         <List>
             <ListItem button>
               <ListItemIcon><a href="/posts"><PostAddIcon/></a></ListItemIcon>
-              <ListItemText primary={t('Posts')} />
+              <ListItemText primary={t('posts')} />
             </ListItem>
         </List>
         <List>
             <ListItem button>
               <ListItemIcon><a href="/posts"><PostAddIcon/></a></ListItemIcon>
-              <ListItemText primary={t('Users')} />
+              <ListItemText primary={t('users')} />
             </ListItem>
         </List>
       </Drawer>
