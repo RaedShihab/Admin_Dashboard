@@ -80,7 +80,7 @@ class PostsTable extends React.Component {
         <TableHead>
           <TableRow>
             <StyledTableCell>{t("post_number")}</StyledTableCell>
-            <StyledTableCell align="right">{t("user_id")}</StyledTableCell>
+            <StyledTableCell align="right">{t("translation:user_id")}</StyledTableCell>
             <StyledTableCell align="right">{t("title")}</StyledTableCell>
             <StyledTableCell align="right">{t("the_post")}</StyledTableCell>
             <StyledTableCell align="right">{t("edit")}</StyledTableCell>
@@ -126,4 +126,4 @@ class PostsTable extends React.Component {
     );
   }
 }
-  export default withStyles(useStyles)(withTranslation('translations')(PostsTable))
+  export default withStyles(useStyles)(withTranslation(['postsTable', 'translation'])(PostsTable))

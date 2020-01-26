@@ -147,4 +147,4 @@ class InfoForm extends React.Component {
      );
    }
 }
-export default withTranslation("translations")(InfoForm);
+export default withTranslation("addPost")(InfoForm);

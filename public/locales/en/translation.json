@@ -1,19 +1,12 @@
-export const eng = {
+{
     "admin_dashboard" : "Admin Dashboard",
-    "sign_in":"Sign in",
-    "user_name": "User Name",
-    "passowrd": "Passowrd",
-    "forgot_password": "Forgot password",
-    "dont_have_an_account_sign_up": "Don't have an account? Sign Up",
-    "email": "Email",
-    "phone": "Phone",
-    "edit": "Edit",
-    "name": "Name",
+    
+    "user_id" : "User Id",
+   
     "dashboard": "Dashboard",
     "posts": "Posts",
     "users": "Users",
-    "add_user": "ADD USER",
-    "user_table": "User Table",
+    
     "password" : "Password",
     "password_confirmation": "Password Confirmation",
     "add" : "ADD",
@@ -26,22 +19,18 @@ export const eng = {
     "the_user_has_updated_successfuly": "The User Has Updated Successfuly",
     "the_user_has_added_successfuly": "the User Has Added Successfuly",
     "please_try_again." : "Please, Try Again.",
-    "post_Table" : "Post Table",
-    "the_post" : "The Post",
-    "posts_table" : "Posts Table",
-    "post_number" : "Post Number",
-    "user_id" : "User Id",
-    "title" : "Title",
-    "pleaes_add_post" : "Please Add A Post",
-    "post" : "POST",
-    "add_post" : "Add A Post",
+    
+    
+    
+    
+    
     "update_post" : "Update A Post",
-    "the_post_has_added_successfuly": "The Post Has Added Successfuly",
+    
     "The_post_has_updated_successfuly" : "The Post Has Updated Successfuly",
     "the_post_has_deleted_successfuly": "The Post Has Deleted Successfuly",
     "are_you_sure_delete" : "Are You Sure You Want To Delete This Post?",
     "cancele" : "Cancele",
-    "delete": "Delete",
+    
     "are_you_sure_delete_user": "Are You Sure You Want Tp Delete This User?",
     "the_user_has_deleted_successfuly" : "The user Has Deleted Successfuly"
   }

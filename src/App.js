@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {Suspense} from 'react';
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -32,7 +32,8 @@ class App extends React.Component {
     render() {
         const { alert } = this.props;
         return (
-            <div className="jumbotron">
+            <Suspense fallback={(<div>Loading</div>)}>
+                 <div className="jumbotron">
                 <div className="container">
                     <div className="col-sm-8 col-sm-offset-2">
                         {alert.message &&
@@ -54,6 +55,7 @@ class App extends React.Component {
                     </div>
                 </div>
             </div>
+            </Suspense>
         );
     }
 }

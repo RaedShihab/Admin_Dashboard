@@ -132,4 +132,4 @@ class CustomizedTables extends React.Component {
     );
   }
 }
-export default withStyles(useStyles)(withTranslation("translations")(CustomizedTables));
+export default withStyles(useStyles)(withTranslation("usersTable")(CustomizedTables));

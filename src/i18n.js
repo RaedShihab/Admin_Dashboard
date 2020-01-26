@@ -1,41 +1,27 @@
-import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-// import XHR from "i18next-xhr-backend";
+import i18n from 'i18next';
+import Backend from 'i18next-xhr-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
 
-import Arab from  './local/ar/index';
-import {eng} from  './local/en/translation.js';
+const fallbackLng = ['en']; 
+const availableLanguages = ['en', 'ar'];
 
 i18n
-//  .use(XHR)
- .use(LanguageDetector).init({
-  
-  // we init with resources
-  resources: {
-    en: {
-      translations: eng
+  .use(Backend) // load translation using xhr -> see /public/locales. We will add locales in the next step
+
+  .use(LanguageDetector) // detect user language
+
+  .use(initReactI18next) // pass the i18n instance to react-i18next.
+
+  .init({
+    fallbackLng, // if user computer language is not on the list of available languages, than we will be using the fallback language specified earlier
+    debug: true,
+    whitelist: availableLanguages,
+    loadPath: '/locales/{{lng}}/{{ns}}.json',
+    allowMultiLoading: true,
+    interpolation: {
+      escapeValue: false
     },
-    ar: {
-      translations: Arab
-    }
-  },
-  fallbackLng: "en",
-  debug: true,
-
-  // have a common namespace used around the full app
-  ns: ["translations"],
-  defaultNS: "translations",
-
-  keySeparator: false, // we use content as keys
-
-  interpolation: {
-    // escapeValue: false, // not needed for react!!
-    formatSeparator: ","
-  },
-
-  react: {
-    wait: true
-  }
-  // have a common namespace used around the full app
-});
+  });
 
 export default i18n;
