@@ -156,7 +156,7 @@ const useStyles = makeStyles(theme => ({
             <LanguageIcon />
           </IconButton>
           <Typography stayle={{marginLeft: 10}} variant="h6" noWrap>
-            {props.t("admin_dashboard")}
+            {props.t("Admin Dashboard")}
           </Typography>
           <IconButton
           style={{position: 'absolute', right: logOutIconPos.right}}

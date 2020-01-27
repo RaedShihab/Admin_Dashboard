@@ -10,7 +10,7 @@
     "password" : "Password",
     "password_confirmation": "Password Confirmation",
     "add" : "ADD",
-    "update" : "Update",
+    
     "emailRequired": "Email is a required field",
     "name_is_required" : "User Name Is Required",
     "password_is_required" : "Password Is Required",
@@ -24,9 +24,7 @@
     
     
     
-    "update_post" : "Update A Post",
     
-    "The_post_has_updated_successfuly" : "The Post Has Updated Successfuly",
     "the_post_has_deleted_successfuly": "The Post Has Deleted Successfuly",
     "are_you_sure_delete" : "Are You Sure You Want To Delete This Post?",
     "cancele" : "Cancele",

@@ -16,7 +16,7 @@
     "the_user_has_deleted_successfuly" : "تم حذف المستخدم بنجاح",
     "password_confirmation" : "تأكيد كلمة المرور",
     "add": "إضافة",
-    "update" : "تعديل",
+    
     "emailRequired": "رجاءاً املأ الحقل الخاص بالايميل",
     "name_is_required" : "رجاءاً إدخال اسم المستخدم",
     "password_is_required" : "الرجاء إدخال كلمة المرور",
@@ -25,9 +25,7 @@
     
    
     
-    "update_post" : "تعديل المنشور",
-    
-    "The_post_has_updated_successfuly": "تم تعديل المنشور بنجاح",
+   
     "the_post_has_deleted_successfuly": "تم حذف المنشور بنجاح",
     
     "are_you_sure_delete" : "هل تريد فعلا حذف المنشور؟",
