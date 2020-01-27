@@ -15,7 +15,9 @@ import PosteTable from './view/posts/postsTable';
 import AddPost from './view/posts/addPost/infoForm';
 import updatePost from './view/posts/updatePost/infoForm';
 
-import AddCountry from './countries/addCountry'
+import AddCountry from './countries/addCountry';
+import UpdateCountry from './countries/updateCountry/infoForm'
+import CountriesTable from './countries/countriesList';
 
 import LoginPage from './auth/LoginPage/loginPage';
 import { Button } from '@material-ui/core';
@@ -51,7 +53,9 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/posts/add-post" component={AddPost} />
                                 <PrivateRoute exact path="/posts/update/:id" component={updatePost} />
                                 <PrivateRoute exact path="/posts" component={PosteTable} />
-                                <PrivateRoute exact path="/countries" component={AddCountry} />
+                                <PrivateRoute exact path="/countries-list/add-country" component={AddCountry} />
+                                <PrivateRoute exact path="/countries-list/update/:id" component={UpdateCountry} />
+                                <PrivateRoute exact path="/countries-list" component={CountriesTable} />
                                 <Route path="/login" component={LoginPage} />
                             </div>
                         </Router>
