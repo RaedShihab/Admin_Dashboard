@@ -2,9 +2,9 @@ import React from 'react';
 import { withTranslation } from "react-i18next";
 import {Link} from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteUser from './DeleteUser';
-import LayOut from '../layOut';
-import {countries} from './contriesArr';
+import DeleteUser from './delete';
+import LayOut from '../../layOut';
+import {countries} from './service';
 import CountriesTable from './table'
  import 
  { Dialog,
@@ -21,7 +21,7 @@ import CountriesTable from './table'
   TableHead,
   Paper,
 } from '@material-ui/core';
-import ApiService from '../services/apis'
+// import ApiService from '../services/apis'
 
 const useStyles = ({
   table: {
@@ -39,13 +39,13 @@ class CustomizedTables extends React.Component {
     users: [],
     open: false
   }
-  componentDidMount() { 
-    this.setState({open: true})
-    ApiService.fetchUsers().then(res => {
-      this.setState({open: false})
-      this.setState({users: res.data})
-    })
-  }
+  // componentDidMount() { 
+  //   this.setState({open: true})
+  //   ApiService.fetchUsers().then(res => {
+  //     this.setState({open: false})
+  //     this.setState({users: res.data})
+  //   })
+  // }
   render() {
     const {classes, t} = this.props
     return(
@@ -60,9 +60,9 @@ class CustomizedTables extends React.Component {
         <TableContainer component={Paper}>
       <div >
       <Typography className={classes.title} variant="h5" component="h2">
-          {t("countries_table")}
-          <Button className={classes.title} variant="contained" color="primary" href="/countries-list/add-country">
-            {t("add_country")}
+          {t("cities_table")}
+          <Button className={classes.title} variant="contained" color="primary" href="/cities-list/add-city">
+            {t("add_city")}
           </Button>
         </Typography>
       </div>

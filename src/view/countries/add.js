@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import IconCard from '../iconCard'
+import IconCard from './iconCard'
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@material-ui/lab';
@@ -42,7 +42,6 @@ class UserForm extends React.Component {
   };
   render() {
     const {t} = this.props;
-    console.log('oooooo',this.props)
     return (
         <div>
       <Formik

@@ -15,12 +15,15 @@ import PosteTable from './view/posts/postsTable';
 import AddPost from './view/posts/addPost/infoForm';
 import updatePost from './view/posts/updatePost/infoForm';
 
-import AddCountry from './countries/addCountry';
-import UpdateCountry from './countries/updateCountry/infoForm'
-import CountriesTable from './countries/countriesList';
+import AddCountry from './view/countries/add';
+import UpdateCountry from './view/countries/update';
+import CountriesTable from './view/countries/list';
+
+import AddCity from './view/Cities/add'
+import UpdateCity from './view/Cities/update'
+import CitiesList from './view/Cities/list';
 
 import LoginPage from './auth/LoginPage/loginPage';
-import { Button } from '@material-ui/core';
 
 class App extends React.Component {
     constructor(props) {
@@ -53,9 +56,15 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/posts/add-post" component={AddPost} />
                                 <PrivateRoute exact path="/posts/update/:id" component={updatePost} />
                                 <PrivateRoute exact path="/posts" component={PosteTable} />
+
                                 <PrivateRoute exact path="/countries-list/add-country" component={AddCountry} />
                                 <PrivateRoute exact path="/countries-list/update/:id" component={UpdateCountry} />
                                 <PrivateRoute exact path="/countries-list" component={CountriesTable} />
+
+                                <PrivateRoute exact path="/cities-list/add-city" component={AddCity} />
+                                <PrivateRoute exact path="/cities-list/update-city/:id" component={UpdateCity} />
+                                <PrivateRoute exact path="/cities-list" component={CitiesList} />
+
                                 <Route path="/login" component={LoginPage} />
                             </div>
                         </Router>

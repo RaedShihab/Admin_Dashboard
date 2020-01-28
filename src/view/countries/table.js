@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteUser from './DeleteUser';
+import Delete from './delete';
 const StyledTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -74,7 +74,7 @@ export default function CustomizedTables(props) {
                     </Avatar>
               </StyledTableCell>
               <StyledTableCell align="right">
-              <DeleteUser
+              <Delete
                       countryId={country.phone}
                     />
               </StyledTableCell>
