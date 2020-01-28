@@ -244,15 +244,13 @@ class Form extends React.Component {
           </LayOut>
         })}
         validationSchema={Yup.object().shape({
-          name: Yup.string('Enter a name').required(t('name_is_required'))
-          .min(2, 'Seems a bit short...')
-          .max(10, 'We prefer insecure system, try a shorter password.'),
-          arname: Yup.string('Enter a name').required(t('name_is_required'))
-          .min(2, 'Seems a bit short...')
-          .max(10, 'We prefer insecure system, try a shorter password.'),
-          lon: Yup.string('Enter a name').required(t('required')),
-          lat: Yup.string('Enter a name').required(t('required')),
-          order: Yup.string('Enter a name').required(t('required'))
+          name: Yup.string('Enter a City Name').required(t('name_is_required'))
+          .min(2, 'Seems a bit short...'),
+          arname: Yup.string('Enter an Arabic name').required(t('name_is_required'))
+          .min(2, 'Seems a bit short...'),
+          lon: Yup.number('Enter a number').required(t('required')),
+          lat: Yup.number('Enter a number').required(t('required')),
+          order: Yup.number('Enter a number').required(t('required'))
         })}
       />
     </div>

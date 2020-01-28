@@ -132,4 +132,4 @@ const useStyles = makeStyles(theme => ({
          );
      }
 
-     export default (withTranslation("translations")(SideBar));
+     export default (withTranslation("sideBar/sideBar")(SideBar));

@@ -59,14 +59,12 @@ class InfoForm extends React.Component {
                })
                axios.put('https://jsonplaceholder.typicode.com/users', values)
                  .then(res =>{
-                   console.log(res)
                    this.setState({
                      showLoading: false,
                      openSnackSucc: true,
                    })
                  })
                  .catch(err => {
-                   console.log(err)
                    this.setState({
                      openSnackErr:true,
                      showLoading: false,
@@ -80,7 +78,7 @@ class InfoForm extends React.Component {
                   <form onSubmit={props.handleSubmit}>
                  <React.Fragment>
                  <Typography style={{marginBottom: 10}} variant='h5'>
-                     {t("update_the_user")}
+                     {t("users:update_the_user")}
                    </Typography>
                    <Grid
                      container
@@ -151,7 +149,7 @@ class InfoForm extends React.Component {
                      type="submit"
                      variant="contained"
                    >
-                     {!this.state.showLoading&&t('update')} 
+                     {!this.state.showLoading&&t('edit')} 
                      {this.state.showLoading&&<CircularProgress
                        color="inherit"
                        size={23}
@@ -168,7 +166,7 @@ class InfoForm extends React.Component {
                          severity="success"
                          style={{backgroundColor: 'green', color: 'white'}}
                        >
-                      {t("the_user_has_updated_successfuly")}
+                      {t("users:the_user_has_updated_successfuly")}
                        </Alert>
                      </Snackbar>
                      <Snackbar
@@ -206,4 +204,4 @@ class InfoForm extends React.Component {
      );
    }
 }
-export default withTranslation("translations")(InfoForm);
+export default withTranslation(["translation", "users"])(InfoForm);

@@ -193,7 +193,7 @@ function mapStateToProps(state) {
 const connectedLoginPage = compose(
     withStyles(useStyles),
     connect(mapStateToProps),
-    withTranslation("signIn")
+    withTranslation("translation")
   )(LoginPage);
 
   export default connectedLoginPage;

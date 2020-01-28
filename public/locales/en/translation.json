@@ -1,34 +1,22 @@
 {
+  "sign_in":"Sign In",
+    "passowrd": "Password",
+    "forgot_password": "Forget Your Password? ",
+    "dont_have_an_account_sign_up": "Don't have an account?",
+    "user_name":"User Name",
     "admin_dashboard" : "Admin Dashboard",
-    
     "user_id" : "User Id",
-   
-    "dashboard": "Dashboard",
-    "posts": "Posts",
-    "users": "Users",
-    
+    "edit": "Edit",
+    "delete": "Delete",
     "password" : "Password",
     "password_confirmation": "Password Confirmation",
     "add" : "ADD",
-    
     "emailRequired": "Email is a required field",
     "name_is_required" : "User Name Is Required",
     "password_is_required" : "Password Is Required",
     "passwords_must_match" : "Passwords Must Match",
-    "update_the_user" : "Update The User",
-    "the_user_has_updated_successfuly": "The User Has Updated Successfuly",
-    "the_user_has_added_successfuly": "the User Has Added Successfuly",
-    "please_try_again." : "Please, Try Again.",
-    
-    
-    
-    
-    
-    
+    "please_try_again" : "Please, Try Again.",
     "the_post_has_deleted_successfuly": "The Post Has Deleted Successfuly",
     "are_you_sure_delete" : "Are You Sure You Want To Delete This Post?",
-    "cancele" : "Cancele",
-    
-    "are_you_sure_delete_user": "Are You Sure You Want Tp Delete This User?",
-    "the_user_has_deleted_successfuly" : "The user Has Deleted Successfuly"
+    "cancele" : "Cancele" 
   }

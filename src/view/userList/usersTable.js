@@ -87,10 +87,10 @@ class CustomizedTables extends React.Component {
           <TableRow>
             <StyledTableCell>{t("name")}</StyledTableCell>
             <StyledTableCell align="right">{t("user_name")}</StyledTableCell>
-            <StyledTableCell align="right">{t("email")}</StyledTableCell>
+            <StyledTableCell align="right">{t("translation:email")}</StyledTableCell>
             <StyledTableCell align="right">{t("phone")}</StyledTableCell>
-            <StyledTableCell align="right">{t("edit")}</StyledTableCell>
-            <StyledTableCell align="right">{t("delete")}</StyledTableCell>
+            <StyledTableCell align="right">{t("translation:edit")}</StyledTableCell>
+            <StyledTableCell align="right">{t("translation:delete")}</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -132,4 +132,4 @@ class CustomizedTables extends React.Component {
     );
   }
 }
-export default withStyles(useStyles)(withTranslation("usersTable")(CustomizedTables));
+export default withStyles(useStyles)(withTranslation(["usersTable", "translation"])(CustomizedTables));

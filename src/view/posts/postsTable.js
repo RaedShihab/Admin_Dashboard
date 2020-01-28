@@ -83,8 +83,8 @@ class PostsTable extends React.Component {
             <StyledTableCell align="right">{t("translation:user_id")}</StyledTableCell>
             <StyledTableCell align="right">{t("title")}</StyledTableCell>
             <StyledTableCell align="right">{t("the_post")}</StyledTableCell>
-            <StyledTableCell align="right">{t("edit")}</StyledTableCell>
-            <StyledTableCell align="right">{t("delete")}</StyledTableCell>
+            <StyledTableCell align="right">{t("translation:edit")}</StyledTableCell>
+            <StyledTableCell align="right">{t("translation:delete")}</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>

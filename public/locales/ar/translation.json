@@ -1,34 +1,23 @@
 {
+  "sign_in":"تسجيل الدخول",
+    "passowrd": "رمز المرور",
+    "forgot_password": "نسيت طلمة المرور؟",
+    "dont_have_an_account_sign_up": "ليس لديك حساب؟ سجل من هنا",
+    "user_name":" أسم المستخدم",
     "admin_dashboard" : "المعرض",
     "user_id" : "رمز المستخدم",
-   
-    "dashboard": "المعرض",
-    "posts": "المنشورات",
-    "users": "المستخدمين",
-    
-    
-    "update_the_user" : "تعديل معلومات المستخدم",
-    "the_user_has_updated_successfuly" : "تم تعديل المستخدم بنجاح",
-    "the_user_has_added_successfuly": "تم إضافة المستخدم بنجاح",
-    
+    "email": "الإيميل",
+    "edit": "تعديل",
+    "delete": "حذف",
     "password" : "كلمة المرور",
-    "are_you_sure_delete_user": "هل تريد بالفعل حذف المستخدم؟",
-    "the_user_has_deleted_successfuly" : "تم حذف المستخدم بنجاح",
     "password_confirmation" : "تأكيد كلمة المرور",
     "add": "إضافة",
-    
     "emailRequired": "رجاءاً املأ الحقل الخاص بالايميل",
     "name_is_required" : "رجاءاً إدخال اسم المستخدم",
     "password_is_required" : "الرجاء إدخال كلمة المرور",
     "passwords_must_match" : "كلمات المرور غير متطابقة",
-    "please_try_again." : "حاول مرة ثانية",
-    
-   
-    
-   
+    "please_try_again" : "حاول مرة ثانية",
     "the_post_has_deleted_successfuly": "تم حذف المنشور بنجاح",
-    
     "are_you_sure_delete" : "هل تريد فعلا حذف المنشور؟",
-    "cancele" : "إلغاء"
-    
+    "cancele" : "إلغاء" 
   }

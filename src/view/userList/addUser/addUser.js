@@ -80,7 +80,7 @@ class UserForm extends React.Component {
                  >
             <React.Fragment>
               <Typography style={{marginBottom: 10}} variant='h5'>
-                    {t("add_user")}
+                    {t("users:add_user")}
               </Typography>
               <Grid
                 container
@@ -168,7 +168,7 @@ class UserForm extends React.Component {
                     severity="success"
                     style={{backgroundColor: 'green', color: 'white'}}
                   >
-                    {t("the_user_has_added_successfuly")}
+                    {t("users:the_user_has_added_successfuly")}
                   </Alert>
                 </Snackbar>
                 <Snackbar
@@ -206,4 +206,4 @@ class UserForm extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(withTranslation("translations")(UserForm));
+export default withStyles(useStyles)(withTranslation(["translation", "users"])(UserForm));
