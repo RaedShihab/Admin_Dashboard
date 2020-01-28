@@ -108,6 +108,9 @@ class UserForm extends React.Component {
               <Typography style={{marginBottom: 10}} variant='h5'>
                     {t("add_country")}
               </Typography>
+              <div>
+                <IconCard/>
+              </div>
               <Grid
               style={{width: '50%'}}
                 container
@@ -145,7 +148,7 @@ class UserForm extends React.Component {
                   xs={12}
                 >
                     <TextField
-                     label={t("idoCode")}
+                     label={t("isoCode")}
                      name="isoCode"
                      onChange={props.handleChange}
                     variant="outlined"
@@ -197,7 +200,7 @@ class UserForm extends React.Component {
                   xs={12}
                 >
                     <TextField
-                     label={t("currency in arabic")}
+                     label={t("currency_arabic")}
                      name="arCurrency"
                      onChange={props.handleChange}
                     variant="outlined"
@@ -259,9 +262,6 @@ class UserForm extends React.Component {
                 />}
               </Button>
               <div>
-                  <div>
-                  <IconCard/>
-                  </div>
                 <Snackbar
                   autoHideDuration={3000}
                   onClose={this.handleClose}
@@ -272,7 +272,7 @@ class UserForm extends React.Component {
                     severity="success"
                     style={{backgroundColor: 'green', color: 'white'}}
                   >
-                    {t("the_user_has_added_successfuly")}
+                    {t("the_country_has_updated_successfuly")}
                   </Alert>
                 </Snackbar>
                 <Snackbar
@@ -294,21 +294,17 @@ class UserForm extends React.Component {
           </LayOut>
         })}
         validationSchema={Yup.object().shape({
-          name: Yup.string('Enter a name').required(t('name_is_required'))
-          .min(2, 'Seems a bit short...')
-          .max(10, 'We prefer insecure system, try a shorter password.'),
-          arname: Yup.string('Enter a name').required(t('name_is_required'))
-          .min(2, 'Seems a bit short...')
-          .max(10, 'We prefer insecure system, try a shorter password.'),
-          isoCode: Yup.string('Enter a iso Code').required(t('iso_code_is_requier')),
-          phone:  Yup.string('Enter a name').required(t('name_is_required')),
-        //   .min(2, 'Seems a bit short...')
-        //   .max(10, 'We prefer insecure system, try a shorter password.'),
-          currency: Yup.string('Enter a name').required(t('currency_is_required')),
-          arCurrency: Yup.string('Enter a name').required(t('currency_is_required')),
-          lon: Yup.string('Enter a name').required(t('required')),
-          lat: Yup.string('Enter a name').required(t('required')),
-          order: Yup.string('Enter a name').required(t('required'))
+          name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
+          .min(2, 'Seems a bit short...'),
+          arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+          .min(2, 'Seems a bit short...'),
+          isoCode: Yup.string('Enter a iso Code').required(t('countries/validations:iso_code_is_requier')),
+          phone:  Yup.string('Enter a phone code').required(t('countries/validations:phone_code_is_required')),
+          currency: Yup.string('Enter a currency').required(t('countries/validations:currency_is_required')),
+          arCurrency: Yup.string('Enter a currency').required(t('countries/validations:currency_is_required')),
+          lon: Yup.number('Enter a number').required(t('countries/validations:required')),
+          lat: Yup.number('Enter a number').required(t('countries/validations:required')),
+          order: Yup.number('Enter a number').required(t('countries/validations:required'))
         })}
       />
     </div>
@@ -316,4 +312,5 @@ class UserForm extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(withTranslation("translations")(UserForm));
+export default withStyles(useStyles)(withTranslation(["countries/addApdate", "countries/validations"])(UserForm));
+

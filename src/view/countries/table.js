@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withTranslation } from "react-i18next";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -34,19 +35,19 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomizedTables(props) {
+ function CustomizedTables(props) {
   const classes = useStyles();
-  
+  const {t} = props;
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell align="right">Code</StyledTableCell>
-            <StyledTableCell align="right">Phone Code</StyledTableCell>
-            <StyledTableCell align="right">Edit</StyledTableCell>
-            <StyledTableCell align="right">Delete</StyledTableCell>
+            <StyledTableCell>{t("country_name")}</StyledTableCell>
+            <StyledTableCell align="right">{t("isoCode")}</StyledTableCell>
+            <StyledTableCell align="right">{t("phone_code")}</StyledTableCell>
+            <StyledTableCell align="right">{t("translation:edit")}</StyledTableCell>
+            <StyledTableCell align="right">{t("translation:delete")}</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -85,3 +86,4 @@ export default function CustomizedTables(props) {
     </TableContainer>
   );
 } 
+export default withTranslation(["countries/addApdate", "translation"])(CustomizedTables);

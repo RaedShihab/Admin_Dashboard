@@ -1,5 +1,5 @@
 {
-  "sign_in":"Sign In",
+    "sign_in":"Sign In",
     "passowrd": "Password",
     "forgot_password": "Forget Your Password? ",
     "dont_have_an_account_sign_up": "Don't have an account?",
@@ -16,7 +16,5 @@
     "password_is_required" : "Password Is Required",
     "passwords_must_match" : "Passwords Must Match",
     "please_try_again" : "Please, Try Again.",
-    "the_post_has_deleted_successfuly": "The Post Has Deleted Successfuly",
-    "are_you_sure_delete" : "Are You Sure You Want To Delete This Post?",
     "cancele" : "Cancele" 
   }

@@ -103,4 +103,4 @@ class DeletePost extends React.Component {
   }
 }
 
-export default withTranslation('translations')(DeletePost);
+export default withTranslation('posts/updatePost')(DeletePost);

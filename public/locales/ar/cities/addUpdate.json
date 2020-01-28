@@ -1,0 +1,12 @@
+{
+    "add_city":"أضافة مدينة",
+    "update_city":"تعديل مدينة",
+    "city_name":"اسم المدينة",
+    "arabic_name": "الاسم بالعربية",
+    "lon": "Lon الموقع",
+    "lat": "Lat الموقع",
+    "order_number": "رقم الطلب",
+    "update" : "تحديث",
+    "the_city_has_added_successfuly": "The City Has Added Successfuly",
+    "the_city_has_updated_successfuly" : "The City Has Updated Successfuly"
+}

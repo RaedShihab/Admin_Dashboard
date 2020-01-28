@@ -1,0 +1,15 @@
+{
+    "add_country" : "إضافة دولة",
+    "country_name" : "اسم الدولة",
+    "arabic_name" : "الاسم بالعربية",
+    "isoCode" : "ISO رمز",
+    "phone_code" : "رمز الهاتف",
+    "icon" : "Icon",
+    "currency" : "العملة",
+    "currency_arabic" : "العملة بالعربية",
+    "lon" : "Lon إحداثيات الموقع",
+    "lat" : "Lat إحداثيات الموقع",
+    "order_number": "رقم الطلب",
+    "the_country_has_added_successfuly": "تم أضافة الدولة بنجاح",
+    "the_country_has_updated_successfuly": "تم تحديث الدولة بنجاح"
+}

@@ -1,0 +1,15 @@
+{
+    "add_country" : "Add Country",
+    "country_name" : "Country Name",
+    "arabic_name" : "Arabic Name",
+    "isoCode" : "ISO Code",
+    "phone_code" : "Phone Code",
+    "icon" : "Icon",
+    "currency" : "Currency",
+    "currency_arabic" : "Currency In Arabic",
+    "lon" : "Lng",
+    "lat" : "Lat",
+    "order_number" : "Order Number",
+    "the_country_has_added_successfuly": "The Country has Added Seccessfuly",
+    "the_country_has_updated_successfuly": "The Country Has Updated Seccessfuly"
+}

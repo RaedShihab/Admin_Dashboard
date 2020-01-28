@@ -1,0 +1,8 @@
+{
+    "name_is_required": "Name is required",
+    "arabic_name_is_required" : "Arabic Name is required",
+    "iso_code_is_requier": "Iso Code Is Required",
+    "phone_code_is_required": "Phone Code Is Required",
+    "currency_is_required": "Currency Is Required",
+    "required" : "Required"
+}

@@ -82,7 +82,7 @@ class DeleteUser extends React.Component {
             style={{backgroundColor:'red', color: 'white', marginBottom: 3}}
             variant="contained"
           >
-            {!this.state.showLoading&&t('delete')} 
+            {!this.state.showLoading&&t('translation:delete')} 
             {this.state.showLoading && <CircularProgress
               color="inherit"
               size={23}
@@ -95,7 +95,7 @@ class DeleteUser extends React.Component {
             })}
             variant="contained"
           >
-          {t("cancele")}
+          {t("translation:cancele")}
           </Button>
         </Dialog>
       </div>
@@ -103,4 +103,4 @@ class DeleteUser extends React.Component {
   }
 }
 
-export default withTranslation('translations')(DeleteUser);
+export default withTranslation(['users/users', 'translation'])(DeleteUser);

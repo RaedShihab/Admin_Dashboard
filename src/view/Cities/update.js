@@ -107,7 +107,7 @@ class Form extends React.Component {
                  >
             <React.Fragment>
               <Typography style={{marginBottom: 10}} variant='h5'>
-                    {t("add_city")}
+                    {t("update_city")}
               </Typography>
               <Grid
               style={{width: '50%'}}
@@ -120,7 +120,7 @@ class Form extends React.Component {
                   xs={12}
                 >
                     <TextField
-                     label={t("country_name")}
+                     label={t("city_name")}
                      name="name"
                      onChange={props.handleChange}
                      variant="outlined"
@@ -205,7 +205,7 @@ class Form extends React.Component {
                 type="submit"
                 variant="contained"
               >
-                {!this.state.showLoading&&t('add')} 
+                {!this.state.showLoading&&t('update')} 
                 {this.state.showLoading&&<CircularProgress
                   color="inherit"
                   size={23}
@@ -244,15 +244,13 @@ class Form extends React.Component {
           </LayOut>
         })}
         validationSchema={Yup.object().shape({
-          name: Yup.string('Enter a name').required(t('name_is_required'))
-          .min(2, 'Seems a bit short...')
-          .max(10, 'We prefer insecure system, try a shorter password.'),
-          arname: Yup.string('Enter a name').required(t('name_is_required'))
-          .min(2, 'Seems a bit short...')
-          .max(10, 'We prefer insecure system, try a shorter password.'),
-          lon: Yup.string('Enter a name').required(t('required')),
-          lat: Yup.string('Enter a name').required(t('required')),
-          order: Yup.string('Enter a name').required(t('required'))
+          name: Yup.string('Enter a name').required(t('cities/validations:name_is_required'))
+          .min(2, 'Seems a bit short...'),
+          arname: Yup.string('Enter a name').required(t('cities/validations:arabic_name_is_required'))
+          .min(2, 'Seems a bit short...'),
+          lon: Yup.number('Enter a number').required(t('cities/validations:required')),
+          lat: Yup.number('Enter a number').required(t('cities/validations:required')),
+          order: Yup.number('Enter a number').required(t('cities/validations:required'))
         })}
       />
     </div>
@@ -264,4 +262,5 @@ Form.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(useStyles)(withTranslation("translations")(Form));
+export default withStyles(useStyles)(withTranslation(["cities/addUpdate", "cities/validations"])(Form));
+

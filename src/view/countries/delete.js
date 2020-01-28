@@ -103,4 +103,4 @@ class Delete extends React.Component {
   }
 }
 
-export default withTranslation('translations')(Delete);
+export default withTranslation('countries/delete')(Delete);

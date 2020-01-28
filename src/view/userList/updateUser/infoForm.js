@@ -9,16 +9,6 @@ import * as Yup from 'yup';
 import LayOut from '../../../layOut';
 import { withTranslation } from "react-i18next";
 
-// const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-// const validationSchema = Yup.object().shape({
-//   name: Yup.string('Enter a name').required('Name is required'),
-//   email: Yup.string('Enter your email')
-//     .email('Enter a valid email')
-//     .required('Email is required'),
-//   phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Phone Number is required'),
-//   location: Yup.string('Enter your adress').required('The address is required'),
-// });
-
 class InfoForm extends React.Component {
   constructor(props) {
     console.log(props.history.location.state.user)
@@ -78,7 +68,7 @@ class InfoForm extends React.Component {
                   <form onSubmit={props.handleSubmit}>
                  <React.Fragment>
                  <Typography style={{marginBottom: 10}} variant='h5'>
-                     {t("users:update_the_user")}
+                     {t("users/users:update_the_user")}
                    </Typography>
                    <Grid
                      container
@@ -166,7 +156,7 @@ class InfoForm extends React.Component {
                          severity="success"
                          style={{backgroundColor: 'green', color: 'white'}}
                        >
-                      {t("users:the_user_has_updated_successfuly")}
+                      {t("users/users:the_user_has_updated_successfuly")}
                        </Alert>
                      </Snackbar>
                      <Snackbar
@@ -204,4 +194,4 @@ class InfoForm extends React.Component {
      );
    }
 }
-export default withTranslation(["translation", "users"])(InfoForm);
+export default withTranslation(["translation", "users/users"])(InfoForm);

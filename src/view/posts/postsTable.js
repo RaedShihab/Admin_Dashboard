@@ -126,4 +126,4 @@ class PostsTable extends React.Component {
     );
   }
 }
-  export default withStyles(useStyles)(withTranslation(['postsTable', 'translation'])(PostsTable))
+  export default withStyles(useStyles)(withTranslation(['posts/postsTable', 'translation'])(PostsTable))

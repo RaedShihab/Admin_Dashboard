@@ -120,7 +120,7 @@ class Form extends React.Component {
                   xs={12}
                 >
                     <TextField
-                     label={t("country_name")}
+                     label={t("city_name")}
                      name="name"
                      onChange={props.handleChange}
                      variant="outlined"
@@ -242,15 +242,15 @@ class Form extends React.Component {
             </React.Fragment>
           </form>
           </LayOut>
-        })}
+        })} 
         validationSchema={Yup.object().shape({
-          name: Yup.string('Enter a City Name').required(t('name_is_required'))
+          name: Yup.string('Enter a name').required(t('cities/validations:name_is_required'))
           .min(2, 'Seems a bit short...'),
-          arname: Yup.string('Enter an Arabic name').required(t('name_is_required'))
+          arname: Yup.string('Enter a name').required(t('cities/validations:arabic_name_is_required'))
           .min(2, 'Seems a bit short...'),
-          lon: Yup.number('Enter a number').required(t('required')),
-          lat: Yup.number('Enter a number').required(t('required')),
-          order: Yup.number('Enter a number').required(t('required'))
+          lon: Yup.number('Enter a number').required(t('cities/validations:required')),
+          lat: Yup.number('Enter a number').required(t('cities/validations:required')),
+          order: Yup.number('Enter a number').required(t('cities/validations:required'))
         })}
       />
     </div>
@@ -260,4 +260,4 @@ class Form extends React.Component {
 Form.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(useStyles)(withTranslation("translations")(Form));
+export default withStyles(useStyles)(withTranslation(["cities/addUpdate", "cities/validations"])(Form));

@@ -1,0 +1,9 @@
+{
+    "add_city":"Add City",
+    "city_name":"City Name",
+    "arabic_name": "Arabic Name",
+    "lon": "Lon Location",
+    "lat": "Lat Location",
+    "order_number": "Order Number",
+    "update" : "Update"
+}

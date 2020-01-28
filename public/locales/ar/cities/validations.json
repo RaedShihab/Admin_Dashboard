@@ -1,0 +1,8 @@
+{
+    "name_is_required": "رجاء إدخال الاسم",
+    "arabic_name_is_required" : "الرجاء إدخال الاسم باللغة العربية",
+    "iso_code_is_requier": "Iso Code رجاء أدخل",
+    "phone_code_is_required": "رجاء أدخل رمز الهاتف",
+    "currency_is_required": "رجاء أدخل العملة",
+    "required" : "الحقل مطلوب"
+}

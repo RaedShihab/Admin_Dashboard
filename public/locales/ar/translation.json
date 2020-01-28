@@ -17,7 +17,5 @@
     "password_is_required" : "الرجاء إدخال كلمة المرور",
     "passwords_must_match" : "كلمات المرور غير متطابقة",
     "please_try_again" : "حاول مرة ثانية",
-    "the_post_has_deleted_successfuly": "تم حذف المنشور بنجاح",
-    "are_you_sure_delete" : "هل تريد فعلا حذف المنشور؟",
     "cancele" : "إلغاء" 
   }
