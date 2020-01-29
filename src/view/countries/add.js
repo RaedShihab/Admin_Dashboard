@@ -107,17 +107,14 @@ class UserForm extends React.Component {
               <Typography style={{marginBottom: 10}} variant='h5'>
                     {t("add_country")}
               </Typography>
-              <div>
-                  <IconCard/>
-                  </div>
               <Grid
-              style={{width: '50%'}}
+              style={{width: '45%'}}
                 container
                 spacing={3}
               >
                 <Grid
                   item
-                  sm={6}
+                  sm={4}
                   xs={12}
                 >
                     <TextField
@@ -129,6 +126,13 @@ class UserForm extends React.Component {
                     />
                 </Grid>
                 <Grid
+                  item
+                  sm={8}
+                  xs={12}
+                >
+                  <IconCard/>
+              </Grid>
+              <Grid
                   item
                   sm={6}
                   xs={12}
@@ -245,8 +249,6 @@ class UserForm extends React.Component {
                     helperText={(props.errors.order && props.touched.order) && props.errors.order}
                     />
                 </Grid>
-                
-                
               </Grid>
               <Button 
                 color="primary"

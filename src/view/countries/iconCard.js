@@ -8,8 +8,12 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   card: {
-    width: '30%',
-    margin: '30px 0px'
+    // position: 'absolute',
+    // right: '5%',
+    // top: '15%',
+    width: '86%',
+    height: 150
+    // margin: '30px 0px'
   },
   bullet: {
     display: 'inline-block',

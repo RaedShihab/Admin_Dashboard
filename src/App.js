@@ -23,6 +23,10 @@ import AddCity from './view/Cities/add'
 import UpdateCity from './view/Cities/update'
 import CitiesList from './view/Cities/list';
 
+import AddDistric from './view/Districts/add'
+import UpdateDistrict from './view/Districts/update'
+import DistrictsList from './view/Districts/list';
+
 import LoginPage from './auth/LoginPage/loginPage';
 
 class App extends React.Component {
@@ -50,9 +54,11 @@ class App extends React.Component {
                             <div>
                                 <PrivateRoute exact path="/" component={HomePage} />
                                 <PrivateRoute exact path="/dashboard" component={HomePage} />
+
                                 <PrivateRoute exact path="/users" component={UserTable} />
                                 <PrivateRoute exact path="/users/add-user" component={Adduser} />
                                 <PrivateRoute exact path="/users/update/:id" component={UserUpdate} />
+                                
                                 <PrivateRoute exact path="/posts/add-post" component={AddPost} />
                                 <PrivateRoute exact path="/posts/update/:id" component={updatePost} />
                                 <PrivateRoute exact path="/posts" component={PosteTable} />
@@ -64,6 +70,10 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/cities-list/add-city" component={AddCity} />
                                 <PrivateRoute exact path="/cities-list/update-city/:id" component={UpdateCity} />
                                 <PrivateRoute exact path="/cities-list" component={CitiesList} />
+
+                                <PrivateRoute exact path="/districts-list/add-district" component={AddDistric} />
+                                <PrivateRoute exact path="/districts-list/update-district/:id" component={UpdateDistrict} />
+                                <PrivateRoute exact path="/districts-list" component={DistrictsList} />
 
                                 <Route path="/login" component={LoginPage} />
                             </div>

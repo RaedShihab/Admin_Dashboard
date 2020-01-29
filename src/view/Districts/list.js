@@ -52,7 +52,7 @@ class CustomizedTables extends React.Component {
       <div >
       <Typography className={classes.title} variant="h5" component="h2">
           {t("cities_table")}
-          <Button className={classes.title} variant="contained" color="primary" href="/cities-list/add-city">
+          <Button className={classes.title} variant="contained" color="primary" href="/districts-list/add-district">
             {t("add_city")}
           </Button>
         </Typography>

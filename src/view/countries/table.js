@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { withTranslation } from "react-i18next";
 import Table from '@material-ui/core/Table';
@@ -10,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
-import Delete from './delete';
+import  Menu from '../menu';
 const StyledTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -46,8 +45,7 @@ const useStyles = makeStyles({
             <StyledTableCell>{t("country_name")}</StyledTableCell>
             <StyledTableCell align="right">{t("isoCode")}</StyledTableCell>
             <StyledTableCell align="right">{t("phone_code")}</StyledTableCell>
-            <StyledTableCell align="right">{t("translation:edit")}</StyledTableCell>
-            <StyledTableCell align="right">{t("translation:delete")}</StyledTableCell>
+            <StyledTableCell align="middle">{t("translation:edit")}</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -59,6 +57,13 @@ const useStyles = makeStyles({
               <StyledTableCell align="right">{country.code}</StyledTableCell>
               <StyledTableCell align="right">{country.phone}</StyledTableCell>
               <StyledTableCell align="right">
+              <Menu country={country}
+                    path={'/countries-list/update/'}
+                    data={country}
+                    url={'https://jsonplaceholder.typicode.com/users/'}
+                        />
+              </StyledTableCell>
+              {/* <StyledTableCell align="right">
               <Avatar
                       style={{left:20 }}
                     >
@@ -73,12 +78,12 @@ const useStyles = makeStyles({
                         <EditIcon />
                       </Link>
                     </Avatar>
-              </StyledTableCell>
-              <StyledTableCell align="right">
+              </StyledTableCell> */}
+              {/* <StyledTableCell align="right">
               <Delete
                       countryId={country.phone}
                     />
-              </StyledTableCell>
+              </StyledTableCell> */}
             </StyledTableRow>
           ))}
         </TableBody>

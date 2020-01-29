@@ -22,12 +22,13 @@ class Delete extends React.Component {
     })
   };
 
-  countryId = this.props.countryId
+  data = this.props.data
   deleteUser = ()=> {
     this.setState({
       showLoading: true,
     })
-    axios.delete('https://jsonplaceholder.typicode.com/users/'+this.countryId , { id: this.countryId })
+    console.log(this.props.url+this.data.code)
+    axios.delete(this.props.url+this.data.code , { id: this.data.code})
       .then(res => {
         console.log(res)
         this.setState({

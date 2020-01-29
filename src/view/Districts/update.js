@@ -1,13 +1,17 @@
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import IconCard from './iconCard'
+import {countries} from './service'
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@material-ui/lab';
 import {TextField,Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const useStyles = (theme => ({
   root: {
@@ -19,10 +23,18 @@ const useStyles = (theme => ({
   },
   btn: {
     margin: '80px 0px 0px 0px'
-  }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    width: 209,
+    color: 'red'
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
-class UserForm extends React.Component {
+class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,22 +53,17 @@ class UserForm extends React.Component {
     })
   };
   render() {
-    const {t} = this.props;
-    console.log('oooooo',this.props)
+    const {t, classes} = this.props;
     return (
         <div>
       <Formik
         initialValues={{
           name:'',
           arname: '',
-          isoCode: '',
-          phone: '',
-          icon: '',
-          currency: '',
-          arCurrency: '',
           lon: '',
           lat: '',
-          order: ''
+          order: '',
+          id: ''
         }}
         onSubmit={data => {
             const values     = {
@@ -64,18 +71,12 @@ class UserForm extends React.Component {
                     "en" : data.name,
                     "ar" : data.arname
                 },
-                "iso_code" : data.isoCode,
-                "phone_code" : data.phone,
-                "icon" : data.icon,
-                "currency" : {
-                    "en" : data.currency,
-                    "ar" : data.arCurrency
-                },
+                "country_id" : data.id,
+                "order" : data.order,
                 "geoloc" : {
-                    "lon" : data.lon,
-                    "lat" : data.lat
-                },
-                "order" : data.order
+                    "lat" : data.lon,
+                    "lon" : data.lat
+                }
             }
           console.log(values)
           this.setState({
@@ -100,39 +101,32 @@ class UserForm extends React.Component {
         }
         render={(props=> {
           return <LayOut>
-           <form
+              <form
             form
             onSubmit={props.handleSubmit}
                  >
             <React.Fragment>
               <Typography style={{marginBottom: 10}} variant='h5'>
-                    {t("add_country")}
+                    {t("update_city")}
               </Typography>
               <Grid
-              style={{width: '45%'}}
+              style={{width: '50%'}}
                 container
                 spacing={3}
               >
                 <Grid
                   item
-                  sm={4}
+                  sm={6}
                   xs={12}
                 >
                     <TextField
-                     label={t("country_name")}
+                     label={t("city_name")}
                      name="name"
                      onChange={props.handleChange}
                      variant="outlined"
                      helperText={(props.errors.name && props.touched.name) && props.errors.name}
                     />
                 </Grid>
-                <Grid
-                  item
-                  sm={8}
-                  xs={12}
-                >
-                  <IconCard/>
-              </Grid>
                 <Grid
                   item
                   sm={6}
@@ -144,71 +138,6 @@ class UserForm extends React.Component {
                      onChange={props.handleChange}
                     variant="outlined"
                     helperText={(props.errors.arname && props.touched.arname) && props.errors.arname}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("isoCode")}
-                     name="isoCode"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.isoCode && props.touched.isoCode) && props.errors.isoCode}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("phone_code")}
-                     name="phone"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.phone && props.touched.phone) && props.errors.phone}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("icon")}
-                     name="icon"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.icon && props.touched.icon) && props.errors.icon}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("currency")}
-                     name="currency"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.currency && props.touched.currency) && props.errors.currency}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("currency_arabic")}
-                     name="arCurrency"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.arCurrency && props.touched.arCurrency) && props.errors.arCurrency}
                     />
                 </Grid>
                 <Grid
@@ -250,16 +179,33 @@ class UserForm extends React.Component {
                     helperText={(props.errors.order && props.touched.order) && props.errors.order}
                     />
                 </Grid>
-                
-                
+                <Grid
+                  item
+                  sm={6}
+                  xs={12}
+                >
+                   <FormControl variant="filled" className={classes.formControl}>
+                      <InputLabel htmlFor="filled-age-native-simple">Country</InputLabel>
+                        <Select
+                        native
+                        onChange={props.handleChange('id')}
+                        name='id'
+                        >
+                        {
+                          countries.map(country=> {
+                            return <option value={country.code}>{country.label}</option>
+                          })
+                        }
+                      </Select>
+                  </FormControl>
+                </Grid>
               </Grid>
-              <Button 
+              <Button
                 color="primary"
-                style={{marginTop: 30}}
                 type="submit"
                 variant="contained"
               >
-                {!this.state.showLoading&&t('add')} 
+                {!this.state.showLoading&&t('update')} 
                 {this.state.showLoading&&<CircularProgress
                   color="inherit"
                   size={23}
@@ -276,7 +222,7 @@ class UserForm extends React.Component {
                     severity="success"
                     style={{backgroundColor: 'green', color: 'white'}}
                   >
-                    {t("the_country_has_updated_successfuly")}
+                    {t("the_city_has_added_successfuly")}
                   </Alert>
                 </Snackbar>
                 <Snackbar
@@ -298,17 +244,13 @@ class UserForm extends React.Component {
           </LayOut>
         })}
         validationSchema={Yup.object().shape({
-          name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
+          name: Yup.string('Enter a name').required(t('cities/validations:name_is_required'))
           .min(2, 'Seems a bit short...'),
-          arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+          arname: Yup.string('Enter a name').required(t('cities/validations:arabic_name_is_required'))
           .min(2, 'Seems a bit short...'),
-          isoCode: Yup.string('Enter a iso Code').required(t('countries/validations:iso_code_is_requier')),
-          phone:  Yup.string('Enter a phone code').required(t('countries/validations:phone_code_is_required')),
-          currency: Yup.string('Enter a currency').required(t('countries/validations:currency_is_required')),
-          arCurrency: Yup.string('Enter a currency').required(t('countries/validations:currency_is_required')),
-          lon: Yup.number('Enter a number').required(t('countries/validations:required')),
-          lat: Yup.number('Enter a number').required(t('countries/validations:required')),
-          order: Yup.number('Enter a number').required(t('countries/validations:required'))
+          lon: Yup.number('Enter a number').required(t('cities/validations:required')),
+          lat: Yup.number('Enter a number').required(t('cities/validations:required')),
+          order: Yup.number('Enter a number').required(t('cities/validations:required'))
         })}
       />
     </div>
@@ -316,5 +258,9 @@ class UserForm extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(withTranslation(["countries/addApdate", "countries/validations"])(UserForm));
+Form.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(useStyles)(withTranslation(["cities/addUpdate", "cities/validations"])(Form));
 

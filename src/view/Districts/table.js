@@ -8,8 +8,8 @@ import {TableContainer, Avatar} from '@material-ui/core';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import  Menu from '../menu';
-
+import EditIcon from '@material-ui/icons/Edit';
+import Delete from './delete';
 const StyledTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -46,6 +46,7 @@ export default function CustomizedTables(props) {
             <StyledTableCell align="right">Code</StyledTableCell>
             <StyledTableCell align="right">Phone Code</StyledTableCell>
             <StyledTableCell align="right">Edit</StyledTableCell>
+            <StyledTableCell align="right">Delete</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -57,19 +58,12 @@ export default function CustomizedTables(props) {
               <StyledTableCell align="right">{city.code}</StyledTableCell>
               <StyledTableCell align="right">{city.phone}</StyledTableCell>
               <StyledTableCell align="right">
-                <Menu
-                 path={'/cities-list/update-city/'}
-                 data={city}
-                 url={'https://jsonplaceholder.typicode.com/users/'}
-                />
-              </StyledTableCell>
-              {/* <StyledTableCell align="right">
               <Avatar
                       style={{left:20 }}
                     >
                       <Link
                         to={{
-                            pathname: '/cities-list/update-city/' +city.phone,
+                            pathname: '/districts-list/update-district/' +city.phone,
                           state: {
                             city: city
                           }
@@ -83,7 +77,7 @@ export default function CustomizedTables(props) {
               <Delete
                       cityId={city.phone}
                     />
-              </StyledTableCell> */}
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
