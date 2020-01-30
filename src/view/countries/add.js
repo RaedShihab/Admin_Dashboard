@@ -19,6 +19,9 @@ const useStyles = (theme => ({
   },
   btn: {
     margin: '80px 0px 0px 0px'
+  },
+  form: {
+    backgroundColor: 'white', padding:30
   }
 }));
 
@@ -41,7 +44,7 @@ class UserForm extends React.Component {
     })
   };
   render() {
-    const {t} = this.props;
+    const {t, classes} = this.props;
     return (
         <div>
       <Formik
@@ -100,10 +103,11 @@ class UserForm extends React.Component {
         render={(props=> {
           return <LayOut>
            <form
+           className={classes.form}
             form
             onSubmit={props.handleSubmit}
                  >
-            <React.Fragment>
+            <React.Fragment >
               <Typography style={{marginBottom: 10}} variant='h5'>
                     {t("add_country")}
               </Typography>

@@ -6,8 +6,6 @@ import CountriesTable from './table'
  import 
  { Dialog,
   DialogTitle,
-  Typography, 
-  Button, 
   withStyles, 
   TableContainer, 
   Paper,
@@ -38,7 +36,6 @@ class CustomizedTables extends React.Component {
   //   })
   // }
   render() {
-    const {classes, t} = this.props
     return(
       <LayOut>
         <Dialog
@@ -49,14 +46,6 @@ class CustomizedTables extends React.Component {
         <DialogTitle id="alert-dialog-title"> Please Wait...</DialogTitle>
       </Dialog>
         <TableContainer component={Paper}>
-      <div >
-      <Typography className={classes.title} variant="h5" component="h2">
-          {t("countries_table")}
-          <Button className={classes.title} variant="contained" color="primary" href="/countries-list/add-country">
-            {t("add_country")}
-          </Button>
-        </Typography>
-      </div>
      <CountriesTable countriesList={countries}/>
     </TableContainer>
       </LayOut>

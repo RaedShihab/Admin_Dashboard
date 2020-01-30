@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { withTranslation } from "react-i18next";
 import {Button, DialogTitle, Dialog, Snackbar, CircularProgress} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { Alert } from '@material-ui/lab';
 
 class Delete extends React.Component {
@@ -22,13 +22,15 @@ class Delete extends React.Component {
     })
   };
 
-  data = this.props.data
+  // data = this.props.data
   deleteUser = ()=> {
     this.setState({
       showLoading: true,
     })
-    console.log(this.props.url+this.data.code)
-    axios.delete(this.props.url+this.data.code , { id: this.data.code})
+    console.log(this.props.url)
+    console.log(this.props.data)
+    console.log(this.props.url,this.props.data)
+    axios.delete(this.props.url+this.props.data , { id: this.props.data})
       .then(res => {
         console.log(res)
         this.setState({
@@ -64,7 +66,8 @@ class Delete extends React.Component {
           </Alert>
         </Snackbar>
 
-        <DeleteIcon
+        <DeleteOutlineIcon
+        color="secondary"
         cursor="pointer"
         fontSize="large"
           onClick={this.openDialog}
@@ -72,7 +75,7 @@ class Delete extends React.Component {
             backgroundColor: '#dee1fa',
           }}
         >
-        </DeleteIcon>
+        </DeleteOutlineIcon>
         <Dialog
           onEnter={console.log('Hey.')}
           open={this.state.openDelete}
