@@ -1,14 +1,14 @@
 import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import Table from '../table';
-import ApiService from '../../services/apis'
+import Table from '../table'
  import 
- { 
+ {
   withStyles, 
   TableContainer, 
   Paper,
 } from '@material-ui/core';
+import ApiService from '../../services/apis'
 
 const useStyles = ({
   table: {
@@ -27,19 +27,19 @@ class CustomizedTables extends React.Component {
     open: false
   }
   columns = [
-    { name: "id", label: "ID" },
-    { name: "phone", label: "Phone" },
-    { name: "label", label: "Name" },
-    { name: "code", label: "Code" },
+    { name: "userId", label: "User ID" },
+    { name: "id", label: "Post Number" },
+    { name: "title", label: "Title" },
+    { name: "body", label: "The Post" },
   ];
   render() {
     return(
       <LayOut>
         <TableContainer component={Paper}>
-     <Table add={'District'} path={{update:'/districts-list/update-district/', add: '/districts-list/add-district/'}} fetch={ApiService.fetchCountries()} columns={this.columns} url={'https://jsonplaceholder.typicode.com/users/'}/>
+     <Table add={'POST'} path={{update:'/posts/update/', add: '/posts/add-post/'}} fetch={ApiService.fetchPosts()} columns={this.columns} url={'https://jsonplaceholder.typicode.com/posts/'}/>
     </TableContainer>
       </LayOut>
     );
   }
 }
-export default withStyles(useStyles)(withTranslation("usersTable")(CustomizedTables));
+export default withStyles(useStyles)(withTranslation(["countries/list", "translation"])(CustomizedTables));

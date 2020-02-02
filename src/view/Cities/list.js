@@ -1,18 +1,14 @@
 import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import {countries} from './service';
-import CountriesTable from './table'
+import CountriesTable from '../table'
  import 
- { Dialog,
-  DialogTitle,
-  Typography, 
-  Button, 
+ {
   withStyles, 
   TableContainer, 
   Paper,
 } from '@material-ui/core';
-// import ApiService from '../services/apis'
+import ApiService from '../../services/apis'
 
 const useStyles = ({
   table: {
@@ -28,36 +24,18 @@ const useStyles = ({
 class CustomizedTables extends React.Component {
   state= {
     users: [],
-    open: false
   }
-  // componentDidMount() { 
-  //   this.setState({open: true})
-  //   ApiService.fetchUsers().then(res => {
-  //     this.setState({open: false})
-  //     this.setState({users: res.data})
-  //   })
-  // }
+  columns = [
+    { name: "id", label: "ID" },
+    { name: "phone", label: "Phone" },
+    { name: "label", label: "Name" },
+    { name: "code", label: "Code" },
+  ];
   render() {
-    const {classes, t} = this.props
     return(
       <LayOut>
-        <Dialog
-        open={this.state.open}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title"> Please Wait...</DialogTitle>
-      </Dialog>
         <TableContainer component={Paper}>
-      <div >
-      <Typography className={classes.title} variant="h5" component="h2">
-          {t("cities_table")}
-          <Button className={classes.title} variant="contained" color="primary" href="/cities-list/add-city">
-            {t("add_city")}
-          </Button>
-        </Typography>
-      </div>
-     <CountriesTable countriesList={countries}/>
+     <CountriesTable add={'CITY'} path={{update:'/cities-list/update-city/', add: '/cities-list/add-city'}} fetch={ApiService.fetchCountries()} columns={this.columns} url={'https://jsonplaceholder.typicode.com/users/'}/>
     </TableContainer>
       </LayOut>
     );

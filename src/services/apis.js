@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {countries} from './service';
+
 const USER_API_BASE_URL = "https://jsonplaceholder.typicode.com/users";
 const POSTS_API_BASE_URL = "https://jsonplaceholder.typicode.com/posts";
 // const USER_API_BASE_URL_GITHUB = "https://api.github.com/users";
@@ -11,6 +13,9 @@ class ApiService {
     }
     fetchPosts() {
         return axios.get(POSTS_API_BASE_URL);
+    }
+    fetchCountries() {
+        return Promise.resolve(countries);
     }
 }
 

@@ -1,16 +1,14 @@
 import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import {countries} from './service';
-import CountriesTable from './table'
+import Table from '../table'
  import 
- { Dialog,
-  DialogTitle,
+ {
   withStyles, 
   TableContainer, 
   Paper,
 } from '@material-ui/core';
-// import ApiService from '../services/apis'
+import ApiService from '../../services/apis'
 
 const useStyles = ({
   table: {
@@ -25,28 +23,20 @@ const useStyles = ({
 
 class CustomizedTables extends React.Component {
   state= {
-    users: [],
+    countries: [],
     open: false
   }
-  // componentDidMount() { 
-  //   this.setState({open: true})
-  //   ApiService.fetchUsers().then(res => {
-  //     this.setState({open: false})
-  //     this.setState({users: res.data})
-  //   })
-  // }
+  columns = [
+    { name: "id", label: "ID" },
+    { name: "phone", label: "Phone" },
+    { name: "label", label: "Name" },
+    { name: "code", label: "Code" },
+  ];
   render() {
     return(
       <LayOut>
-        <Dialog
-        open={this.state.open}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title"> Please Wait...</DialogTitle>
-      </Dialog>
         <TableContainer component={Paper}>
-     <CountriesTable countriesList={countries}/>
+     <Table add={'COUNTRY'} path={{update:'/countries-list/update/', add: '/countries-list/add-country/'}} fetch={ApiService.fetchCountries()} columns={this.columns} url={'https://jsonplaceholder.typicode.com/users/'}/>
     </TableContainer>
       </LayOut>
     );

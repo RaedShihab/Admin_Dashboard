@@ -27,11 +27,9 @@ class Delete extends React.Component {
     this.setState({
       showLoading: true,
     })
-    console.log(this.props.url)
-    console.log(this.props.data)
-    console.log(this.props.url,this.props.data)
     axios.delete(this.props.url+this.props.data , { id: this.props.data})
       .then(res => {
+        console.log('delete', this.props.url+this.props.data)
         console.log(res)
         this.setState({
           showLoading: false,
@@ -50,6 +48,7 @@ class Delete extends React.Component {
 
   render() {
     const {t} = this.props
+    console.log('dalete',this.props.data, this.props.url)
     return (
       <div>
         <Snackbar

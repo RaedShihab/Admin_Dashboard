@@ -125,7 +125,7 @@ class UserForm extends React.Component {
                      label={t("country_name")}
                      name="name"
                      onChange={props.handleChange}
-                     variant="outlined"
+                     variant="filled"
                      helperText={(props.errors.name && props.touched.name) && props.errors.name}
                     />
                 </Grid>
@@ -145,7 +145,7 @@ class UserForm extends React.Component {
                      label={t("arabic_name")}
                      name="arname"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.arname && props.touched.arname) && props.errors.arname}
                     />
                 </Grid>
@@ -158,7 +158,7 @@ class UserForm extends React.Component {
                      label={t("isoCode")}
                      name="isoCode"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.isoCode && props.touched.isoCode) && props.errors.isoCode}
                     />
                 </Grid>
@@ -171,7 +171,7 @@ class UserForm extends React.Component {
                      label={t("phone_code")}
                      name="phone"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.phone && props.touched.phone) && props.errors.phone}
                     />
                 </Grid>
@@ -184,7 +184,7 @@ class UserForm extends React.Component {
                      label={t("icon")}
                      name="icon"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.icon && props.touched.icon) && props.errors.icon}
                     />
                 </Grid>
@@ -197,7 +197,7 @@ class UserForm extends React.Component {
                      label={t("currency")}
                      name="currency"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.currency && props.touched.currency) && props.errors.currency}
                     />
                 </Grid>
@@ -210,7 +210,7 @@ class UserForm extends React.Component {
                      label={t("currency_arabic")}
                      name="arCurrency"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.arCurrency && props.touched.arCurrency) && props.errors.arCurrency}
                     />
                 </Grid>
@@ -223,7 +223,7 @@ class UserForm extends React.Component {
                      label={t("lon")}
                      name="lon"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.lon && props.touched.lon) && props.errors.lon}
                     />
                 </Grid>
@@ -236,7 +236,7 @@ class UserForm extends React.Component {
                      label={t("lat")}
                      name="lat"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.lat && props.touched.lat) && props.errors.lat}
                     />
                 </Grid>
@@ -249,20 +249,20 @@ class UserForm extends React.Component {
                      label={t("order_number")}
                      name="order"
                      onChange={props.handleChange}
-                    variant="outlined"
+                    variant="filled"
                     helperText={(props.errors.order && props.touched.order) && props.errors.order}
                     />
                 </Grid>
               </Grid>
               <Button 
                 color="primary"
-                style={{marginTop: 30}}
+
+                style={{marginTop: 30, backgroundColor:'blue', color: 'white'}}
                 type="submit"
-                variant="contained"
               >
                 {!this.state.showLoading&&t('add')} 
                 {this.state.showLoading&&<CircularProgress
-                  color="inherit"
+                  // color="inherit"
                   size={23}
                 />}
               </Button>

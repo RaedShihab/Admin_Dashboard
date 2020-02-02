@@ -3,7 +3,6 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import {countries} from './service'
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@material-ui/lab';
@@ -12,6 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { withStyles } from '@material-ui/core/styles';
+import ApiService from '../../services/apis';
 
 const useStyles = (theme => ({
   root: {
@@ -40,8 +40,12 @@ class Form extends React.Component {
     this.state = {
       openSnackSucc: false,
       showLoading: false,
-      openSnackErr: false
+      openSnackErr: false,
+      countries: []
     };
+  }
+  componentDidMount() {
+    ApiService.fetchCountries().then(res=> this.setState({countries: res}))
   }
   handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -192,7 +196,7 @@ class Form extends React.Component {
                         name='id'
                         >
                         {
-                          countries.map(country=> {
+                          this.state.countries.map(country=> {
                             return <option value={country.code}>{country.label}</option>
                           })
                         }

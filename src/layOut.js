@@ -123,7 +123,6 @@ const useStyles = makeStyles(theme => ({
     direction: 'ltr',
   });
   const themee1 = createMuiTheme(theme1)
-  console.log('layout',props)
   return (
     <div dir={rtl.direction}>
     <ThemeProvider theme={themee1}>

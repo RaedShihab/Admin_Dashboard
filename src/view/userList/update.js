@@ -6,15 +6,15 @@ import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import LayOut from '../../../layOut';
+import LayOut from '../../layOut';
 import { withTranslation } from "react-i18next";
 
 class InfoForm extends React.Component {
   constructor(props) {
-    console.log(props.history.location.state.user)
+    // console.log(props.history.location.state.user)
     super(props);
     this.state = {
-      user: props.history.location.state.user,
+      // user: props.history.location.state.user,
       openSnackSucc: false,
       showLoading: false,
       openSnackErr: false
@@ -65,7 +65,7 @@ class InfoForm extends React.Component {
            render={
              (props)=> {
                return <LayOut>
-                  <form onSubmit={props.handleSubmit}>
+                  <form style={{backgroundColor: 'white', padding: 20, width: '50%' }} onSubmit={props.handleSubmit}>
                  <React.Fragment>
                  <Typography style={{marginBottom: 10}} variant='h5'>
                      {t("users/users:update_the_user")}
@@ -80,6 +80,7 @@ class InfoForm extends React.Component {
                        xs={12}
                      >
                        <TextField
+                       variant="filled"
                     autoComplete="fname"
                     fullWidth
                     helperText={(props.errors.name && props.touched.name) && props.errors.name}
@@ -94,6 +95,7 @@ class InfoForm extends React.Component {
                        xs={12}
                      >
                        <TextField
+                       variant="filled"
                     autoComplete="fname"
                     fullWidth
                     helperText={(props.errors.email && props.touched.name) && props.errors.email}
@@ -108,6 +110,7 @@ class InfoForm extends React.Component {
                        xs={12}
                      >
                        <TextField
+                       variant="filled"
                         type='password'
                         autoComplete="fname"
                         fullWidth
@@ -123,6 +126,7 @@ class InfoForm extends React.Component {
                        xs={12}
                      >
                        <TextField
+                       variant="filled"
                         type='password'
                         autoComplete="fname"
                         fullWidth

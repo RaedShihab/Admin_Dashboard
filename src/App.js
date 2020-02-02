@@ -7,13 +7,13 @@ import { alertActions } from './auth/Actions/alertAction';
 import { PrivateRoute } from './auth/Components/privateRoutes';
 import { HomePage } from './auth/HomePage/homePage';
 
-import UserTable from './view/userList/usersTable';
-import Adduser from './view/userList/addUser/addUser';
-import UserUpdate from './view/userList/updateUser/infoForm';
+import UserTable from './view/userList/list';
+import Adduser from './view/userList/add';
+import UserUpdate from './view/userList/update';
 
-import PosteTable from './view/posts/postsTable';
-import AddPost from './view/posts/addPost/infoForm';
-import updatePost from './view/posts/updatePost/infoForm';
+import PosteTable from './view/posts/list';
+import AddPost from './view/posts/add';
+import updatePost from './view/posts/update';
 
 import AddCountry from './view/countries/add';
 import UpdateCountry from './view/countries/update';

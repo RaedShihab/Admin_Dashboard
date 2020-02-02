@@ -1,17 +1,23 @@
+
 import React from 'react';
-import { withTranslation } from "react-i18next"
+import { withTranslation } from "react-i18next";
 import {TextField, Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import LayOut from '../../../layOut'
+// import Yup from './yup'
+import LayOut from '../../layOut';
+// import { fr } from 'yup-locales';
+// import { setLocale } from 'yup';
+
+// setLocale(fr);
 
 class InfoForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      post: props.history.location.state.post,
+      post: '',
       openSnackSucc: false,
       showLoading: false,
       openSnackErr: false
@@ -33,7 +39,7 @@ class InfoForm extends React.Component {
        <div>
          <Formik
            initialValues={{
-             name: '',
+            name: '',
 
            }}
            onSubmit = {
@@ -59,10 +65,10 @@ class InfoForm extends React.Component {
            render={
              (props)=> {
                return <LayOut>
-                 <form onSubmit={props.handleSubmit}>
+                  <form style={{backgroundColor: 'white', padding: 20, width: '50%'}} onSubmit={props.handleSubmit}>
                  <React.Fragment>
-                   <Typography style={{marginBottom: 10}} variant='h5'>
-                     {t("update_post")}
+                 <Typography style={{marginBottom: 10}} variant='h5'>
+                    {t("add_post")}
                    </Typography>
                    <Grid
                      container
@@ -94,7 +100,7 @@ class InfoForm extends React.Component {
                      type="submit"
                      variant="contained"
                    >
-                     {!this.state.showLoading&&t('update')} 
+                     {!this.state.showLoading&&t('post')} 
                      {this.state.showLoading&&<CircularProgress
                        color="inherit"
                        size={23}
@@ -111,7 +117,7 @@ class InfoForm extends React.Component {
                          severity="success"
                          style={{backgroundColor: 'green', color: 'white'}}
                        >
-                       {t("The_post_has_updated_successfuly")}
+                       {t("the_post_has_added_successfuly")}
                        </Alert>
                      </Snackbar>
                      <Snackbar
@@ -124,7 +130,7 @@ class InfoForm extends React.Component {
                          severity="error"
                          style={{backgroundColor: 'red', color: 'white'}}
                        >
-                       {t("please_try_again")}
+                      {t("please_try_again")}
                        </Alert>
                      </Snackbar>
                    </div>
@@ -141,4 +147,4 @@ class InfoForm extends React.Component {
      );
    }
 }
-export default withTranslation(['posts/updatePost', 'translation'])(InfoForm)
+export default withTranslation("posts/addPost")(InfoForm);

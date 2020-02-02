@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { withTranslation } from "react-i18next";
-import LayOut from '../../../layOut'
+import LayOut from '../../layOut'
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@material-ui/lab';
@@ -18,6 +18,9 @@ const useStyles = (theme => ({
   },
   btn: {
     margin: '80px 0px 0px 0px'
+  },
+  form : {
+    backgroundColor: 'white', padding: 20, width: '50%'
   }
 }));
 
@@ -40,7 +43,7 @@ class UserForm extends React.Component {
     })
   };
   render() {
-    const {t} = this.props;
+    const {t, classes} = this.props;
     return (
         <div>
       <Formik
@@ -75,6 +78,7 @@ class UserForm extends React.Component {
         render={(props=> {
           return <LayOut>
            <form
+           className={classes.form}
             form
             onSubmit={props.handleSubmit}
                  >
@@ -92,6 +96,7 @@ class UserForm extends React.Component {
                   xs={12}
                 >
                   <TextField
+                  variant="filled"
                     autoComplete="fname"
                     fullWidth
                     helperText={(props.errors.name && props.touched.name) && props.errors.name}
@@ -106,6 +111,7 @@ class UserForm extends React.Component {
                   xs={12}
                 >
                   <TextField
+                  variant="filled"
                     autoComplete="fname"
                     fullWidth
                     helperText={(props.errors.email && props.touched.name) && props.errors.email}
@@ -120,6 +126,7 @@ class UserForm extends React.Component {
                   xs={12}
                 >
                   <TextField
+                  variant="filled"
                   type='password'
                     autoComplete="fname"
                     fullWidth
@@ -135,6 +142,7 @@ class UserForm extends React.Component {
                   xs={12}
                 >
                   <TextField
+                  variant="filled"
                   type='password'
                     autoComplete="fname"
                     fullWidth
