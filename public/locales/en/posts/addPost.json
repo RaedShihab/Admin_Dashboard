@@ -3,5 +3,10 @@
     "post" : "POST",
     "the_post_has_added_successfuly": "The Post Has Added Successfuly",
     "please_try_again." : "Please, Try Again.",
-    "add_post" : "Add a post"
+    "add_post" : "Add a post",
+    "update_post" : "Update A Post",
+    "The_post_has_updated_successfuly" : "The Post Has Updated Successfuly",
+    "update" : "Update",
+    "are_you_sure_delete" : " Are You Sure?",
+    "the_post_has_deleted_successfuly": "The Post Has Deleted Successfuly"
 }

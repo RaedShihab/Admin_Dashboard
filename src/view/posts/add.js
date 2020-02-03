@@ -1,17 +1,13 @@
 
 import React from 'react';
 import { withTranslation } from "react-i18next";
-import {TextField, Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
+import {Snackbar, CircularProgress} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-// import Yup from './yup'
+import Form from '../postForm'
 import LayOut from '../../layOut';
-// import { fr } from 'yup-locales';
-// import { setLocale } from 'yup';
-
-// setLocale(fr);
 
 class InfoForm extends React.Component {
   constructor(props) {
@@ -19,8 +15,8 @@ class InfoForm extends React.Component {
     this.state = {
       post: '',
       openSnackSucc: false,
+      openSnackErr: false,
       showLoading: false,
-      openSnackErr: false
     };
   }
    handleClose = (event, reason) => {
@@ -49,6 +45,7 @@ class InfoForm extends React.Component {
                })
                axios.post('https://jsonplaceholder.typicode.com/posts', values)
                  .then(res =>{
+                   console.log('add post', res)
                    this.setState({
                      showLoading: false,
                      openSnackSucc: true,
@@ -66,75 +63,42 @@ class InfoForm extends React.Component {
              (props)=> {
                return <LayOut>
                   <form style={{backgroundColor: 'white', padding: 20, width: '50%'}} onSubmit={props.handleSubmit}>
-                 <React.Fragment>
-                 <Typography style={{marginBottom: 10}} variant='h5'>
-                    {t("add_post")}
-                   </Typography>
-                   <Grid
-                     container
-                     spacing={3}
-                   >
-                     <Grid
-                       item
-                       sm={6}
-                       xs={12}
-                     >
-                       <TextField
-                         defaultValue={this.state.post.body}
-                         fullWidth="bool"
-                         helperText={(props.errors.name && props.touched.name) && props.errors.name}
-                         id="filled-multiline-static"
-                         label="Multiline"
-                         multiline
-                         name="name"
-                         onChange={props.handleChange}
-                         rows="4"
-                         variant="filled"
-                       />
- 
-                     </Grid>
-                   </Grid>
-                   <Button
-                     color="primary"
-                     style={{marginTop: 30}}
-                     type="submit"
-                     variant="contained"
-                   >
-                     {!this.state.showLoading&&t('post')} 
-                     {this.state.showLoading&&<CircularProgress
-                       color="inherit"
-                       size={23}
-                     />}
-                   </Button>
+                  {!this.state.showLoading&&<Form
+                   handleSubmit={props.handleSubmit}
+                   onChang={props.handleChange}
+                   helperText={(props.errors.name && props.touched.name) && props.errors.name}
+                   keyy={{btn:"add", title: "add_post"}}
+                   />}
+                   {this.state.showLoading&&<CircularProgress size="150px"/>
+                   }
                    <div>
-                     <Snackbar
-                       autoHideDuration={3000}
-                       onClose={this.handleClose}
-                       open={this.state.openSnackSucc}
-                     >
-                       <Alert
-                         onClose={this.handleClose}
-                         severity="success"
-                         style={{backgroundColor: 'green', color: 'white'}}
-                       >
-                       {t("the_post_has_added_successfuly")}
-                       </Alert>
-                     </Snackbar>
-                     <Snackbar
-                       autoHideDuration={3000}
-                       onClose={this.handleClose}
-                       open={this.state.openSnackErr}
-                     >
-                       <Alert
-                         onClose={this.handleClose}
-                         severity="error"
-                         style={{backgroundColor: 'red', color: 'white'}}
-                       >
-                      {t("please_try_again")}
-                       </Alert>
-                     </Snackbar>
-                   </div>
-                 </React.Fragment>
+                    <Snackbar
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      open={this.state.openSnackSucc}
+                    >
+                      <Alert
+                        onClose={this.handleClose}
+                        severity="success"
+                        style={{backgroundColor: 'green', color: 'white'}}
+                      >
+                        {t("the_post_has_added_successfuly")}
+                      </Alert>
+                    </Snackbar>
+                    <Snackbar
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      open={this.state.openSnackErr}
+                    >
+                      <Alert
+                        onClose={this.handleClose}
+                        severity="error"
+                        style={{backgroundColor: 'red', color: 'white'}}
+                      >
+                        {t("please_try_again")}
+                      </Alert>
+                    </Snackbar>
+                  </div>
                </form>
                </LayOut>
              }

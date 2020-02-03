@@ -2,5 +2,10 @@
     "post" : "نشر",
     "the_post_has_added_successfuly" : "تم إضافة المنشور بنجاح",
     "please_try_again." : "حاول مرة ثانية",
-    "add_post" : "إضافة منشور"
+    "add_post" : "إضافة منشور",
+    "update_post" : "تعديل المنشور",
+    "The_post_has_updated_successfuly": "تم تعديل المنشور بنجاح",
+    "update" : "تعديل",
+    "are_you_sure_delete" : "هل تريد فعلا حذف المنشور؟",
+    "the_post_has_deleted_successfuly": "تم حذف المنشور بنجاح"
 }

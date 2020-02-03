@@ -36,7 +36,11 @@ class CustomizedTables extends React.Component {
     return(
       <LayOut>
         <TableContainer component={Paper}>
-     <Table add={'USER'} path={{update:'/users/update/', add: '/users/add-user/'}} fetch={ApiService.fetchUsers()} columns={this.columns} url={'https://jsonplaceholder.typicode.com/users/'}/>
+     <Table 
+     add={'USER'} 
+     path={{update:'/users/update/', add: '/users/add-user/'}} 
+     fetch={ApiService.fetchUsers()} columns={this.columns} 
+     url={'https://jsonplaceholder.typicode.com/users/'}/>
     </TableContainer>
       </LayOut>
     );

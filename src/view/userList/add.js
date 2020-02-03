@@ -5,8 +5,9 @@ import LayOut from '../../layOut'
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@material-ui/lab';
-import {TextField,Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
+import {Snackbar, CircularProgress} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import Form from '../userForm';
 
 const useStyles = (theme => ({
   root: {
@@ -29,8 +30,8 @@ class UserForm extends React.Component {
     super(props);
     this.state = {
       openSnackSucc: false,
+      openSnackErr: false,
       showLoading: false,
-      openSnackErr: false
     };
   }
   handleClose = (event, reason) => {
@@ -60,17 +61,17 @@ class UserForm extends React.Component {
           })
           axios.post('https://jsonplaceholder.typicode.com/users', data)
                  .then(res =>{
-                   console.log(res)
+                   console.log('res')
                    this.setState({
                      showLoading: false,
-                     openSnackSucc: true,
+                     openSnackSucc: true
                    })
                  })
                  .catch(err => {
                    console.log(err)
                    this.setState({
-                     openSnackErr:true,
                      showLoading: false,
+                     openSnackErr: true
                    })
                  })
         }
@@ -82,118 +83,46 @@ class UserForm extends React.Component {
             form
             onSubmit={props.handleSubmit}
                  >
-            <React.Fragment>
-              <Typography style={{marginBottom: 10}} variant='h5'>
-                    {t("users/users:add_user")}
-              </Typography>
-              <Grid
-                container
-                spacing={3}
-              >
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                  <TextField
-                  variant="filled"
-                    autoComplete="fname"
-                    fullWidth
-                    helperText={(props.errors.name && props.touched.name) && props.errors.name}
-                    label={t("user_name")}
-                    name="name"
-                    onChange={props.handleChange}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                  <TextField
-                  variant="filled"
-                    autoComplete="fname"
-                    fullWidth
-                    helperText={(props.errors.email && props.touched.name) && props.errors.email}
-                    label={t("email")}
-                    name="email"
-                    onChange={props.handleChange}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                  <TextField
-                  variant="filled"
-                  type='password'
-                    autoComplete="fname"
-                    fullWidth
-                    helperText={(props.errors.password && props.touched.password) && props.errors.password}
-                    label={t("password")}
-                    name="password"
-                    onChange={props.handleChange}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                  <TextField
-                  variant="filled"
-                  type='password'
-                    autoComplete="fname"
-                    fullWidth
-                    helperText={(props.errors.password_confirmation && props.touched.password_confirmation) && props.errors.password_confirmation}
-                    label={t("password_confirmation")}
-                    name="password_confirmation"
-                    onChange={props.handleChange}
-                  />
-                </Grid>
-              </Grid>
-              <Button 
-                color="primary"
-                style={{marginTop: 30}}
-                type="submit"
-                variant="contained"
-              >
-                {!this.state.showLoading&&t('add')} 
-                {this.state.showLoading&&<CircularProgress
-                  color="inherit"
-                  size={23}
-                />}
-              </Button>
-              <div>
-                <Snackbar
-                  autoHideDuration={3000}
-                  onClose={this.handleClose}
-                  open={this.state.openSnackSucc}
-                >
-                  <Alert
-                    onClose={this.handleClose}
-                    severity="success"
-                    style={{backgroundColor: 'green', color: 'white'}}
-                  >
-                    {t("users/users:the_user_has_added_successfuly")}
-                  </Alert>
-                </Snackbar>
-                <Snackbar
-                  autoHideDuration={3000}
-                  onClose={this.handleClose}
-                  open={this.state.openSnackErr}
-                >
-                  <Alert
-                    onClose={this.handleClose}
-                    severity="error"
-                    style={{backgroundColor: 'red', color: 'white'}}
-                  >
-                    {t("please_try_again")}
-                  </Alert>
-                </Snackbar>
-              </div>
-            </React.Fragment>
+                   {!this.state.showLoading&&<Form
+                   handleSubmit={props.handleSubmit}
+                   helperText={(props.errors.name && props.touched.name) && props.errors.name}
+                   helperTextEmail={(props.errors.email && props.touched.name) && props.errors.email}
+                   helperTextPassword={(props.errors.password && props.touched.password) && props.errors.password}
+                   helperTextConfigPassword={(props.errors.password_confirmation && props.touched.password_confirmation) && props.errors.password_confirmation}
+                   onChang={props.handleChange}
+                   keyy={{btn:"add", title: "add_user"}}
+                   disabled={false}
+                   />}
+                   {this.state.showLoading&&<CircularProgress size="150px"/>
+                   }
+                   <div>
+                    <Snackbar
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      open={this.state.openSnackSucc}
+                    >
+                      <Alert
+                        onClose={this.handleClose}
+                        severity="success"
+                        style={{backgroundColor: 'green', color: 'white'}}
+                      >
+                        {t("users/users:the_user_has_added_successfuly")}
+                      </Alert>
+                    </Snackbar>
+                    <Snackbar
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      open={this.state.openSnackErr}
+                    >
+                      <Alert
+                        onClose={this.handleClose}
+                        severity="error"
+                        style={{backgroundColor: 'red', color: 'white'}}
+                      >
+                        {t("please_try_again")}
+                      </Alert>
+                    </Snackbar>
+                  </div>
           </form>
           </LayOut>
         })}

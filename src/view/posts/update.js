@@ -1,11 +1,12 @@
 import React from 'react';
 import { withTranslation } from "react-i18next"
-import {TextField, Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
+import {Snackbar, CircularProgress} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import LayOut from '../../layOut'
+import LayOut from '../../layOut';
+import Form from '../postForm';
 
 class InfoForm extends React.Component {
   constructor(props) {
@@ -60,75 +61,42 @@ class InfoForm extends React.Component {
              (props)=> {
                return <LayOut>
                  <form style={{backgroundColor: 'white', padding: 20, width: '50%' }} onSubmit={props.handleSubmit}>
-                 <React.Fragment>
-                   <Typography style={{marginBottom: 10}} variant='h5'>
-                     {t("update_post")}
-                   </Typography>
-                   <Grid
-                     container
-                     spacing={3}
-                   >
-                     <Grid
-                       item
-                       sm={6}
-                       xs={12}
-                     >
-                       <TextField
-                        //  defaultValue={this.state.post.body}
-                         fullWidth="bool"
-                         helperText={(props.errors.name && props.touched.name) && props.errors.name}
-                         id="filled-multiline-static"
-                         label="Multiline"
-                         multiline
-                         name="name"
-                         onChange={props.handleChange}
-                         rows="4"
-                         variant="filled"
-                       />
- 
-                     </Grid>
-                   </Grid>
-                   <Button
-                     color="primary"
-                     style={{marginTop: 30}}
-                     type="submit"
-                     variant="contained"
-                   >
-                     {!this.state.showLoading&&t('update')} 
-                     {this.state.showLoading&&<CircularProgress
-                       color="inherit"
-                       size={23}
-                     />}
-                   </Button>
+                 {!this.state.showLoading&&<Form
+                   handleSubmit={props.handleSubmit}
+                   onChang={props.handleChange}
+                   helperText={(props.errors.name && props.touched.name) && props.errors.name}
+                   keyy={{btn:"update", title: "update_post"}}
+                   />}
+                   {this.state.showLoading&&<CircularProgress size="150px"/>
+                   }
                    <div>
-                     <Snackbar
-                       autoHideDuration={3000}
-                       onClose={this.handleClose}
-                       open={this.state.openSnackSucc}
-                     >
-                       <Alert
-                         onClose={this.handleClose}
-                         severity="success"
-                         style={{backgroundColor: 'green', color: 'white'}}
-                       >
-                       {t("The_post_has_updated_successfuly")}
-                       </Alert>
-                     </Snackbar>
-                     <Snackbar
-                       autoHideDuration={3000}
-                       onClose={this.handleClose}
-                       open={this.state.openSnackErr}
-                     >
-                       <Alert
-                         onClose={this.handleClose}
-                         severity="error"
-                         style={{backgroundColor: 'red', color: 'white'}}
-                       >
-                       {t("please_try_again")}
-                       </Alert>
-                     </Snackbar>
-                   </div>
-                 </React.Fragment>
+                    <Snackbar
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      open={this.state.openSnackSucc}
+                    >
+                      <Alert
+                        onClose={this.handleClose}
+                        severity="success"
+                        style={{backgroundColor: 'green', color: 'white'}}
+                      >
+                        {t("The_post_has_updated_successfuly")}
+                      </Alert>
+                    </Snackbar>
+                    <Snackbar
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      open={this.state.openSnackErr}
+                    >
+                      <Alert
+                        onClose={this.handleClose}
+                        severity="error"
+                        style={{backgroundColor: 'red', color: 'white'}}
+                      >
+                        {t("please_try_again")}
+                      </Alert>
+                    </Snackbar>
+                  </div>
                </form>
                </LayOut>
              }
@@ -141,4 +109,4 @@ class InfoForm extends React.Component {
      );
    }
 }
-export default withTranslation(['posts/updatePost', 'translation'])(InfoForm)
+export default withTranslation("posts/addPost")(InfoForm)
