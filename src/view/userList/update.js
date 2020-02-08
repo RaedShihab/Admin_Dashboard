@@ -45,9 +45,9 @@ class InfoForm extends React.Component {
 
    render() {
      const {t, classes}  = this.props
-     const userIdArray = this.props.location.state.data.map(user=> user.id);
-     const userEmailArray = this.props.location.state.data.map(user=> user.email);
-     console.log(userEmailArray)
+     const userIdArray = this.props.match.params.id;
+    //  const userEmailArray = this.props.location.state.data.map(user=> user.email);
+    //  console.log(userEmailArray)
      return (
        <div>
          <Formik
@@ -64,7 +64,7 @@ class InfoForm extends React.Component {
             })
             axios.put('https://jsonplaceholder.typicode.com/users/'+userIdArray, data)
                    .then(res =>{
-                     console.log('res')
+                     console.log(userIdArray)
                      this.setState({
                        showLoading: false,
                        openSnackSucc: true
@@ -90,7 +90,7 @@ class InfoForm extends React.Component {
                    helperTextConfigPassword={(props.errors.password_confirmation && props.touched.password_confirmation) && props.errors.password_confirmation}
                    onChang={props.handleChange}
                    keyy={{btn:"update", title: "update_the_user"}}
-                   email={userEmailArray}
+                  //  email={userEmailArray}
                    disabled={true}
                    />}
                    {this.state.showLoading&&<CircularProgress size="150px"/>}

@@ -39,11 +39,15 @@ class CustomizedTables extends React.Component {
      <Table 
      add={'USER'} 
      path={{update:'/users/update/', add: '/users/add-user/'}} 
-     fetch={ApiService.fetchUsers()} columns={this.columns} 
-     url={'https://jsonplaceholder.typicode.com/users/'}/>
+     fetch={ApiService.fetchUsers()}
+     url={'https://jsonplaceholder.typicode.com/users/'}
+     columns={this.columns}
+     searchUrl={'https://jsonplaceholder.typicode.com/users/'}
+     filterUrl={'https://jsonplaceholder.typicode.com/users/'}
+     />
     </TableContainer>
       </LayOut>
     );
   }
 }
-export default withStyles(useStyles)(withTranslation(["countries/list", "translation"])(CustomizedTables));
+export default withStyles(useStyles)(withTranslation(["users/usersTable", "translation"])(CustomizedTables));

@@ -36,7 +36,15 @@ class CustomizedTables extends React.Component {
     return(
       <LayOut>
         <TableContainer component={Paper}>
-     <Table add={'POST'} path={{update:'/posts/update/', add: '/posts/add-post/'}} fetch={ApiService.fetchPosts()} columns={this.columns} url={'https://jsonplaceholder.typicode.com/posts/'}/>
+     <Table 
+     add={'POST'} 
+     path={{update:'/posts/update/', add: '/posts/add-post/'}} 
+     fetch={ApiService.fetchPosts()}
+     url={'https://jsonplaceholder.typicode.com/posts/'}
+     columns={this.columns}
+     searchUrl={'https://jsonplaceholder.typicode.com/posts/'}
+     filterUrl={'https://jsonplaceholder.typicode.com/posts/'}
+     />
     </TableContainer>
       </LayOut>
     );

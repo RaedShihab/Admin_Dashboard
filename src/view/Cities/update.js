@@ -1,17 +1,15 @@
 import React from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@material-ui/lab';
-import {TextField,Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
+import {Snackbar, CircularProgress} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import ApiService from '../../services/apis'
+import ApiService from '../../services/apis';
+import Form from './form';
 
 const useStyles = (theme => ({
   root: {
@@ -34,7 +32,7 @@ const useStyles = (theme => ({
   },
 }));
 
-class Form extends React.Component {
+class FormList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -109,141 +107,48 @@ class Form extends React.Component {
             form
             onSubmit={props.handleSubmit}
                  >
-            <React.Fragment>
-              <Typography style={{marginBottom: 10}} variant='h5'>
-                    {t("update_city")}
-              </Typography>
-              <Grid
-              style={{width: '50%'}}
-                container
-                spacing={3}
-              >
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("city_name")}
-                     name="name"
-                     onChange={props.handleChange}
-                     variant="outlined"
-                     helperText={(props.errors.name && props.touched.name) && props.errors.name}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("arabic_name")}
-                     name="arname"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.arname && props.touched.arname) && props.errors.arname}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("lon")}
-                     name="lon"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.lon && props.touched.lon) && props.errors.lon}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("lat")}
-                     name="lat"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.lat && props.touched.lat) && props.errors.lat}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("order_number")}
-                     name="order"
-                     onChange={props.handleChange}
-                    variant="outlined"
-                    helperText={(props.errors.order && props.touched.order) && props.errors.order}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                   <FormControl variant="filled" className={classes.formControl}>
-                      <InputLabel htmlFor="filled-age-native-simple">Country</InputLabel>
-                        <Select
-                        native
-                        onChange={props.handleChange('id')}
-                        name='id'
-                        >
-                        {
-                          this.state.countries.map(country=> {
-                            return <option value={country.code}>{country.label}</option>
-                          })
-                        }
-                      </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
-              <Button
-                color="primary"
-                type="submit"
-                variant="contained"
-              >
-                {!this.state.showLoading&&t('update')} 
-                {this.state.showLoading&&<CircularProgress
-                  color="inherit"
-                  size={23}
-                />}
-              </Button>
-              <div>
-                <Snackbar
-                  autoHideDuration={3000}
-                  onClose={this.handleClose}
-                  open={this.state.openSnackSucc}
-                >
-                  <Alert
-                    onClose={this.handleClose}
-                    severity="success"
-                    style={{backgroundColor: 'green', color: 'white'}}
-                  >
-                    {t("the_city_has_added_successfuly")}
-                  </Alert>
-                </Snackbar>
-                <Snackbar
-                  autoHideDuration={3000}
-                  onClose={this.handleClose}
-                  open={this.state.openSnackErr}
-                >
-                  <Alert
-                    onClose={this.handleClose}
-                    severity="error"
-                    style={{backgroundColor: 'red', color: 'white'}}
-                  >
-                    {t("please_try_again")}
-                  </Alert>
-                </Snackbar>
-              </div>
-            </React.Fragment>
+            {!this.state.showLoading&&<Form
+                   handleSubmit={props.handleSubmit}
+                   helperText={(props.errors.name && props.touched.name) && props.errors.name}
+                   helperTextArname={(props.errors.arname && props.touched.arname) && props.errors.arname}
+                   helperTextOrder={(props.errors.order && props.touched.order) && props.errors.order}
+                   helperTextLon={(props.errors.lon && props.touched.lon) && props.errors.lon}
+                   helperTextLat={(props.errors.lat && props.touched.lat) && props.errors.lat}
+                   onChang={props.handleChange}
+                   keyy={{btn:"add", title: "add_user"}}
+                   disabled={false}
+                   countries={this.state.countries}
+                   />}
+                   {this.state.showLoading&&<CircularProgress size="150px"/>
+                   }
+                   <div>
+                    <Snackbar
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      open={this.state.openSnackSucc}
+                    >
+                      <Alert
+                        onClose={this.handleClose}
+                        severity="success"
+                        style={{backgroundColor: 'green', color: 'white'}}
+                      >
+                        {t("users/users:the_user_has_added_successfuly")}
+                      </Alert>
+                    </Snackbar>
+                    <Snackbar
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      open={this.state.openSnackErr}
+                    >
+                      <Alert
+                        onClose={this.handleClose}
+                        severity="error"
+                        style={{backgroundColor: 'red', color: 'white'}}
+                      >
+                        {t("please_try_again")}
+                      </Alert>
+                    </Snackbar>
+                  </div>
           </form>
           </LayOut>
         })}
@@ -266,5 +171,5 @@ Form.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(useStyles)(withTranslation(["cities/addUpdate", "cities/validations"])(Form));
+export default withStyles(useStyles)(withTranslation(["cities/addUpdate", "cities/validations"])(FormList));
 

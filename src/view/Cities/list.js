@@ -35,7 +35,15 @@ class CustomizedTables extends React.Component {
     return(
       <LayOut>
         <TableContainer component={Paper}>
-     <CountriesTable add={'CITY'} path={{update:'/cities-list/update-city/', add: '/cities-list/add-city'}} fetch={ApiService.fetchCountries()} columns={this.columns} url={'https://jsonplaceholder.typicode.com/users/'}/>
+     <CountriesTable 
+     add={'CITY'} 
+     path={{update:'/cities-list/update-city/', add: '/cities-list/add-city'}} 
+     fetch={ApiService.fetchCountries()} 
+     columns={this.columns} 
+     url={'https://jsonplaceholder.typicode.com/users/'}
+     searchUrl={'https://jsonplaceholder.typicode.com/cuntries/'}
+     filterUrl={'https://jsonplaceholder.typicode.com/ocuntries/'}
+     />
     </TableContainer>
       </LayOut>
     );
