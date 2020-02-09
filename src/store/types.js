@@ -1,0 +1,1 @@
+export const textAlginType = 'TEXT_ALIGN';

@@ -9,8 +9,6 @@ import { Drawer,
     ListItemIcon,
     ListItemText, 
   } from '@material-ui/core';
-//   import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import PostAddIcon from '@material-ui/icons/PostAdd';

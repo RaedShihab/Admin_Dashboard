@@ -1,14 +1,14 @@
 import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import Table from '../table'
+import Table from '../table';
  import 
  {
   withStyles, 
-  TableContainer, 
+  TableContainer,
   Paper,
 } from '@material-ui/core';
-import ApiService from '../../services/apis'
+import ApiService from '../../services/apis';
 
 const useStyles = ({
   table: {
@@ -30,7 +30,6 @@ class CustomizedTables extends React.Component {
     { name: "name", label: "Name" },
     { name: "email", label: "Email" },
     { name: "address.street", label: "Adress" },
-    { name: "address.street", label: "Edit" },
   ];
   render() {
     return(

@@ -1,8 +1,10 @@
 import React from "react";
 import axios from 'axios';
+import {connect} from 'react-redux';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import MUIDataTable from "mui-datatables";
 import {Button, CircularProgress, IconButton, Avatar} from '@material-ui/core'
-import CustomSearchRender from './OrderEdit';
+import CustomSearchRender from './CustomSearchRender';
 import CustomToolbarSelect from './CustomSelectToolBar';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -16,8 +18,18 @@ class App extends React.Component {
     page: 0,
     count: 100,
     data: [],
-    searchText: ''
+    searchText: '',
+    textAlign: 'left'
   };
+  getMuiTheme = () => createMuiTheme({
+    overrides: {
+      MUIDataTableBodyCell: {
+        root: {
+          textAlign: this.props.data.reducer[0]
+        }
+      }
+    }
+  });
 
   componentDidMount() {
     this.getData();
@@ -26,7 +38,7 @@ class App extends React.Component {
   // get data
   getData = () => {
       this.props.fetch.then(res=>{ 
-      this.setState({data: res})
+      this.setState({data: res.data})
       this.setState({isFetching: false})
     }
   )
@@ -43,7 +55,8 @@ class App extends React.Component {
       })
     })
     .catch(err=> {
-      this.setState({open: false,
+      this.setState({
+        open: false,
         openAlert: true
         })
     })
@@ -96,13 +109,15 @@ class App extends React.Component {
         data: res.data });
     })
     .catch(err=> {
-      this.setState({open: false,
-        openAlert: true,
+      this.setState({
+        open: false,
         submitFilter: false,
+        openAlert: true
         })
     })
   };
   render() {
+    console.log(this.props.data.reducer[0])
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -171,7 +186,9 @@ class App extends React.Component {
     return (
       <React.Fragment>
         {this.state.open&&<CircularProgress size='120px' style={{display: 'block', margin:'350px 440px'}}/>}
-        {!this.state.open&&<MUIDataTable
+        {!this.state.open&&
+        <MuiThemeProvider theme={this.getMuiTheme()}>
+          <MUIDataTable
         title={
           <Avatar>
             <IconButton
@@ -185,7 +202,9 @@ class App extends React.Component {
         data={data}
         columns={this.props.columns}
         options={options}
-      />}
+      />
+        </MuiThemeProvider>
+        }
       <Snackbar open={this.state.openAlert} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error">
                 This is a error message!
@@ -195,5 +214,9 @@ class App extends React.Component {
     );
   }
 }
-export default App;
-
+function mapStateToProps(state) {
+  return {
+    data: state
+  }
+}
+export default connect(mapStateToProps)(App);

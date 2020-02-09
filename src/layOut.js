@@ -1,8 +1,11 @@
-import React, {useState, Suspense } from 'react';
+import React, {useState } from 'react';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
 import { withTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import SideBar from './sideBar'
+import SideBar from './sideBar';
+import {TextAlignAction} from './auth/Actions/textAlignAction';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
         AppBar,
@@ -84,6 +87,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
  function LayOut(props) {
+   console.log(props.data.reducer[0])
   const classes = useStyles();
   const [value, setValue] = useState({
     lang: "en"
@@ -106,6 +110,7 @@ const useStyles = makeStyles(theme => ({
       lang: newlang
     });
     props.i18n.changeLanguage(newlang);
+    props.TextAlignAction(props.data.reducer[0])
   };
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -179,19 +184,20 @@ const useStyles = makeStyles(theme => ({
     </div>
   );
 }
-
-// function mapStateToProps(state) {
-//   return {
-//     data: state
-//   }
-// }
+function mapStateToProps(state) {
+  return {
+    data: state
+  }
+}
 // function mapDispachToProps(dispatch) {
 //   return {
-//     logout: ()=> dispatch(LOGOUT_ACTION())
+//     rtl: ()=> dispatch()
 //   }
 // }
-export default withTranslation('translations')(LayOut);
-
+export default compose(
+  withTranslation('translations'),
+  connect(mapStateToProps, {TextAlignAction})
+)(LayOut);
 // export default withStyles(styles)(translate("translations")(App));
 
 
