@@ -59,17 +59,16 @@ class LoginPage extends React.Component {
         // reset login status
         this.props.dispatch(userActions.logout());
     }
-  
+    // componentDidMount() {
+    //   localStorage.removeItem('user')
+    // }
     handleChange = event => {
-      console.log("selected val is ", event.target.value);
       let newlang = event.target.value;
       this.setState(prevState => ({ value: newlang }));
-      console.log("state value is", newlang);
       this.props.i18n.changeLanguage(newlang);
     };
     render() {
         const {classes, t} = this.props;
-        console.log('jjjjj',this.props)
         return (
             <div>
               <Grid item xs={12}>
@@ -82,102 +81,107 @@ class LoginPage extends React.Component {
                 onSubmit={(values)=> {
                     const { dispatch, history } = this.props;
                     if (values) {
+                      console.log(values)
                         dispatch(userActions.login(values.username, values.password));
                         history.push('/dashboard')
                         }
                           }}
-                          render={
-                            (props)=> {
-                              return <div className={classes.paper}>
-                                 <Avatar className={classes.avatar}>
-                                    <LockIcon />
-                                  </Avatar>
-                                  <Typography component="h1" variant="h5">
-                                  {t(
-                                      "sign_in"
-                                    )} 
-                                  </Typography>
-                              <form className={classes.form} onSubmit={props.handleSubmit}>
-                                      <Container component="main" maxWidth="xs">
-                                      <CssBaseline />
-                                      <FormControl
-                                      component="fieldset"
-                                      className={classes.formControl}
-                                    >
-                                      <RadioGroup
-                                        aria-label="Gender"
-                                        name="gender1"
-                                        className={classes.group}
-                                        // value={this.state.value}
-                                        onChange={this.handleChange}
-                                      >
-                                        <FormControlLabel
-                                          value="en"
-                                          control={<Radio />}
-                                          label="English"
-                                        />
-                                        <FormControlLabel
-                                          value="ar"
-                                          control={<Radio />}
-                                          label="Arabic"
-                                        />
-                                      </RadioGroup>
-                                    </FormControl>
-                                      <TextField
-                                       variant="outlined"
-                                       margin="normal"
-                                       required
-                                       fullWidth
-                                       helperText={(props.errors.username && props.touched.username) && props.errors.username}
-                                       label={t("user_name")}
-                                       name="username"
-                                        onChange={props.handleChange}
-                                      />
-                                       <TextField
-                                       variant="outlined"
-                                       margin="normal"
-                                       required
-                                       fullWidth
-                                       helperText={(props.errors.password && props.touched.password) && props.errors.password}
-                                       label={t("passowrd")}
-                                       name="password"
-                                       onChange={props.handleChange}
-                                      />
-                                      <Button
-                                        color="primary"
-                                        type="submit"
-                                        variant="contained"
-                                        fullWidth
-                                        className={classes.submit}
-                                      >
-                                        {t("sign_in")}
-                                      </Button>
-                                      <Grid container>
-                                  <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                      {t("forgot_password")}
-                                    </Link>
-                                  </Grid>
-                                  <Grid item>
-                                    <Link href="#" variant="body2">
-                                      {t("dont_have_an_account_sign_up")}
-                                    </Link>
-                                  </Grid>
-                               </Grid>
-                                      </Container>
-                              </form>
-                              <Box mt={8}>
-                           <Copyright />
-                          </Box>
-                              </div>
-                            }
-                          }
+                          // render={
+                            
+                          // }
                           validationSchema={Yup.object().shape({
                             username: Yup.string('Enter your User Name')
                               .required (t('name_is_required')),
                             password: Yup.string().required(t('password_is_required'))
                           })}
-                />
+                >
+                  {
+                    (props)=> {
+                      return <div className={classes.paper}>
+                         <Avatar className={classes.avatar}>
+                            <LockIcon />
+                          </Avatar>
+                          <Typography component="h1" variant="h5">
+                          {t(
+                              "sign_in"
+                            )} 
+                          </Typography>
+                      <form className={classes.form} onSubmit={props.handleSubmit}>
+                              <Container component="main" maxWidth="xs">
+                              <CssBaseline />
+                              <FormControl
+                              component="fieldset"
+                              className={classes.formControl}
+                            >
+                              <RadioGroup
+                                aria-label="Gender"
+                                name="gender1"
+                                className={classes.group}
+                                // value={this.state.value}
+                                onChange={this.handleChange}
+                              >
+                                <FormControlLabel
+                                  value="en"
+                                  control={<Radio />}
+                                  label="English"
+                                />
+                                <FormControlLabel
+                                  value="ar"
+                                  control={<Radio />}
+                                  label="Arabic"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                              <TextField
+                               variant="filled"
+                               margin="normal"
+                               required
+                               fullWidth
+                               helperText={(props.errors.username && props.touched.username) && props.errors.username}
+                               label={t("user_name")}
+                               name="username"
+                                onChange={props.handleChange}
+                              />
+                               <TextField
+                               variant="filled"
+                               margin="normal"
+                               required
+                               fullWidth
+                               helperText={(props.errors.password && props.touched.password) && props.errors.password}
+                               label={t("passowrd")}
+                               name="password"
+                               onChange={props.handleChange}
+                              />
+                              <Button
+                                color="primary"
+                                type="submit"
+                                variant="contained"
+                                fullWidth
+                                className={classes.submit}
+                              >
+                                {t("sign_in")}
+                              </Button>
+                              <Grid container>
+                          <Grid item xs>
+                            <Link href="#" variant="body2">
+                              {t("forgot_password")}
+                            </Link>
+                          </Grid>
+                          <Grid item>
+                            <Link href="#" variant="body2">
+                              {t("dont_have_an_account_sign_up")}
+                            </Link>
+                          </Grid>
+                       </Grid>
+                              </Container>
+                      </form>
+                      <Box mt={8}>
+                   <Copyright />
+                  </Box>
+                      </div>
+                    }
+                  } 
+                </Formik>
             </div>
         );
     }

@@ -55,7 +55,7 @@ class FormList extends React.Component {
     })
   };
   render() {
-    const {t, classes} = this.props;
+    const {t} = this.props;
     return (
         <div>
       <Formik

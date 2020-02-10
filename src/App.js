@@ -15,7 +15,7 @@ import PosteTable from './view/posts/list';
 import AddPost from './view/posts/add';
 import updatePost from './view/posts/update';
 
-import AddCountry from './view/countries/add';
+import AddCountry from './view/countries/add1';
 import UpdateCountry from './view/countries/update';
 import CountriesTable from './view/countries/list';
 

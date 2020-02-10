@@ -160,7 +160,7 @@ const useStyles = makeStyles(theme => ({
             <LanguageIcon />
           </IconButton>
           <Typography stayle={{marginLeft: 10}} variant="h6" noWrap>
-            {props.t("Admin Dashboard")}
+            {props.t("admin_dashboard")}
           </Typography>
           <IconButton
           style={{position: 'absolute', right: logOutIconPos.right}}
@@ -189,16 +189,10 @@ function mapStateToProps(state) {
     data: state
   }
 }
-// function mapDispachToProps(dispatch) {
-//   return {
-//     rtl: ()=> dispatch()
-//   }
-// }
 export default compose(
-  withTranslation('translations'),
+  withTranslation('translation'),
   connect(mapStateToProps, {TextAlignAction})
 )(LayOut);
-// export default withStyles(styles)(translate("translations")(App));
 
 
 

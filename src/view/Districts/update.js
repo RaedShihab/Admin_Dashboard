@@ -111,7 +111,7 @@ class Form extends React.Component {
                  >
             <React.Fragment>
               <Typography style={{marginBottom: 10}} variant='h5'>
-                    {t("update_city")}
+                    {t("update_district")}
               </Typography>
               <Grid
               style={{width: '50%'}}

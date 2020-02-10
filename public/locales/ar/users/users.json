@@ -4,5 +4,6 @@
     "the_user_has_added_successfuly": "تم إضافة المستخدم بنجاح",
     "are_you_sure_delete_user": "هل تريد بالفعل حذف المستخدم؟",
     "the_user_has_deleted_successfuly" : "تم حذف المستخدم بنجاح",
-    "add_user" : "أضافة مستخدم"
+    "add_user" : "أضافة مستخدم",
+    "address" : "العنوان"
 }

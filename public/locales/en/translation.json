@@ -6,6 +6,7 @@
     "user_name":"User Name",
     "admin_dashboard" : "Admin Dashboard",
     "user_id" : "User Id",
+    "email": "Email",
     "edit": "Edit",
     "delete": "Delete",
     "password" : "Password",

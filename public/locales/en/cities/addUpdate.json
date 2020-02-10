@@ -5,5 +5,8 @@
     "lon": "Lon Location",
     "lat": "Lat Location",
     "order_number": "Order Number",
-    "update" : "Update"
+    "update" : "Update",
+    "the_city_has_added_successfuly": "Added Successfuly",
+    "the_city_has_updated_successfuly" : "Udated Successfuly",
+    "update_district": "Update The Districs"
 }

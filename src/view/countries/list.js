@@ -26,12 +26,6 @@ class CustomizedTables extends React.Component {
     countries: [],
     open: false
   }
-  columns = [
-    { name: "id", label: "ID" },
-    { name: "phone", label: "Phone" },
-    { name: "label", label: "Name" },
-    { name: "code", label: "Code" },
-  ];
   render() {
     return(
       <LayOut>
@@ -40,7 +34,7 @@ class CustomizedTables extends React.Component {
      add={'COUNTRY'} 
      path={{update:'/countries-list/update/', add: '/countries-list/add-country/'}} 
      fetch={ApiService.fetchCountries()} 
-     columns={this.columns} 
+     column={"countries"} 
      url={'https://jsonplaceholder.typicode.com/users/'}
      searchUrl={'https://jsonplaceholder.typicode.com/cuntries/'}
      filterUrl={'https://jsonplaceholder.typicode.com/ocuntries/'}

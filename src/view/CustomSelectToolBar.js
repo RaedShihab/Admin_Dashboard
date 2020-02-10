@@ -68,7 +68,7 @@ class CustomToolbarSelect extends React.Component {
         }
         this.setState({open: false});
           };
-    const { classes, selectedRows, displayData, data } = this.props;
+    const { classes, selectedRows, data } = this.props;
     const ids = selectedRows.data.map(d => data[d.dataIndex].id);
     return (
       <div className={classes.iconContainer}>

@@ -26,17 +26,18 @@ class CustomizedTables extends React.Component {
     users: [],
     open: false
   }
-  columns = [
-    { name: "id", label: "ID" },
-    { name: "phone", label: "Phone" },
-    { name: "label", label: "Name" },
-    { name: "code", label: "Code" },
-  ];
   render() {
     return(
       <LayOut>
         <TableContainer component={Paper}>
-     <Table add={'District'} path={{update:'/districts-list/update-district/', add: '/districts-list/add-district/'}} fetch={ApiService.fetchCountries()} columns={this.columns} url={'https://jsonplaceholder.typicode.com/users/'}/>
+     <Table add={'District'}
+      path={{update:'/districts-list/update-district/', add: '/districts-list/add-district/'}}
+      fetch={ApiService.fetchCountries()} 
+      column={"districts"} 
+      url={'https://jsonplaceholder.typicode.com/users/'}
+      searchUrl={'https://jsonplaceholder.typicode.com/countries/'}
+      filterUrl={'https://jsonplaceholder.typicode.com/countries/'}
+      />
     </TableContainer>
       </LayOut>
     );

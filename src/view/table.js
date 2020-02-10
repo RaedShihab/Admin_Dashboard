@@ -1,5 +1,6 @@
 import React from "react";
 import axios from 'axios';
+import { withTranslation } from 'react-i18next';
 import {connect} from 'react-redux';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import MUIDataTable from "mui-datatables";
@@ -117,7 +118,8 @@ class App extends React.Component {
     })
   };
   render() {
-    console.log(this.props.data.reducer[0])
+    const {t, column} = this.props
+    console.log(this.props)
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -144,7 +146,7 @@ class App extends React.Component {
       },
       customFilterDialogFooter: filterList => {
         return (
-          <div style={{ marginTop: '40px' }}>
+          <div style={{marginTop: '40px'}}>
             {this.state.submitFilter&&<CircularProgress/>}
             {!this.state.submitFilter&&<Button variant="contained" onClick={this.handleFilterSubmit(filterList)}>Apply Filters</Button>}
           </div>
@@ -155,11 +157,15 @@ class App extends React.Component {
           case "changePage":
             this.changePage(tableState.page);
             break;
+            default:
+            return
         }
         switch (action) {
           case "delete":
             console.log(action)
             break;
+            default:
+            return
         }
       },
       customSearchRender: (searchText, handleSearch, hideSearch, options) => {
@@ -183,6 +189,38 @@ class App extends React.Component {
         />
       ),
     };
+    const columns = {
+      users:  [
+        { name: "id", label: "ID" },
+        { name: "name", label: this.props.t("translation:user_name")},
+        { name: "email", label: t("translation:email")},
+        { name: "address.street", label: t("users/users:address") },
+      ],
+      posts:  [
+        { name: "userId", label: t("user_id") },
+        { name: "id", label: t("posts/postsTable:post_number") },
+        { name: "title", label: t("posts/postsTable:title") },
+        { name: "body", label: t("posts/postsTable:the_post")},
+      ],
+      countries : [
+        { name: "id", label: "ID" },
+        { name: "phone", label: t("countries/list:phone_code")},
+        { name: "label", label: t("countries/list:name")},
+        { name: "code", label: t("countries/list:Code")},
+      ],
+      cities: [
+        { name: "id", label: "ID" },
+        { name: "phone", label: t("countries/list:phone_code")},
+        { name: "label", label: t("countries/list:name")},
+        { name: "code", label: t("countries/list:Code")},
+      ],
+      districts: [
+        { name: "id", label: "ID" },
+        { name: "phone", label: t("countries/list:phone_code")},
+        { name: "label", label: t("countries/list:name")},
+        { name: "code", label: t("countries/list:Code")},
+      ]
+    }
     return (
       <React.Fragment>
         {this.state.open&&<CircularProgress size='120px' style={{display: 'block', margin:'350px 440px'}}/>}
@@ -200,7 +238,7 @@ class App extends React.Component {
         </IconButton>
           </Avatar>}
         data={data}
-        columns={this.props.columns}
+        columns={columns[column]}
         options={options}
       />
         </MuiThemeProvider>
@@ -219,4 +257,4 @@ function mapStateToProps(state) {
     data: state
   }
 }
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(withTranslation(['translation', 'users/users', 'posts/postsTable', 'countries/list'])(App));

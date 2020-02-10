@@ -25,12 +25,6 @@ class CustomizedTables extends React.Component {
   state= {
     users: [],
   }
-  columns = [
-    { name: "id", label: "ID" },
-    { name: "name", label: "Name" },
-    { name: "email", label: "Email" },
-    { name: "address.street", label: "Adress" },
-  ];
   render() {
     return(
       <LayOut>
@@ -40,7 +34,7 @@ class CustomizedTables extends React.Component {
      path={{update:'/users/update/', add: '/users/add-user/'}} 
      fetch={ApiService.fetchUsers()}
      url={'https://jsonplaceholder.typicode.com/users/'}
-     columns={this.columns}
+     column={"users"}
      searchUrl={'https://jsonplaceholder.typicode.com/users/'}
      filterUrl={'https://jsonplaceholder.typicode.com/users/'}
      />

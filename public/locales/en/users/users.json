@@ -4,5 +4,6 @@
     "the_user_has_deleted_successfuly" : "The user Has Deleted Successfuly",
     "update_the_user" : "Update The User",
     "the_user_has_updated_successfuly": "The User Has Updated Successfuly",
-    "add_user" : "Add User"
+    "add_user" : "Add User",
+    "address": "Address"
 }

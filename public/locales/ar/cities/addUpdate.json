@@ -7,6 +7,7 @@
     "lat": "Lat الموقع",
     "order_number": "رقم الطلب",
     "update" : "تحديث",
-    "the_city_has_added_successfuly": "The City Has Added Successfuly",
-    "the_city_has_updated_successfuly" : "The City Has Updated Successfuly"
+    "the_city_has_added_successfuly": "تمت الإضافة بنجاح",
+    "the_city_has_updated_successfuly" : "تم التعديل بنجاح",
+    "update_district": "تعديل معلومات المنطقة"
 }

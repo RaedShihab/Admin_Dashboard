@@ -7,7 +7,7 @@ import { withTranslation } from "react-i18next";
 
 class Form extends React.Component {
      render() {
-         const{t, keyy} = this.props
+         const{t} = this.props
          console.log(this.props.disabled)
         return(
             <React.Fragment>

@@ -2,11 +2,12 @@ import React from 'react';
 import axios from 'axios';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import IconCard from './iconCard'
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@material-ui/lab';
 import {TextField,Button, Grid, Snackbar, CircularProgress, Typography} from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = (theme => ({
@@ -21,8 +22,12 @@ const useStyles = (theme => ({
     margin: '80px 0px 0px 0px'
   },
   form: {
-    backgroundColor: 'white', padding:30
-  }
+    backgroundColor: 'white', padding:30,
+  },
+  card: {
+    width: '86%',
+    height: 120
+  },
 }));
 
 class UserForm extends React.Component {
@@ -31,8 +36,14 @@ class UserForm extends React.Component {
     this.state = {
       openSnackSucc: false,
       showLoading: false,
-      openSnackErr: false
+      openSnackErr: false,
+      selectedFile: null
     };
+  }
+  fileSelectHandler = (e)=> {
+    this.setState({
+      selectedFile: e.target.files[0]
+    })
   }
   handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -45,6 +56,7 @@ class UserForm extends React.Component {
   };
   render() {
     const {t, classes} = this.props;
+    console.log(this.state.selectedFile)
     return (
         <div>
       <Formik
@@ -61,6 +73,7 @@ class UserForm extends React.Component {
           order: ''
         }}
         onSubmit={data => {
+          console.log(data)
             const values     = {
                 "name" : {
                     "en" : data.name,
@@ -68,7 +81,7 @@ class UserForm extends React.Component {
                 },
                 "iso_code" : data.isoCode,
                 "phone_code" : data.phone,
-                "icon" : data.icon,
+                "flag" : this.state.selectedFile,
                 "currency" : {
                     "en" : data.currency,
                     "ar" : data.arCurrency
@@ -83,7 +96,13 @@ class UserForm extends React.Component {
           this.setState({
             showLoading:true
           })
-          axios.post('https://jsonplaceholder.typicode.com/users', values)
+          axios.post('https://jsonplaceholder.typicode.com/users', values, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type' : 'multipart/form-data',
+                // 'Authorization': 'Bearer ' + 'user.token'
+            }
+        })
                  .then(res =>{
                    console.log(res)
                    this.setState({
@@ -134,7 +153,19 @@ class UserForm extends React.Component {
                   sm={8}
                   xs={12}
                 >
-                  <IconCard/>
+                  <Card className={classes.card} variant="outlined">
+                    <CardContent>
+                      <Typography variant="h5" component="h2">
+                        Add Country Flag
+                      </Typography>
+                      <TextField
+                                variant="filled"
+                                type="file"
+                                name="icon"
+                                onChange={this.fileSelectHandler}
+                                />
+                    </CardContent>
+                  </Card>
               </Grid>
               <Grid
                   item
@@ -173,19 +204,6 @@ class UserForm extends React.Component {
                      onChange={props.handleChange}
                     variant="filled"
                     helperText={(props.errors.phone && props.touched.phone) && props.errors.phone}
-                    />
-                </Grid>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                    <TextField
-                     label={t("icon")}
-                     name="icon"
-                     onChange={props.handleChange}
-                    variant="filled"
-                    helperText={(props.errors.icon && props.touched.icon) && props.errors.icon}
                     />
                 </Grid>
                 <Grid

@@ -9,20 +9,35 @@ export const userService = {
 };
 
 function login(username, password) {
+    const body = JSON.stringify({ login:username, password:password })
+    const data = { login:username, password:password }
+
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: body
     };
 
     // return fetch(`${apiUrl}/api/login/email`, requestOptions)
-    return fetch(`/users/authenticate`, requestOptions)
+    return fetch(`https://api.glowyhan.com/gateway/auth/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
             // login successful if there's a jwt token in the response
             if (user.token) {
+                console.log('user',user)
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
+                // localStorage.setItem('user', JSON.stringify(user));
+               return fetch(`https://api.glowyhan.com/gateway/auth/me`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                    // 'Content-Type': 'application/json'
+                },}).then(res => {
+                    console.log(res)
+                    localStorage.setItem('user', JSON.stringify(user));
+                })
+                    .catch(err=> console.log(err))
             }
 
             return user;

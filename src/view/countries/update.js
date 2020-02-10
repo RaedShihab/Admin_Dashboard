@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import IconCard from './iconCard'
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@material-ui/lab';
@@ -84,7 +83,7 @@ class UserForm extends React.Component {
           this.setState({
             showLoading:true
           })
-          axios.post('https://jsonplaceholder.typicode.com/users', values)
+          axios.put('https://jsonplaceholder.typicode.com/users', values)
                  .then(res =>{
                    console.log(res)
                    this.setState({
@@ -135,7 +134,7 @@ class UserForm extends React.Component {
                   sm={8}
                   xs={12}
                 >
-                  <IconCard/>
+                  {/* <IconCard/> */}
               </Grid>
                 <Grid
                   item
