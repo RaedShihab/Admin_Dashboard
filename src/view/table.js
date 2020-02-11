@@ -39,7 +39,7 @@ class App extends React.Component {
   // get data
   getData = () => {
       this.props.fetch.then(res=>{ 
-      this.setState({data: res.data})
+      this.setState({data: res})
       this.setState({isFetching: false})
     }
   )
