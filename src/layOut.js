@@ -87,7 +87,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
  function LayOut(props) {
-   console.log(props.data.reducer[0])
+   console.log(props)
   const classes = useStyles();
   const [value, setValue] = useState({
     lang: "en"
