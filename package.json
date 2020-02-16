@@ -17,6 +17,7 @@
     "i18next-browser-languagedetector": "^4.0.1",
     "i18next-xhr-backend": "^3.2.2",
     "install": "^0.13.0",
+    "markdown": "^0.5.0",
     "mdi-material-ui": "^6.11.0",
     "mui-datatables": "^2.14.0",
     "prop-types": "^15.7.2",

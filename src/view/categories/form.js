@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Yup from 'yup';
-import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
 import { withTranslation } from "react-i18next";
 import {Formik} from 'formik'
@@ -21,9 +20,6 @@ import LayOut from '../../layOut';
 
 const useStyles = (() => ({
   root: {
-      padding: 20,
-    //   margin: 10,
-    //   backgroundColor: '#fafafa'
   },
   details: {
     display: 'flex'
@@ -44,7 +40,9 @@ const useStyles = (() => ({
   input: {
     display: 'none',
   },
-  
+  form: {
+    backgroundColor: 'white', borderRadius: 5
+    }
 }));
 
 class AccountDetails extends React.Component {
@@ -83,29 +81,29 @@ class AccountDetails extends React.Component {
     render() {
         const { t ,classes, ...rest } = this.props;
         return (
-            <Card
-              {...rest}
-              className={classes.root}
+            <div
+              // {...rest}
+              // className={classes.root}
             >
             <Formik
                 initialValues={{
                     name:'',
-                    email:'',
-                    password:'',
-                    password_confirmation:'',
+                    arname: '',
+                    description: ''
                   }}
                   onSubmit={data => {
-                    const values     = {
-                        "name" : data.name,
-                        "email": data.email,
-                        "password" : data.password,
-                        "password_confirmation" : data.password_confirmation,
-                        "photo" : this.state.file,
-                    }
-                      console.log(values)
+                      const values     = {
+                          "name" : {
+                              "en" : data.name,
+                              "ar" : data.arname
+                          },
+                          "description": data.description,
+                          "flag" : this.state.file,
+                      }
                     this.setState({
                       showLoading:true
                     })
+
                 this.props.requist(values)
                            .then(res =>{
                              console.log(res)
@@ -136,7 +134,7 @@ class AccountDetails extends React.Component {
                               >
                                 <Grid
                                   item
-                                  lg={4}
+                                  lg={3}
                                   md={6}
                                   xl={4}
                                   xs={12}
@@ -148,7 +146,7 @@ class AccountDetails extends React.Component {
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {t("add_photo")}
+                                        {t("category")}
                                       </Typography>
                                       <Avatar
                                           className={classes.avatar}
@@ -181,13 +179,12 @@ class AccountDetails extends React.Component {
                                     xl={8}
                                     xs={12}
                                   >
+                                    <Card className={classes.form}>
                                     <CardHeader
-                                    style={{backgroundColor: 'white'}}
-                                    //   subheader={t("user_form")}
-                                      title={t("user_form")}
+                                      title="Adding Category"
                                       />
                                       <Divider />
-                                      <CardContent style={{backgroundColor: 'white'}}>
+                                      <CardContent >
                                           <Grid
                                             container
                                             spacing={3}
@@ -198,14 +195,13 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                    margin="dense"
-                                                    variant="outlined"
-                                                    autoComplete="fname"
-                                                    fullWidth
-                                                    helperText={(props.errors.name && props.touched.name) && props.errors.name}
-                                                    label={t("user_name")}
-                                                    name="name"
-                                                    onChange={props.handleChange}
+                                                fullWidth
+                                                margin="dense"
+                                                variant="outlined"
+                                                label={t("country_name")}
+                                                name="name"
+                                                onChange={props.handleChange}
+                                                helperText={(props.errors.name && props.touched.name) && props.errors.name}
                                                 />
                                             </Grid>
                                           <Grid
@@ -213,60 +209,38 @@ class AccountDetails extends React.Component {
                                               sm={6}
                                               xs={12}
                                             >
-                                                 <TextField
-                                                    margin="dense"
-                                                    defaultValue={this.props.email}
-                                                    disabled= {this.props.disabled}
-                                                    variant="outlined"
-                                                        autoComplete="fname"
-                                                        fullWidth
-                                                        helperText={(props.errors.email && props.touched.name) && props.errors.email}
-                                                        label={t("email")}
-                                                        name="email"
-                                                        onChange={props.handleChange}
-                                                    />
-                                            </Grid>
-                                            <Grid
-                                              item
-                                              sm={6}
-                                              xs={12}
-                                            >
                                                 <TextField
+                                                label={t("arabic_name")}
+                                                name="arname"
+                                                onChange={props.handleChange}
+                                                fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                type='password'
-                                                    autoComplete="fname"
-                                                    fullWidth
-                                                    helperText={(props.errors.password && props.touched.password) && props.errors.password}
-                                                    label={t("password")}
-                                                    name="password"
-                                                    onChange={props.handleChange}
+                                                helperText={(props.errors.arname && props.touched.arname) && props.errors.arname}
                                                 />
                                             </Grid>
                                             <Grid
                                               item
-                                              sm={6}
-                                              xs={12} 
+                                              sm={12}
+                                              xs={12}
                                             >
                                                 <TextField
-                                                    margin="dense"
-                                                  variant="outlined"
-                                                    type='password'
-                                                    autoComplete="fname"
-                                                    fullWidth
-                                                    helperText={(props.errors.password_confirmation && props.touched.password_confirmation) && props.errors.password_confirmation}
-                                                    label={t("password_confirmation")}
-                                                    name="password_confirmation"
-                                                    onChange={props.handleChange}
+                                                label={t("category_discription")}
+                                                name="description"
+                                                onChange={props.handleChange}
+                                                fullWidth
+                                                margin="dense"
+                                                variant="outlined"
+                                                helperText={(props.errors.description && props.touched.description) && props.errors.description}
                                                 />
                                             </Grid>
                                           </Grid>
                                       </CardContent>
-                                      <Divider />
                                       <CardActions>
                                       <Button
+                                      style={{marginBottom: 30}}
                                             color="primary"
-                                            variant="contained"
+                                           variant="contained"
                                             type="submit"
                                           >
                                             {!this.state.showLoading&&t('add')} 
@@ -275,10 +249,116 @@ class AccountDetails extends React.Component {
                                             />}
                                           </Button>
                                       </CardActions>
+                                      <Divider />
+                                    </Card>
+                                      <Grid  container spacing={1}>
+                                          <Grid container item xs={4} >
+                                            <Card style={{marginTop: 15}}>
+                                    <CardContent>
+                                      <div className={classes.details}>
+                                      <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                      >
+                                        {t("category")}
+                                      </Typography>
+                                      <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.image}
+                                        />
+                                      </div>
+                                    </CardContent>
+                                    <Divider />
+                                    <CardActions>
+                                    <input
+                                      onChange={this.onImageChange}
+                                      accept="image/*"
+                                      id="contained-button-file"
+                                      multiple
+                                      type="file"
+                                      className={classes.input}
+                                    />
+                                    <label htmlFor="contained-button-file">
+                                      <Button variant="contained" color="primary" component="span">
+                                        Upload
+                                      </Button>
+                                    </label>
+                                    </CardActions>
+                                  </Card>
+                                          </Grid>
+                                          <Grid  container item xs={4} >
+                                          <Card style={{marginTop: 15}}>
+                                    <CardContent>
+                                      <div className={classes.details}>
+                                      <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                      >
+                                        {t("category")}
+                                      </Typography>
+                                      <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.image}
+                                        />
+                                      </div>
+                                    </CardContent>
+                                    <Divider />
+                                    <CardActions>
+                                    <input
+                                      onChange={this.onImageChange}
+                                      accept="image/*"
+                                      id="contained-button-file"
+                                      multiple
+                                      type="file"
+                                      className={classes.input}
+                                    />
+                                    <label htmlFor="contained-button-file">
+                                      <Button variant="contained" color="primary" component="span">
+                                        Upload
+                                      </Button>
+                                    </label>
+                                    </CardActions>
+                                  </Card>
+                                          </Grid>
+                                          <Grid  container item xs={4} >
+                                          <Card style={{marginTop: 15}}>
+                                    <CardContent>
+                                      <div className={classes.details}>
+                                      <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                      >
+                                        {t("category")}
+                                      </Typography>
+                                      <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.image}
+                                        />
+                                      </div>
+                                    </CardContent>
+                                    <Divider />
+                                    <CardActions>
+                                    <input
+                                      onChange={this.onImageChange}
+                                      accept="image/*"
+                                      id="contained-button-file"
+                                      multiple
+                                      type="file"
+                                      className={classes.input}
+                                    />
+                                    <label htmlFor="contained-button-file">
+                                      <Button variant="contained" color="primary" component="span">
+                                        Upload
+                                      </Button>
+                                    </label>
+                                    </CardActions>
+                                  </Card>
+                                          </Grid>
+                                        </Grid>
                                       <div>
                                             <Snackbar
                                               autoHideDuration={3000}
-                                              onClose={props.handleClose}
+                                              onClose={this.handleClose}
                                               open={this.state.openSnackSucc}
                                             >
                                               <Alert
@@ -286,12 +366,12 @@ class AccountDetails extends React.Component {
                                                 severity="success"
                                                 style={{backgroundColor: 'green', color: 'white'}}
                                               >
-                                                {t("users/users:the_user_has_added_successfuly")}
+                                                {t("the_country_has_added_successfuly")}
                                               </Alert>
                                             </Snackbar>
                                             <Snackbar
                                               autoHideDuration={3000}
-                                              onClose={props.handleClose}
+                                              onClose={this.handleClose}
                                               open={this.state.openSnackErr}
                                             >
                                               <Alert
@@ -309,18 +389,15 @@ class AccountDetails extends React.Component {
                     </form>
                   })}
                   validationSchema={Yup.object().shape({
-                    name: Yup.string('Enter a name').required(t('name_is_required'))
-                    .min(2, 'Seems a bit short...')
-                    .max(10, 'We prefer insecure system, try a shorter password.'),
-                    email: Yup.string('Enter your email')
-                      .email('Enter a valid email')
-                      .required(t("emailRequired")),
-                      password: Yup.string().required(t('password_is_required')),
-                      password_confirmation: Yup.string()
-                         .oneOf([Yup.ref('password'), null], t('passwords_must_match'))
+                    name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
+                    .min(2, 'Seems a bit short...'),
+                    arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+                    .min(2, 'Seems a bit short...'),
+                    description: Yup.string('Enter a description').required(t('countries/validations:description_is_required'))
+                    .min(2, 'Seems a bit short...'),
                   })}
             />
-            </Card>
+            </div>
           );
     }  
 };
@@ -328,4 +405,4 @@ class AccountDetails extends React.Component {
 AccountDetails.propTypes = {
     classes: PropTypes.object.isRequired,
   };
-  export default withStyles(useStyles)(withTranslation(["translation", "users/users"])(AccountDetails));
+  export default withStyles(useStyles)(withTranslation(["countries/addApdate", "countries/validations"])(AccountDetails));

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { withTranslation } from 'react-i18next';
 import {connect} from 'react-redux';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import {Dialog, DialogTitle} from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
 import {Button, CircularProgress, IconButton, Avatar} from '@material-ui/core'
 import CustomSearchRender from './CustomSearchRender';
@@ -11,10 +12,12 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
 
+
+
 class App extends React.Component {
   state = {
     submitFilter: false,
-    open: false,
+    open: true,
     openAlert: false,
     page: 0,
     count: 100,
@@ -38,12 +41,15 @@ class App extends React.Component {
 
   // get data
   getData = () => {
-      this.props.fetch.then(res=>{ 
-      this.setState({data: res})
+    this.props.Axios.then(res=> {
+      console.log(res)
+      this.setState({data: res.data.data})
       this.setState({isFetching: false})
-    }
-  )
-    // this.xhrRequest().then(data => {
+      this.setState({open: false})
+    }).catch(err=> this.setState({
+      open: false,
+      openAlert: true}))
+    // this.xhrRequest().then(data => { 
     //   this.setState({ data });
     // });
   };
@@ -119,7 +125,6 @@ class App extends React.Component {
   };
   render() {
     const {t, column} = this.props
-    console.log(this.props)
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -182,7 +187,7 @@ class App extends React.Component {
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
         <CustomToolbarSelect 
         data={this.state.data} 
-        selectedRows={selectedRows} 
+        selectedRows={selectedRows}
         displayData={displayData} 
         setSelectedRows={setSelectedRows} 
         path={this.props.path.update}
@@ -203,27 +208,28 @@ class App extends React.Component {
         { name: "body", label: t("posts/postsTable:the_post")},
       ],
       countries : [
-        { name: "id", label: "ID" },
-        { name: "phone", label: t("countries/list:phone_code")},
-        { name: "label", label: t("countries/list:name")},
-        { name: "code", label: t("countries/list:Code")},
+        { name: "_id", label: "ID" },
+        { name: "name.en", label: t("countries/list:name")},
+        { name: "name.ar", label: t("countries/list:name")},
+        { name: "phone_code", label: t("countries/list:phone_code")},
+        { name: "iso_code", label: t("countries/list:Code")},
       ],
       cities: [
-        { name: "id", label: "ID" },
-        { name: "phone", label: t("countries/list:phone_code")},
-        { name: "label", label: t("countries/list:name")},
-        { name: "code", label: t("countries/list:Code")},
+        { name: "_id", label: "ID" },
+        { name: "name.en", label: t("countries/list:city_name")},
+        { name: "geoloc.lon", label: t("countries/list:lon")},
+        { name: "geoloc.lat", label: t("countries/list:lat")},
       ],
       districts: [
-        { name: "id", label: "ID" },
-        { name: "phone", label: t("countries/list:phone_code")},
-        { name: "label", label: t("countries/list:name")},
-        { name: "code", label: t("countries/list:Code")},
+        { name: "_id", label: "ID" },
+        { name: "name.en", label: t("countries/list:name")},
+        { name: "geoloc.lon", label: t("countries/lon")},
+        { name: "geoloc.lat", label: t("countries/lat")},
       ]
     }
     return (
       <React.Fragment>
-        {this.state.open&&<CircularProgress size='120px' style={{display: 'block', margin:'350px 440px'}}/>}
+        {this.state.open&&<CircularProgress size='100px' style={{display: 'block', margin:'350px 500px'}}/>}
         {!this.state.open&&
         <MuiThemeProvider theme={this.getMuiTheme()}>
           <MUIDataTable
@@ -234,7 +240,7 @@ class App extends React.Component {
         >
           <AddIcon
            color="primary" variant="contained"
-           >ADD USER</AddIcon>
+           />
         </IconButton>
           </Avatar>}
         data={data}

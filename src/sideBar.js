@@ -9,6 +9,10 @@ import { Drawer,
     ListItemIcon,
     ListItemText, 
   } from '@material-ui/core';
+  import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import PostAddIcon from '@material-ui/icons/PostAdd';
@@ -74,8 +78,21 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(3),
     },
   }));
-
+  const options = [
+    'None',
+    'Atria',
+  ];
  const SideBar = (props)=> {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
         const classes = useStyles();
         const {t} = props;
         // const theme = useTheme();
@@ -96,12 +113,42 @@ const useStyles = makeStyles(theme => ({
         }}
       >
         <div className={classes.toolbar}>
+        
           {/* <IconButton>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton> */}
         </div>
         {/* <Divider /> */}
         <List>
+        <div>
+      <IconButton
+        aria-label="more"
+        aria-controls="long-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+      >
+        <MoreVertIcon />
+      </IconButton>
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxHeight: 48 * 4.5,
+            width: 200,
+          },
+        }}
+      >
+        {options.map(option => (
+          <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
+            {option}
+          </MenuItem>
+        ))}
+      </Menu>
+    </div>
             <ListItem button>
               <ListItemIcon><a href="/"><DashboardIcon/></a></ListItemIcon>
               <ListItemText primary={t('dashboard')} />

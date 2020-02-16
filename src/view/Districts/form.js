@@ -20,7 +20,7 @@ import {
   TextField
 } from '@material-ui/core';
 import LayOut from '../../layOut';
-import ApiService from '../../services/apis';
+import {Axios} from '../axiosConfig';
 
 const useStyles = (() => ({
   root: {
@@ -55,7 +55,7 @@ class AccountDetails extends React.Component {
           showLoading: false,
           openSnackErr: false,
           selectedFile: null,
-          countries: [],
+          cities: [],
         };
       }
       handleClose = (event, reason) => {
@@ -68,7 +68,7 @@ class AccountDetails extends React.Component {
         })
       };
       componentDidMount() {
-        ApiService.fetchCountries().then(res=> this.setState({countries: res}))
+        Axios.get('/cities').then(res=> this.setState({cities: res.data.data}))
       }
     render() {
         const { t ,classes, ...rest } = this.props;
@@ -92,7 +92,7 @@ class AccountDetails extends React.Component {
                           "en" : data.name,
                           "ar" : data.arname
                         },
-                        "country_id" : data.id,
+                        "city_id" : data.id,
                         "order" : data.order,
                         "geoloc" : {
                           "lat" : data.lat,
@@ -112,7 +112,7 @@ class AccountDetails extends React.Component {
                     })
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log(err.response)
                     this.setState({
                     openSnackErr:true,
                     showLoading: false,
@@ -237,8 +237,8 @@ class AccountDetails extends React.Component {
                                             name='id'
                                             >
                                             {
-                                            this.state.countries.map(country=> {
-                                                return <option value={country.code}>{country.label}</option>
+                                            this.state.cities.map(city=> {
+                                                return <option value={city._id}>{city.name.en}</option>
                                             })
                                             }
                                         </Select>

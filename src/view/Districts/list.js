@@ -2,7 +2,8 @@ import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
 import Table from '../table';
-import ApiService from '../../services/apis'
+import ApiService from '../../services/apis';
+import {Axios} from '../axiosConfig';
  import 
  { 
   withStyles, 
@@ -26,13 +27,14 @@ class CustomizedTables extends React.Component {
     users: [],
     open: false
   }
+  Axios = Axios.get('/districts')
   render() {
     return(
       <LayOut>
         <TableContainer component={Paper}>
      <Table add={'District'}
+     Axios = {this.Axios}
       path={{update:'/districts-list/update-district/', add: '/districts-list/add-district/'}}
-      fetch={ApiService.fetchCountries()} 
       column={"districts"} 
       url={'https://jsonplaceholder.typicode.com/users/'}
       searchUrl={'https://jsonplaceholder.typicode.com/countries/'}

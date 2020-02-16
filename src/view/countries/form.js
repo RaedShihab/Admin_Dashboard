@@ -40,7 +40,9 @@ const useStyles = (() => ({
   input: {
     display: 'none',
   },
-  
+  form: {
+  backgroundColor: 'white', borderRadius: 5
+  }
 }));
 
 class AccountDetails extends React.Component {
@@ -52,7 +54,8 @@ class AccountDetails extends React.Component {
           openSnackErr: false,
           selectedFile: null,
           image: '',
-          file:{}
+          file:{},
+          data: {},
         };
       }
       onImageChange = (event) => {
@@ -76,16 +79,19 @@ class AccountDetails extends React.Component {
           openSnackErr:false
         })
       };
+      componentDidMount() {
+        if(this.props.data !== undefined) {
+          this.setState({data: this.props.data[0]})
+        }
+      }
     render() {
-        const { t ,classes, ...rest } = this.props;
-        return (
-            <Card
-              {...rest}
-              className={classes.root}
-            >
+        const { t, classes } = this.props;
+        const {data} = this.state
+        console.log(data)
+          return (
             <Formik
                 initialValues={{
-                    name:'',
+                    name: '',
                     arname: '',
                     isoCode: '',
                     phone: '',
@@ -120,6 +126,7 @@ class AccountDetails extends React.Component {
                     })
 
                 this.props.requist(values)
+                // console.log(values)
                            .then(res =>{
                              console.log(res)
                              this.setState({
@@ -187,6 +194,7 @@ class AccountDetails extends React.Component {
                                     </CardActions>
                                   </Card>
                                 </Grid>
+                                
                                 <Grid
                                     item
                                     lg={8}
@@ -194,9 +202,10 @@ class AccountDetails extends React.Component {
                                     xl={8}
                                     xs={12}
                                   >
+                                    <Card className={classes.form}>
                                     <CardHeader
-                                      subheader="Adding Country"
-                                      title="Profile"
+                                      // subheader="Adding Country"
+                                      title="Adding Country"
                                       />
                                       <Divider />
                                       <CardContent>
@@ -211,6 +220,7 @@ class AccountDetails extends React.Component {
                                             >
                                                 <TextField
                                                 fullWidth
+                                                value={data._id}
                                                 margin="dense"
                                                 variant="outlined"
                                                 label={t("country_name")}
@@ -382,6 +392,7 @@ class AccountDetails extends React.Component {
                                               </Alert>
                                             </Snackbar>
                                           </div>
+                                    </Card>
                                   </Grid>
                               </Grid>
                              </LayOut>
@@ -401,9 +412,8 @@ class AccountDetails extends React.Component {
                     order: Yup.number('Enter a number').required(t('countries/validations:required'))
                   })}
             />
-            </Card>
           );
-    }  
+        }
 };
 
 AccountDetails.propTypes = {

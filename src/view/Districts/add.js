@@ -1,26 +1,16 @@
 import React from 'react';
 import Form from './form';
-import axios from 'axios';
+import {Axios} from '../axiosConfig';
 
-class Add extends React.Component {
-  render() {
-    const token = ()=> {
-      return localStorage.getItem('user')
-    }
+const Add = ()=> {
    const requist =(values)=> {
      console.log(values)
-    return axios.post('https://jsonplaceholder.typicode.com/users/', values, {
-                      headers: {
-                          'Accept': 'application/json',
-                          'Content-Type' : 'multipart/form-data',
-                          'Authorization': 'Bearer ' + token()
-                      }
-                  })}
+    return Axios.post('/districts', values)
+  }
     return(
       <div>
         <Form requist={requist}/>
       </div>
     );
-  }
 }
 export default Add

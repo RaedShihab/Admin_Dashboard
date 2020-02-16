@@ -1,11 +1,8 @@
 import axios from 'axios';
-import {countries} from './service';
+import {countries, categories} from './service';
 
 const USER_API_BASE_URL = "https://jsonplaceholder.typicode.com/users";
 const POSTS_API_BASE_URL = "https://jsonplaceholder.typicode.com/posts";
-// const USER_API_BASE_URL_GITHUB = "https://api.github.com/users";
-// const USER_API_BASE_URL_SERVER = "http://165.227.194.252/auth/api/login/facebook/login-url";
-
 
 class ApiService {
     fetchUsers() {
@@ -16,6 +13,9 @@ class ApiService {
     }
     fetchCountries() {
         return Promise.resolve(countries);
+    }
+    fetchCategories() {
+        return Promise.resolve(categories);
     }
 }
 

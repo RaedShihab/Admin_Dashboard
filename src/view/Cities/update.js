@@ -1,27 +1,16 @@
 import React from 'react';
 import Form from './formm';
-import axios from 'axios';
+import {Axios} from '../axiosConfig';
 
-class Update extends React.Component {
-  render() {
-    const token = ()=> {
-      return localStorage.getItem('user')
-    }
-    const id = this.props.location.state.data[0]
+const Update = (props)=> {
+    const id = props.location.state.data[0]
    const requist =(values)=> {
-     console.log(values)
-    return axios.put('https://jsonplaceholder.typicode.com/users/'+id, values, {
-                      headers: {
-                          'Accept': 'application/json',
-                          'Content-Type' : 'multipart/form-data',
-                          'Authorization': 'Bearer ' + token()
-                      }
-                  })}
+     console.log(id._id)
+    return Axios.patch('/cities/'+id._id, values)}
     return(
       <div>
         <Form id={id} requist={requist}/>
       </div>
     );
-  }
 }
 export default Update

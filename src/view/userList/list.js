@@ -2,6 +2,7 @@ import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
 import Table from '../table';
+import {Axios} from '../axiosConfig';
  import 
  {
   withStyles, 
@@ -25,11 +26,13 @@ class CustomizedTables extends React.Component {
   state= {
     users: [],
   }
+  Axios = Axios.get('/users')
   render() {
     return(
       <LayOut>
         <TableContainer component={Paper}>
-     <Table 
+     <Table
+     Axios = {this.Axios}
      add={'USER'} 
      path={{update:'/users/update/', add: '/users/add-user/'}} 
      fetch={ApiService.fetchUsers()}

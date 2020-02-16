@@ -1,7 +1,9 @@
 import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import CountriesTable from '../table'
+import CountriesTable from '../table';
+import {Axios} from '../axiosConfig';
+
  import 
  {
   withStyles, 
@@ -25,11 +27,13 @@ class CustomizedTables extends React.Component {
   state= {
     users: [],
   }
+  Axios = Axios.get('/cities')
   render() {
     return(
       <LayOut>
         <TableContainer component={Paper}>
-     <CountriesTable 
+     <CountriesTable
+     Axios = {this.Axios}
      add={'CITY'} 
      path={{update:'/cities-list/update-city/', add: '/cities-list/add-city'}} 
      fetch={ApiService.fetchCountries()} 

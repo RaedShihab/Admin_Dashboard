@@ -1,11 +1,11 @@
 import React from 'react';
-import Form from './formm';
+import Form from './form';
 import {Axios} from '../axiosConfig';
 
 const Add = ()=> {
    const requist =(values)=> {
      console.log(values)
-    return Axios.post('/cities', values)
+    return Axios.post('/brands', values)
   }
     return(
       <div>

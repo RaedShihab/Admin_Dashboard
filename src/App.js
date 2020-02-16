@@ -27,7 +27,18 @@ import AddDistric from './view/Districts/add'
 import UpdateDistrict from './view/Districts/update'
 import DistrictsList from './view/Districts/list';
 
+import AddCategory from './view/categories/add';
+import updateCategory from './view/categories/update';
+import CategoriesList from './view/categories/list';
+
+import AddBrand from './view/brands/add';
+import updateBrand from './view/brands/update';
+import brandList from './view/brands/list'
+
 import LoginPage from './auth/LoginPage/loginPage';
+
+import theme from './theme';
+import { ThemeProvider } from '@material-ui/styles';
 
 class App extends React.Component {
     constructor(props) {
@@ -43,7 +54,8 @@ class App extends React.Component {
     render() {
         const { alert } = this.props;
         return (
-            <Suspense fallback={(<div>Loading</div>)}>
+            <ThemeProvider theme={theme}>
+                <Suspense fallback={(<div>Loading</div>)}>
                  <div className="jumbotron">
                 <div className="container">
                     <div className="col-sm-8 col-sm-offset-2">
@@ -75,6 +87,14 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/districts-list/update-district/:id" component={UpdateDistrict} />
                                 <PrivateRoute exact path="/districts-list" component={DistrictsList} />
 
+                                <PrivateRoute exact path="/categories-list/add-category" component={AddCategory} />
+                                <PrivateRoute exact path="/categories-list/category/:id" component={updateCategory} />    
+                                <PrivateRoute exact path="/categories-list" component={CategoriesList} />
+
+                                <PrivateRoute exact path="/brands-list/add-brand" component={AddBrand} />
+                                <PrivateRoute exact path="/brands-list/brand/:id" component={updateBrand} />    
+                                <PrivateRoute exact path="/brands-list" component={brandList} />
+
                                 <Route path="/login" component={LoginPage} />
                             </div>
                         </Router>
@@ -82,6 +102,7 @@ class App extends React.Component {
                 </div>
             </div>
             </Suspense>
+            </ThemeProvider>
         );
     }
 }

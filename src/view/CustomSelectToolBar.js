@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from 'react-router-dom';
-import axios from "axios";
+import {Axios} from './axiosConfig';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
@@ -51,8 +51,9 @@ class CustomToolbarSelect extends React.Component {
     console.log(`block users with dataIndexes: ${this.props.selectedRows.data.map(row => row.dataIndex)}`);
   };
   delete = (ids)=> {
+    console.log(ids[0])
       this.setState({isDeleting: true})
-     axios.delete('https://jsonplaceholder.typicode.com/users/'+ ids, ids).then(res =>{ 
+     Axios.delete('/cities/'+ids[0]+'/soft').then(res =>{ 
         console.log(res)
         this.setState({
             isDeleting: false,
@@ -60,6 +61,11 @@ class CustomToolbarSelect extends React.Component {
         })
     }
        )
+       .catch(err=> {console.log(err.response)
+        this.setState({
+          isDeleting: false,
+      })
+      })
   }
   render() {
     const handleClose = (event, reason) => {
@@ -69,7 +75,8 @@ class CustomToolbarSelect extends React.Component {
         this.setState({open: false});
           };
     const { classes, selectedRows, data } = this.props;
-    const ids = selectedRows.data.map(d => data[d.dataIndex].id);
+    const ids = selectedRows.data.map(d => data[d.dataIndex]._id);
+    const item = selectedRows.data.map(d => data[d.dataIndex]);
     return (
       <div className={classes.iconContainer}>
        
@@ -84,7 +91,7 @@ class CustomToolbarSelect extends React.Component {
                 to={{
                     pathname: this.props.path +ids,
                     state: {
-                    data: ids
+                    data: item
                     }
                 }}
             >

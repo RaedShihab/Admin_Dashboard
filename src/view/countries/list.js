@@ -1,14 +1,14 @@
 import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
-import Table from '../table'
+import Table from '../table';
+import {Axios} from '../axiosConfig';
  import 
  {
   withStyles, 
   TableContainer, 
   Paper,
 } from '@material-ui/core';
-import ApiService from '../../services/apis'
 
 const useStyles = ({
   table: {
@@ -26,18 +26,16 @@ class CustomizedTables extends React.Component {
     countries: [],
     open: false
   }
+  Axios = Axios.get('/countries')
   render() {
     return(
       <LayOut>
         <TableContainer component={Paper}>
-     <Table 
+     <Table
+     Axios = {this.Axios}
      add={'COUNTRY'} 
      path={{update:'/countries-list/update/', add: '/countries-list/add-country/'}} 
-     fetch={ApiService.fetchCountries()} 
-     column={"countries"} 
-     url={'https://jsonplaceholder.typicode.com/users/'}
-     searchUrl={'https://jsonplaceholder.typicode.com/cuntries/'}
-     filterUrl={'https://jsonplaceholder.typicode.com/ocuntries/'}
+     column={"countries"}
      />
     </TableContainer>
       </LayOut>

@@ -8,7 +8,6 @@ import { withTranslation } from "react-i18next";
 class Form extends React.Component {
      render() {
          const{t} = this.props
-         console.log(this.props.disabled)
         return(
             <React.Fragment>
               <Typography style={{marginBottom: 10}} variant='h5'>

@@ -20,7 +20,7 @@ import {
   TextField
 } from '@material-ui/core';
 import LayOut from '../../layOut';
-import ApiService from '../../services/apis';
+import {Axios} from '../axiosConfig';
 
 const useStyles = (() => ({
   root: {
@@ -44,7 +44,10 @@ const useStyles = (() => ({
   input: {
     display: 'none',
   },
-  
+  form: {
+    backgroundColor: 'white',
+    borderRadius: '5px'
+  }
 }));
 
 class AccountDetails extends React.Component {
@@ -68,15 +71,11 @@ class AccountDetails extends React.Component {
         })
       };
       componentDidMount() {
-        ApiService.fetchCountries().then(res=> this.setState({countries: res}))
+        Axios.get('/countries').then(res=> this.setState({countries: res.data.data}))
       }
     render() {
         const { t ,classes, ...rest } = this.props;
         return (
-            <Card
-              {...rest}
-              className={classes.root}
-            >
             <Formik
                 initialValues={{
                     name:'',
@@ -112,7 +111,7 @@ class AccountDetails extends React.Component {
                     })
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log(err.response)
                     this.setState({
                     openSnackErr:true,
                     showLoading: false,
@@ -128,6 +127,7 @@ class AccountDetails extends React.Component {
                 >
                     <LayOut>
                     <Grid
+                    className={classes.form}
                     container
                     spacing={4}
                     >
@@ -238,7 +238,7 @@ class AccountDetails extends React.Component {
                                             >
                                             {
                                             this.state.countries.map(country=> {
-                                                return <option value={country.code}>{country.label}</option>
+                                                return <option value={country._id}>{country.name.en}</option>
                                             })
                                             }
                                         </Select>
@@ -302,7 +302,6 @@ class AccountDetails extends React.Component {
         order: Yup.number('Enter a number').required(t('cities/validations:required'))
         })}
             />
-            </Card>
           );
     }  
 };
