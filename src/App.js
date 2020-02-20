@@ -75,13 +75,13 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/posts/update/:id" component={updatePost} />
                                 <PrivateRoute exact path="/posts" component={PosteTable} />
 
-                                <PrivateRoute exact path="/countries-list/add-country" component={AddCountry} />
-                                <PrivateRoute exact path="/countries-list/update/:id" component={UpdateCountry} />
-                                <PrivateRoute exact path="/countries-list" component={CountriesTable} />
+                                <PrivateRoute exact path="/countries/create" component={AddCountry} />
+                                <PrivateRoute exact path="/countries/edit/:id" component={UpdateCountry} />
+                                <PrivateRoute exact path="/countries" component={CountriesTable} />
 
-                                <PrivateRoute exact path="/cities-list/add-city" component={AddCity} />
-                                <PrivateRoute exact path="/cities-list/update-city/:id" component={UpdateCity} />
-                                <PrivateRoute exact path="/cities-list" component={CitiesList} />
+                                <PrivateRoute exact path="/cities/create" component={AddCity} />
+                                <PrivateRoute exact path="/cities/edit/:id" component={UpdateCity} />
+                                <PrivateRoute exact path="/cities" component={CitiesList} />
 
                                 <PrivateRoute exact path="/districts-list/add-district" component={AddDistric} />
                                 <PrivateRoute exact path="/districts-list/update-district/:id" component={UpdateDistrict} />

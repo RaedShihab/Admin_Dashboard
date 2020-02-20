@@ -87,6 +87,7 @@ class AccountDetails extends React.Component {
         Axios.get('/categories').then(res=> this.setState({categories: res.data.data}))
       }
     render() {
+      console.log(this.props)
         const { t ,classes } = this.props;
         return (
             <div>
@@ -154,7 +155,7 @@ class AccountDetails extends React.Component {
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {t("brand")}
+                                        {t("brand_icon")}
                                       </Typography>
                                       <Avatar
                                           className={classes.avatar}
@@ -189,7 +190,7 @@ class AccountDetails extends React.Component {
                                   >
                                     <Card className={classes.form}>
                                     <CardHeader
-                                      title="Adding Brand"
+                                      title={t("brand_form")}
                                       />
                                       <Divider />
                                       <CardContent >
@@ -206,7 +207,7 @@ class AccountDetails extends React.Component {
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                label={t("country_name")}
+                                                label={t("name")}
                                                 name="name"
                                                 onChange={props.handleChange}
                                                 helperText={(props.errors.name && props.touched.name) && props.errors.name}
@@ -249,7 +250,7 @@ class AccountDetails extends React.Component {
                                     >
                                     <FormControl fullWidth
                                     margin="dense" variant="filled">
-                                        <InputLabel htmlFor="filled-age-native-simple">Country</InputLabel>
+                                        <InputLabel htmlFor="filled-age-native-simple">{t("category")}</InputLabel>
                                             <Select
                                             native
                                             onChange={props.handleChange('id')}

@@ -11,5 +11,7 @@
     "lat" : "Lat إحداثيات الموقع",
     "order_number": "رقم الطلب",
     "the_country_has_added_successfuly": "تم أضافة الدولة بنجاح",
-    "the_country_has_updated_successfuly": "تم تحديث الدولة بنجاح"
+    "the_country_has_updated_successfuly": "تم تحديث الدولة بنجاح",
+    "country_details_form" : "إدخال معلومات الدولة",
+    "add_country_flag": "اختار علم"
 }

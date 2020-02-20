@@ -33,10 +33,9 @@ class CustomizedTables extends React.Component {
       <LayOut>
         <TableContainer component={Paper}>
      <CountriesTable
+     deleteURL={'/cities'}
      Axios = {this.Axios}
-     add={'CITY'} 
-     path={{update:'/cities-list/update-city/', add: '/cities-list/add-city'}} 
-     fetch={ApiService.fetchCountries()} 
+     path={{update:'/cities/edit/', add: '/cities/create'}} 
      column={"cities"} 
      url={'https://jsonplaceholder.typicode.com/users/'}
      searchUrl={'https://jsonplaceholder.typicode.com/cuntries/'}

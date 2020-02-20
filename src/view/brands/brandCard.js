@@ -105,7 +105,7 @@ const ProductCard = props => {
         gutterBottom
         variant="h6"
       >
-        {/* {product.name.en} */}
+        {product.name.en}
       </Typography>
       <Typography
         align="center"

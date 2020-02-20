@@ -2,9 +2,9 @@ import React from 'react';
 import * as Yup from 'yup';
 import { withStyles } from '@material-ui/styles';
 import { withTranslation } from "react-i18next";
-import {Formik} from 'formik'
+import {Formik, Field} from 'formik'
 import PropTypes from 'prop-types';
-import { Snackbar, CircularProgress, Avatar, Typography} from '@material-ui/core';
+import { CircularProgress, Avatar, Typography} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import {
   Card,
@@ -14,12 +14,16 @@ import {
   Divider,
   Grid,
   Button,
-  TextField
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  Snackbar
 } from '@material-ui/core';
 import LayOut from '../../layOut';
 
 const useStyles = (() => ({
   root: {
+    flexGrow: 1,
   },
   details: {
     display: 'flex'
@@ -41,7 +45,13 @@ const useStyles = (() => ({
     display: 'none',
   },
   form: {
-    backgroundColor: 'white', borderRadius: 5
+    backgroundColor: 'white', borderRadius: 5, marginTop: 10
+    },
+    btn: {
+      marginTop: 20, width: '25%'
+    },
+    margin: {
+      marginTop: 15
     }
 }));
 
@@ -54,16 +64,16 @@ class AccountDetails extends React.Component {
           openSnackErr: false,
           selectedFile: null,
           image: '',
-          file:{}
+          file:{},
+          checked: ''
         };
       }
       onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
           let reader = new FileReader();
           reader.onload = (e) => {
-              console.log(e.target)
             this.setState({image: e.target.result,
-            file: e.target
+            file: document.getElementById('contained-button-file').files[0]
             });
           };
           reader.readAsDataURL(event.target.files[0]);
@@ -78,8 +88,16 @@ class AccountDetails extends React.Component {
           openSnackErr:false
         })
       };
+     handleChange = event => {
+        this.setState({checked:event.target.checked});
+      };
     render() {
-        const { t ,classes, ...rest } = this.props;
+
+      // const FILE_SIZE = 160 * 1024;
+      // const SUPPORTED_FORMATS = [
+      //   "image/svg+xml"
+      // ];        
+        const { t ,classes} = this.props;
         return (
             <div
               // {...rest}
@@ -89,35 +107,48 @@ class AccountDetails extends React.Component {
                 initialValues={{
                     name:'',
                     arname: '',
-                    description: ''
+                    description: '',
+                    // file: undefined
                   }}
                   onSubmit={data => {
-                      const values     = {
-                          "name" : {
-                              "en" : data.name,
-                              "ar" : data.arname
-                          },
-                          "description": data.description,
-                          "flag" : this.state.file,
-                      }
+                      let dataa = new FormData();
+                      let myInt = this.state.checked ? 1 : 0;
+                        dataa.append('name[en]', data.name);
+                        dataa.append('name[ar]', data.arname);
+                        dataa.append('parent', null);
+                        dataa.append('icon', this.state.file);
+                        dataa.append('is_real_estate', myInt);
+                        this.props.patch && dataa.append('_method', 'patch');
                     this.setState({
                       showLoading:true
                     })
-
-                this.props.requist(values)
+                    console.log(dataa)
+                this.props.requist(dataa)
                            .then(res =>{
                              console.log(res)
-                             this.setState({
-                               showLoading: false,
-                               openSnackSucc: true,
-                             })
+                             if(res.status === 201) {
+                              console.log(res)
+                              this.setState({
+                                showLoading: false,
+                                openSnackSucc: true,
+                              })
+                             }
+                             if(res.status === 200) {
+                              console.log(res)
+                              this.setState({
+                                showLoading: false,
+                                openSnackSucc: true,
+                              })
+                             }
                            })
                            .catch(err => {
-                             console.log(err)
-                             this.setState({
-                               openSnackErr:true,
-                               showLoading: false,
-                             })
+                             console.log(err.response)
+                             if(err.response.status === 244) {
+                              this.setState({
+                                openSnackErr:true,
+                                showLoading: false,
+                              })
+                             }
                            })
                   }
                   }
@@ -128,17 +159,9 @@ class AccountDetails extends React.Component {
                       onSubmit={props.handleSubmit}
                            >
                              <LayOut>
-                             <Grid
-                                container
-                                spacing={4}
-                              >
-                                <Grid
-                                  item
-                                  lg={3}
-                                  md={6}
-                                  xl={4}
-                                  xs={12}
-                                >
+                             <div className={classes.root}>
+                                <Grid container spacing={3}>
+                                  <Grid item xs={12}>
                                   <Card>
                                     <CardContent>
                                       <div className={classes.details}>
@@ -146,7 +169,7 @@ class AccountDetails extends React.Component {
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {t("category")}
+                                        {("category")}
                                       </Typography>
                                       <Avatar
                                           className={classes.avatar}
@@ -157,6 +180,7 @@ class AccountDetails extends React.Component {
                                     <Divider />
                                     <CardActions>
                                     <input
+                                      // helperText={(props.errors.file && props.touched.file) && props.errors.file}
                                       onChange={this.onImageChange}
                                       accept="image/*"
                                       id="contained-button-file"
@@ -171,17 +195,116 @@ class AccountDetails extends React.Component {
                                     </label>
                                     </CardActions>
                                   </Card>
+                                </Grid> 
+                                <div className={classes.root}>
+                                <Grid item  xs={12}>
+                                  <Card className={classes.margin}>
+                                    <CardContent>
+                                      <div className={classes.details}>
+                                      <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                      >
+                                        {("category")}
+                                      </Typography>
+                                      <Avatar
+                                          className={classes.avatar}
+                                          // src={this.state.image}
+                                        />
+                                      </div>
+                                    </CardContent>
+                                    <Divider />
+                                    <CardActions>
+                                    <input
+                                      // onChange={this.onImageChange}
+                                      accept="image/*"
+                                      id="contained-button-file"
+                                      multiple
+                                      type="file"
+                                      className={classes.input}
+                                    />
+                                    <label htmlFor="contained-button-file">
+                                      <Button variant="contained" color="primary" component="span">
+                                        Upload
+                                      </Button>
+                                    </label>
+                                    </CardActions>
+                                  </Card>
                                 </Grid>
-                                <Grid
-                                    item
-                                    lg={8}
-                                    md={6}
-                                    xl={8}
-                                    xs={12}
-                                  >
+                                <Grid item  xs={12}>
+                                  <Card className={classes.margin}>
+                                    <CardContent>
+                                      <div className={classes.details}>
+                                      <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                      >
+                                        {("category")}
+                                      </Typography>
+                                      <Avatar
+                                          className={classes.avatar}
+                                          // src={this.state.image}
+                                        />
+                                      </div>
+                                    </CardContent>
+                                    <Divider />
+                                    <CardActions>
+                                    <input
+                                    name="file"
+                                      // onChange={this.onImageChange}
+                                      accept="image/*"
+                                      id="contained-button-file"
+                                      multiple
+                                      type="file"
+                                      className={classes.input}
+                                    />
+                                    <label htmlFor="contained-button-file">
+                                      <Button variant="contained" color="primary" component="span">
+                                        Upload
+                                      </Button>
+                                    </label>
+                                    </CardActions>
+                                  </Card>
+                              </Grid>
+                              <Grid item  xs={12}>
+                                <Card className={classes.margin}>
+                                    <CardContent>
+                                      <div className={classes.details}>
+                                      <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                      >
+                                        {("category")}
+                                      </Typography>
+                                      <Avatar
+                                          className={classes.avatar}
+                                          // src={this.state.image}
+                                        />
+                                      </div>
+                                    </CardContent>
+                                    <Divider />
+                                    <CardActions>
+                                    <input
+                                      // onChange={this.onImageChange}
+                                      accept="image/*"
+                                      id="contained-button-file"
+                                      multiple
+                                      type="file"
+                                      className={classes.input}
+                                    />
+                                    <label htmlFor="contained-button-file">
+                                      <Button variant="contained" color="primary" component="span">
+                                        Upload
+                                      </Button>
+                                    </label>
+                                    </CardActions>
+                                  </Card>
+                                  </Grid>
+                                    </div>
+                                    <Grid item xs={9}>
                                     <Card className={classes.form}>
-                                    <CardHeader
-                                      title="Adding Category"
+                              <CardHeader
+                                      title="Category Form"
                                       />
                                       <Divider />
                                       <CardContent >
@@ -198,7 +321,7 @@ class AccountDetails extends React.Component {
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                label={t("country_name")}
+                                                label={("category_name")}
                                                 name="name"
                                                 onChange={props.handleChange}
                                                 helperText={(props.errors.name && props.touched.name) && props.errors.name}
@@ -210,7 +333,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                label={t("arabic_name")}
+                                                label={("arabic_name")}
                                                 name="arname"
                                                 onChange={props.handleChange}
                                                 fullWidth
@@ -225,7 +348,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                label={t("category_discription")}
+                                                label={("category_discription")}
                                                 name="description"
                                                 onChange={props.handleChange}
                                                 fullWidth
@@ -236,126 +359,30 @@ class AccountDetails extends React.Component {
                                             </Grid>
                                           </Grid>
                                       </CardContent>
-                                      <CardActions>
+                                   </Card>
                                       <Button
-                                      style={{marginBottom: 30}}
-                                            color="primary"
-                                           variant="contained"
-                                            type="submit"
-                                          >
-                                            {!this.state.showLoading&&t('add')} 
-                                            {this.state.showLoading&&<CircularProgress
-                                              size={23}
-                                            />}
-                                          </Button>
-                                      </CardActions>
-                                      <Divider />
-                                    </Card>
-                                      <Grid  container spacing={1}>
-                                          <Grid container item xs={4} >
-                                            <Card style={{marginTop: 15}}>
-                                    <CardContent>
-                                      <div className={classes.details}>
-                                      <Typography
-                                        gutterBottom
-                                        variant="h6"
-                                      >
-                                        {t("category")}
-                                      </Typography>
-                                      <Avatar
-                                          className={classes.avatar}
-                                          src={this.state.image}
-                                        />
-                                      </div>
-                                    </CardContent>
-                                    <Divider />
-                                    <CardActions>
-                                    <input
-                                      onChange={this.onImageChange}
-                                      accept="image/*"
-                                      id="contained-button-file"
-                                      multiple
-                                      type="file"
-                                      className={classes.input}
-                                    />
-                                    <label htmlFor="contained-button-file">
-                                      <Button variant="contained" color="primary" component="span">
-                                        Upload
-                                      </Button>
-                                    </label>
-                                    </CardActions>
-                                  </Card>
-                                          </Grid>
-                                          <Grid  container item xs={4} >
-                                          <Card style={{marginTop: 15}}>
-                                    <CardContent>
-                                      <div className={classes.details}>
-                                      <Typography
-                                        gutterBottom
-                                        variant="h6"
-                                      >
-                                        {t("category")}
-                                      </Typography>
-                                      <Avatar
-                                          className={classes.avatar}
-                                          src={this.state.image}
-                                        />
-                                      </div>
-                                    </CardContent>
-                                    <Divider />
-                                    <CardActions>
-                                    <input
-                                      onChange={this.onImageChange}
-                                      accept="image/*"
-                                      id="contained-button-file"
-                                      multiple
-                                      type="file"
-                                      className={classes.input}
-                                    />
-                                    <label htmlFor="contained-button-file">
-                                      <Button variant="contained" color="primary" component="span">
-                                        Upload
-                                      </Button>
-                                    </label>
-                                    </CardActions>
-                                  </Card>
-                                          </Grid>
-                                          <Grid  container item xs={4} >
-                                          <Card style={{marginTop: 15}}>
-                                    <CardContent>
-                                      <div className={classes.details}>
-                                      <Typography
-                                        gutterBottom
-                                        variant="h6"
-                                      >
-                                        {t("category")}
-                                      </Typography>
-                                      <Avatar
-                                          className={classes.avatar}
-                                          src={this.state.image}
-                                        />
-                                      </div>
-                                    </CardContent>
-                                    <Divider />
-                                    <CardActions>
-                                    <input
-                                      onChange={this.onImageChange}
-                                      accept="image/*"
-                                      id="contained-button-file"
-                                      multiple
-                                      type="file"
-                                      className={classes.input}
-                                    />
-                                    <label htmlFor="contained-button-file">
-                                      <Button variant="contained" color="primary" component="span">
-                                        Upload
-                                      </Button>
-                                    </label>
-                                    </CardActions>
-                                  </Card>
-                                          </Grid>
-                                        </Grid>
-                                      <div>
+                                      className={classes.btn}
+                                        color="primary"
+                                        variant="contained"
+                                        type="submit"
+                                        >
+                                        {!this.state.showLoading&&t('done')}
+                                        {this.state.showLoading&&<CircularProgress
+                                          size={23}
+                                        />}
+                                        </Button>
+                                        <FormControlLabel
+                                        style={{marginLeft: 20}}
+                                            control={
+                                              <Checkbox checked={this.state.checked} onChange={this.handleChange} 
+                                              value="primary"
+                                              inputProps={{ 'aria-label': 'primary checkbox' }} />
+                                            }
+                                            label="Is it a real estate?"
+                                          />
+                                    </Grid>
+                                  </Grid>
+                                  <div>
                                             <Snackbar
                                               autoHideDuration={3000}
                                               onClose={this.handleClose}
@@ -366,7 +393,7 @@ class AccountDetails extends React.Component {
                                                 severity="success"
                                                 style={{backgroundColor: 'green', color: 'white'}}
                                               >
-                                                {t("the_country_has_added_successfuly")}
+                                                {t(this.props.response)}
                                               </Alert>
                                             </Snackbar>
                                             <Snackbar
@@ -382,10 +409,35 @@ class AccountDetails extends React.Component {
                                                 {t("please_try_again")}
                                               </Alert>
                                             </Snackbar>
+                                            <Snackbar
+                                                // autoHideDuration={10000}
+                                                onClose={this.handleClose}
+                                                open={this.state.open422status}
+                                            >
+                                                <Alert
+                                                onClose={this.handleClose}
+                                                severity="error"
+                                                style={{backgroundColor: 'red', color: 'white'}}
+                                                >
+                                                {t("Country Name, Phone Code, ISO Code, Should be uniqe! ")}
+                                                </Alert>
+                                            </Snackbar>
+                                            <Snackbar
+                                                // autoHideDuration={10000}
+                                                onClose={this.handleClose}
+                                                open={this.state.open500status}
+                                            >
+                                                <Alert
+                                                onClose={this.handleClose}
+                                                severity="error"
+                                                style={{backgroundColor: 'red', color: 'white'}}
+                                                >
+                                                {t("Server Error Please try again!")}
+                                                </Alert>
+                                            </Snackbar>
                                           </div>
-                                  </Grid>
-                              </Grid>
-                             </LayOut>
+                      </div>
+                      </LayOut>
                     </form>
                   })}
                   validationSchema={Yup.object().shape({
@@ -393,8 +445,21 @@ class AccountDetails extends React.Component {
                     .min(2, 'Seems a bit short...'),
                     arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
                     .min(2, 'Seems a bit short...'),
-                    description: Yup.string('Enter a description').required(t('countries/validations:description_is_required'))
-                    .min(2, 'Seems a bit short...'),
+                    // description: Yup.string('Enter a description').required(t('countries/validations:description_is_required'))
+                    // .min(2, 'Seems a bit short...'),
+                    // file: Yup
+                    //   .mixed()
+                    //   .required("A file is required")
+                    //   .test(
+                    //     "fileSize",
+                    //     "File too large",
+                    //     value => value && value.size <= FILE_SIZE
+                    //   )
+                    //   .test(
+                    //     "fileFormat",
+                    //     "Unsupported Format",
+                    //     value => value && SUPPORTED_FORMATS.includes(value.type)
+                    //   )
                   })}
             />
             </div>

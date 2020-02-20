@@ -11,5 +11,7 @@
     "lat" : "Lat",
     "order_number" : "Order Number",
     "the_country_has_added_successfuly": "The Country has Added Seccessfuly",
-    "the_country_has_updated_successfuly": "The Country Has Updated Seccessfuly"
+    "the_country_has_updated_successfuly": "The Country Has Updated Seccessfuly",
+    "country_details_form" : "Country Details Form",
+    "add_country_flag": "Add Flag"
 }

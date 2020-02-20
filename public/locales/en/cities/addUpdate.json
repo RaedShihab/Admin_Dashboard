@@ -6,7 +6,8 @@
     "lat": "Lat Location",
     "order_number": "Order Number",
     "update" : "Update",
-    "the_city_has_added_successfuly": "Added Successfuly",
-    "the_city_has_updated_successfuly" : "Udated Successfuly",
-    "update_district": "Update The Districs"
+    "the_city_has_added_successfuly": "The city has added successfuly",
+    "the_city_has_updated_successfuly" : "The city has updated successfuly",
+    "update_district": "Update The Districs",
+    "city_form": "City Form"
 }

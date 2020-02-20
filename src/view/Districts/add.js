@@ -9,7 +9,11 @@ const Add = ()=> {
   }
     return(
       <div>
-        <Form requist={requist}/>
+        <Form 
+        response={"the_district_has_added_successfuly"} 
+        requist={requist}
+        patch={false}
+        />
       </div>
     );
 }

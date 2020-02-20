@@ -57,6 +57,7 @@ class AccountDetails extends React.Component {
           openSnackSucc: false,
           showLoading: false,
           openSnackErr: false,
+          open422status: false,
           selectedFile: null,
           countries: [],
         };
@@ -67,51 +68,70 @@ class AccountDetails extends React.Component {
         }
         this.setState({
           openSnackSucc: false,
-          openSnackErr:false
+          openSnackErr:false,
+          open422status: false
         })
       };
       componentDidMount() {
         Axios.get('/countries').then(res=> this.setState({countries: res.data.data}))
       }
     render() {
-        const { t ,classes, ...rest } = this.props;
+        const { t ,classes, id} = this.props;
+        const data = id
+        console.log(data)
         return (
             <Formik
                 initialValues={{
-                    name:'',
-                    arname: '',
-                    order: '',
-                    lon: '',
-                    lat: '',
+                    name:data===undefined? '': data.name.en,
+                    arname: data===undefined? '': data.name.ar,
+                    order: data===undefined? '': data.order,
+                    // lon: data===undefined? '': data.geoloc.lon,
+                    // lat: data===undefined? '':  data.geoloc.lat,
                     id: ''
                   }}
                   onSubmit={data => {
-                    const values     = {
-                        "name" : {
-                          "en" : data.name,
-                          "ar" : data.arname
-                        },
-                        "country_id" : data.id,
-                        "order" : data.order,
-                        "geoloc" : {
-                          "lat" : data.lat,
-                          "lon" : data.lon
-                        }
-                      }
+                      let dataa = new FormData();
+                        dataa.append('name[en]', data.name);
+                        dataa.append('name[ar]', data.arname);
+                        dataa.append('country_id', data.id);
+                        dataa.append('geoloc[lon]', data.lon);
+                        dataa.append('geoloc[lat]', data.lat);
+                        dataa.append('order', data.order);
+                        this.props.patch && dataa.append('_method', 'patch');
                     this.setState({
                       showLoading:true
                     })
-                    console.log(values)
-               this.props.requist(values)
+                    console.log(dataa)
+               this.props.requist(dataa)
                 .then(res =>{
                     console.log(res)
-                    this.setState({
-                    showLoading: false,
-                    openSnackSucc: true,
-                    })
+                    if(res.status === 201 || res.status === 200) {
+                      this.setState({
+                        showLoading: false,
+                        openSnackSucc: true,
+                        })
+                    }   
                 })
                 .catch(err => {
                     console.log(err.response)
+                    if(err.response === undefined) {
+                      this.setState({
+                        openSnackErr:true,
+                        showLoading: false,
+                      })
+                    }
+                    if(err.response.status === 422) {
+                      this.setState({
+                        open422status:true,
+                        showLoading: false,
+                        })
+                    }
+                    if(err.response.status === 500) {
+                      this.setState({
+                        open500status:true,
+                        showLoading: false,
+                        })
+                    }
                     this.setState({
                     openSnackErr:true,
                     showLoading: false,
@@ -126,7 +146,8 @@ class AccountDetails extends React.Component {
             onSubmit={props.handleSubmit}
                 >
                     <LayOut>
-                    <Grid
+                      <Card>
+                      <Grid
                     className={classes.form}
                     container
                     spacing={4}
@@ -140,7 +161,7 @@ class AccountDetails extends React.Component {
                         >
                         <CardHeader
                             // subheader={t("City Form")}
-                            title={t("City Form")}
+                            title={t("city_form")}
                             />
                             <Divider />
                             <CardContent>
@@ -270,11 +291,11 @@ class AccountDetails extends React.Component {
                                     severity="success"
                                     style={{backgroundColor: 'green', color: 'white'}}
                                     >
-                                    {t("the_country_has_added_successfuly")}
+                                    {t(this.props.response)}
                                     </Alert>
                                 </Snackbar>
                                 <Snackbar
-                                    autoHideDuration={3000}
+                                    autoHideDuration={10000}
                                     onClose={this.handleClose}
                                     open={this.state.openSnackErr}
                                 >
@@ -286,9 +307,23 @@ class AccountDetails extends React.Component {
                                     {t("please_try_again")}
                                     </Alert>
                                 </Snackbar>
+                                <Snackbar
+                                    autoHideDuration={10000}
+                                    onClose={this.handleClose}
+                                    open={this.state.open422status}
+                                >
+                                    <Alert
+                                    onClose={this.handleClose}
+                                    severity="error"
+                                    style={{backgroundColor: 'red', color: 'white'}}
+                                    >
+                                    {t("please check if you selected selected a country")}
+                                    </Alert>
+                                </Snackbar>
                                 </div>
                         </Grid>
                     </Grid>
+                      </Card>
                     </LayOut>
         </form>
         })}
@@ -297,9 +332,9 @@ class AccountDetails extends React.Component {
         .min(2, 'Seems a bit short...'),
         arname: Yup.string('Enter a name').required(t('cities/validations:arabic_name_is_required'))
         .min(2, 'Seems a bit short...'),
-        lon: Yup.number('Enter a number').required(t('cities/validations:required')),
-        lat: Yup.number('Enter a number').required(t('cities/validations:required')),
-        order: Yup.number('Enter a number').required(t('cities/validations:required'))
+        lon: Yup.number().min(-180).max(180).required(t('countries/validations:required')),
+        lat: Yup.number().min(-90).max(90).required(t('countries/validations:required')),
+        order: Yup.number().integer().required(t('countries/validations:required')),
         })}
             />
           );
@@ -309,4 +344,4 @@ class AccountDetails extends React.Component {
 AccountDetails.propTypes = {
     classes: PropTypes.object.isRequired,
   };
-  export default withStyles(useStyles)(withTranslation(["countries/addApdate", "countries/validations"])(AccountDetails));
+  export default withStyles(useStyles)(withTranslation(["cities/addUpdate", "countries/validations"])(AccountDetails));

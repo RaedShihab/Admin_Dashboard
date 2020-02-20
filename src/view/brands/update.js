@@ -11,7 +11,7 @@ const Update = (props)=> {
     return Axios.patch('/brands/'+id, values)}
     return(
       <div>
-        <Form id={id}  requist={requist}/>
+        <Form id={id} data={data}  requist={requist}/>
       </div>
     );
 }

@@ -56,6 +56,7 @@ class AccountDetails extends React.Component {
           openSnackErr: false,
           selectedFile: null,
           cities: [],
+          open422status: false,
         };
       }
       handleClose = (event, reason) => {
@@ -64,7 +65,8 @@ class AccountDetails extends React.Component {
         }
         this.setState({
           openSnackSucc: false,
-          openSnackErr:false
+          openSnackErr:false,
+          open422status: false
         })
       };
       componentDidMount() {
@@ -87,31 +89,35 @@ class AccountDetails extends React.Component {
                     id: ''
                   }}
                   onSubmit={data => {
-                    const values     = {
-                        "name" : {
-                          "en" : data.name,
-                          "ar" : data.arname
-                        },
-                        "city_id" : data.id,
-                        "order" : data.order,
-                        "geoloc" : {
-                          "lat" : data.lat,
-                          "lon" : data.lon
-                        }
-                      }
+
+                      let dataa = new FormData();
+                        dataa.append('name[en]', data.name);
+                        dataa.append('name[ar]', data.arname);
+                        dataa.append('city_id', data.id);
+                        dataa.append('geoloc[lon]', data.lon);
+                        dataa.append('geoloc[lat]', data.lat);
+                        dataa.append('order', data.order);
+                        this.props.patch&&dataa.append('_method', 'patch');
                     this.setState({
                       showLoading:true
                     })
-                    console.log(values)
-               this.props.requist(values)
+               this.props.requist(dataa)
                 .then(res =>{
-                    console.log(res)
+                  console.log(res)
+                  if(res.status === 201 || res.status === 200) {
                     this.setState({
-                    showLoading: false,
-                    openSnackSucc: true,
-                    })
+                      showLoading: false,
+                      openSnackSucc: true,
+                      })
+                  }                    
                 })
                 .catch(err => {
+                  if(err.response.status === 422) {
+                    this.setState({
+                      open422status:true,
+                      showLoading: false,
+                      })
+                  }
                     console.log(err.response)
                     this.setState({
                     openSnackErr:true,
@@ -270,7 +276,7 @@ class AccountDetails extends React.Component {
                                     severity="success"
                                     style={{backgroundColor: 'green', color: 'white'}}
                                     >
-                                    {t("the_country_has_added_successfuly")}
+                                    {t(this.props.response)}
                                     </Alert>
                                 </Snackbar>
                                 <Snackbar
@@ -286,6 +292,19 @@ class AccountDetails extends React.Component {
                                     {t("please_try_again")}
                                     </Alert>
                                 </Snackbar>
+                                <Snackbar
+                                                autoHideDuration={10000}
+                                                onClose={this.handleClose}
+                                                open={this.state.open422status}
+                                            >
+                                                <Alert
+                                                onClose={this.handleClose}
+                                                severity="error"
+                                                style={{backgroundColor: 'red', color: 'white'}}
+                                                >
+                                                {t("please check if you reapeated city names or don't selecting a country")}
+                                                </Alert>
+                                            </Snackbar>
                                 </div>
                         </Grid>
                     </Grid>
@@ -297,9 +316,9 @@ class AccountDetails extends React.Component {
         .min(2, 'Seems a bit short...'),
         arname: Yup.string('Enter a name').required(t('cities/validations:arabic_name_is_required'))
         .min(2, 'Seems a bit short...'),
-        lon: Yup.number('Enter a number').required(t('cities/validations:required')),
-        lat: Yup.number('Enter a number').required(t('cities/validations:required')),
-        order: Yup.number('Enter a number').required(t('cities/validations:required'))
+        lon: Yup.number().min(-180).max(180).required(t('countries/validations:required')),
+        lat: Yup.number().min(-90).max(90).required(t('countries/validations:required')),
+        order: Yup.number().integer().required(t('countries/validations:required')),
         })}
             />
             </Card>

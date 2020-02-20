@@ -3,7 +3,6 @@ import axios from 'axios';
 import { withTranslation } from 'react-i18next';
 import {connect} from 'react-redux';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
-import {Dialog, DialogTitle} from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
 import {Button, CircularProgress, IconButton, Avatar} from '@material-ui/core'
 import CustomSearchRender from './CustomSearchRender';
@@ -124,7 +123,8 @@ class App extends React.Component {
     })
   };
   render() {
-    const {t, column} = this.props
+    console.log(this.state.data)
+    const {t, column, deleteURL} = this.props
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -185,7 +185,8 @@ class App extends React.Component {
         );
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect 
+        <CustomToolbarSelect
+        deleteURL={deleteURL}
         data={this.state.data} 
         selectedRows={selectedRows}
         displayData={displayData} 
@@ -251,7 +252,7 @@ class App extends React.Component {
         }
       <Snackbar open={this.state.openAlert} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error">
-                This is a error message!
+                Somthing went wrong please refresh the page or check enternet connection..
             </Alert>
         </Snackbar>
       </React.Fragment>

@@ -6,10 +6,15 @@ const Update = (props)=> {
     const id = props.location.state.data[0]
    const requist =(values)=> {
      console.log(id._id)
-    return Axios.patch('/cities/'+id._id, values)}
+    return Axios.post('/cities/'+id._id, values)}
     return(
       <div>
-        <Form id={id} requist={requist}/>
+        <Form 
+        response={"the_city_has_updated_successfuly"}  
+        id={id} 
+        requist={requist}
+        patch={true}
+        />
       </div>
     );
 }
