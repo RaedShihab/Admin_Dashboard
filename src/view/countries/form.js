@@ -92,6 +92,13 @@ class AccountDetails extends React.Component {
     render() {
         const { t, classes } = this.props;
         const {data} = this.props
+        // const withTernary = () => (
+        //   (!conditionA)
+        //     ? valueC
+        //     : (conditionB)
+        //     ? valueA
+        //     : valueB
+        // );
           return (
             <Formik
                 initialValues={{
@@ -99,14 +106,16 @@ class AccountDetails extends React.Component {
                     arname: data===undefined? '': data.name.ar,
                     isoCode: data===undefined? '': data.iso_code,
                     phone: data===undefined? '': data.phone_code,
-                    icon: data===undefined? '': this.state.file === {} ? data.flag: this.state.file,
+                    // iconn: withTernary(),
+                    icon: data===undefined? this.state.file : data.flag,
                     currency: data===undefined? '': data.currency.en,
                     arCurrency: data===undefined? '': data.currency.ar,
-                    // lon: data===undefined? '': data.geoloc.lon,
-                    // lat: data===undefined? '':  data.geoloc.lat,
+                    lon: data===undefined? '': data.geoloc.lon,
+                    lat: data===undefined? '':  data.geoloc.lat,
                     order: data===undefined? '': data.order
                   }}
                   onSubmit={data => {
+                    console.log(data)
                     this.setState({
                       showLoading:true
                     })
@@ -118,10 +127,10 @@ class AccountDetails extends React.Component {
                         values.append('phone_code', data.phone);
                         values.append('currency[en]', data.currency);
                         values.append('currency[ar]', data.arCurrency);
-                        // values.append('geoloc[lon]', data.lon);
-                        // values.append('geoloc[lat]', data.lat);
+                        values.append('geoloc[lon]', data.lon);
+                        values.append('geoloc[lat]', data.lat);
                         values.append('order', data.order);
-                        values.append('flag', this.state.file);
+                        values.append('flag', this.state.file==={}? data.flag : this.state.file);
                         this.props.patch && values.append('_method', 'patch');
 
                     this.props.requist(values)

@@ -1,5 +1,9 @@
 import React from 'react';
-import {Snackbar, Button, CircularProgress} from '@material-ui/core';
+import {compose} from 'redux';
+import { withTranslation } from "react-i18next";
+import {Snackbar, Button, CircularProgress, IconButton, Tooltip} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MuiAlert from '@material-ui/lab/Alert';
 import {Axios} from '../axiosConfig';
 import {connect} from 'react-redux';
@@ -40,6 +44,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProductsToolbar = props => {
+  const checkedCategoriesNumber = props.data.deleteCategories.length
+  const {t} = props
   console.log(props)
   const Alert = (props)=> {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -93,7 +99,7 @@ const ProductsToolbar = props => {
       })
       .catch(err => {
         setOpenErr(true)
-        setWaiting(false) 
+        setWaiting(false)
       })
   }
   return (
@@ -106,39 +112,49 @@ const ProductsToolbar = props => {
         <span className={classes.spacer} />
 
         {/* {props.data.deleteCategories.length>0&&<React.Fragment> */}
+        {/* {checkedCategoriesNumber>0 &&<div> */}
         {loading&&<div >
       <CircularProgress />
     </div>}
-    {!loading&&<Button
-        onClick={deleteCategories}
+    {!loading&&
+    <Tooltip title={t("soft_delete")}>
+      <IconButton onClick={deleteCategories}>
+      <DeleteIcon
           color="primary"
           variant="contained"
         >
           delete
-        </Button>}
+        </DeleteIcon>
+    </IconButton>
+    </Tooltip>
+    }
+        {/* </div>} */}
 
+       {/* {checkedCategoriesNumber>0 && <div> */}
         {waiting&&<div >
-      <CircularProgress style={{margin: '0px 45px'}}/>
+      <CircularProgress/>
     </div>}
-    {!waiting&&<Button
-        onClick={forceDeleteCategories}
+    {!waiting&&
+    <Tooltip title={t("force_delete")}>
+      <IconButton onClick={forceDeleteCategories}>
+      <DeleteForeverIcon
           color="secondary"
           variant="contained"
         >
           force delete
-        </Button>}
+        </DeleteForeverIcon>
+    </IconButton>
+    </Tooltip>
+    }
+        {/* </div>} */}
         {/* </React.Fragment>} */}
-        
-        
-
-
         <Button
         className={classes.btn}
         href={props.path.add}
           color="primary"
           variant="contained"
         >
-          Add category
+          {t("add_category")}
         </Button>
       </div>
       <div className={classes.row}>
@@ -150,7 +166,7 @@ const ProductsToolbar = props => {
       <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
-          This is a success message!
+          {t("the_category_has_deleted_successfuly")}
         </Alert>
       </Snackbar>
       <Snackbar open={openErr} autoHideDuration={6000} onClose={handleClose}>
@@ -184,4 +200,5 @@ function mapStateToProps(state) {
     data: state
   }
 }
-export default connect(mapStateToProps)(ProductsToolbar);
+
+export default compose(withTranslation(["categories/addUpdate", "countries/validations"]) , connect(mapStateToProps))(ProductsToolbar);

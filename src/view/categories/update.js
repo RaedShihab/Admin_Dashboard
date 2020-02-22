@@ -12,6 +12,7 @@ const Update = (props)=> {
     return(
       <div>
         <Form
+        data={data}
         response={"the_category_has_updated_successfuly"} 
         patch={true}
         requist={requist}/>

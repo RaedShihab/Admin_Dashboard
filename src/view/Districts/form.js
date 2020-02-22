@@ -73,7 +73,9 @@ class AccountDetails extends React.Component {
         Axios.get('/cities').then(res=> this.setState({cities: res.data.data}))
       }
     render() {
-        const { t ,classes, ...rest } = this.props;
+        const { t , id, classes, ...rest } = this.props;
+        const data = id
+        console.log(data)
         return (
             <Card
               {...rest}
@@ -81,12 +83,12 @@ class AccountDetails extends React.Component {
             >
             <Formik
                 initialValues={{
-                    name:'',
-                    arname: '',
-                    order: '',
-                    lon: '',
-                    lat: '',
-                    id: ''
+                    name:data===undefined? '': data.name.en,
+                    arname: data===undefined? '': data.name.ar,
+                    order: data===undefined? '': data.order,
+                    lon: data===undefined? '': data.geoloc.lon,
+                    lat: data===undefined? '':  data.geoloc.lat,
+                    id: data===undefined? '':  data.city_id
                   }}
                   onSubmit={data => {
 

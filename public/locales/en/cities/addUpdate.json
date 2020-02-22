@@ -9,5 +9,6 @@
     "the_city_has_added_successfuly": "The city has added successfuly",
     "the_city_has_updated_successfuly" : "The city has updated successfuly",
     "update_district": "Update The Districs",
-    "city_form": "City Form"
+    "city_form": "City Form",
+    "please_check_if_you_selected_a_country": "Please check if you selected a country"
 }

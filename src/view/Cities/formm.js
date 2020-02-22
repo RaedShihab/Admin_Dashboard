@@ -85,11 +85,13 @@ class AccountDetails extends React.Component {
                     name:data===undefined? '': data.name.en,
                     arname: data===undefined? '': data.name.ar,
                     order: data===undefined? '': data.order,
-                    // lon: data===undefined? '': data.geoloc.lon,
-                    // lat: data===undefined? '':  data.geoloc.lat,
-                    id: ''
+                    lon: data===undefined? '': data.geoloc.lon,
+                    lat: data===undefined? '':  data.geoloc.lat,
+                    id: data===undefined? '':  data.country_id,
                   }}
+                  
                   onSubmit={data => {
+                    console.log(data)
                       let dataa = new FormData();
                         dataa.append('name[en]', data.name);
                         dataa.append('name[ar]', data.arname);
@@ -175,6 +177,7 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                     <TextField
+                                    defaultValue={data !== undefined? data.name.en : '' }
                                     fullWidth
                                     margin="dense"
                                     label={t("city_name")}
@@ -190,6 +193,7 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                         <TextField
+                                        defaultValue={data!== undefined? data.name.ar : ''}
                                         fullWidth
                                         margin="dense"
                                     label={t("arabic_name")}
@@ -205,6 +209,7 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                         <TextField
+                                        defaultValue={data!== undefined? data.geoloc.lon : ''}
                                         fullWidth
                                         margin="dense"
                                         label={t("lon")}
@@ -220,6 +225,7 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                     <TextField
+                                    defaultValue={data!== undefined? data.geoloc.lat : ''}
                                     fullWidth
                                     margin="dense"
                                         label={t("lat")}
@@ -235,6 +241,7 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                     <TextField
+                                    defaultValue={data!== undefined? data.order : ''}
                                     fullWidth
                                     margin="dense"
                                         label={t("order_number")}
@@ -317,7 +324,7 @@ class AccountDetails extends React.Component {
                                     severity="error"
                                     style={{backgroundColor: 'red', color: 'white'}}
                                     >
-                                    {t("please check if you selected selected a country")}
+                                    {t("please_check_if_you_selected_a_country")}
                                     </Alert>
                                 </Snackbar>
                                 </div>
@@ -327,7 +334,7 @@ class AccountDetails extends React.Component {
                     </LayOut>
         </form>
         })}
-        validationSchema={Yup.object().shape({
+        validationSchema={data === undefined && Yup.object().shape({
         name: Yup.string('Enter a name').required(t('cities/validations:name_is_required'))
         .min(2, 'Seems a bit short...'),
         arname: Yup.string('Enter a name').required(t('cities/validations:arabic_name_is_required'))

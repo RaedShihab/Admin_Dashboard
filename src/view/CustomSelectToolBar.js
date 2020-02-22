@@ -1,4 +1,5 @@
 import React from "react";
+import { withTranslation } from "react-i18next";
 import {Link} from 'react-router-dom';
 import {Axios} from './axiosConfig';
 import IconButton from "@material-ui/core/IconButton";
@@ -130,6 +131,8 @@ class CustomToolbarSelect extends React.Component {
       })
   }
   render() {
+    const {t} = this.props
+    console.log(this.props)
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;
@@ -179,7 +182,7 @@ class CustomToolbarSelect extends React.Component {
         </Tooltip>
         <Snackbar open={this.state.open} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
-                The Items has deleted successfuly!
+                {t("the_Items_has_deleted_successfuly!")}
             </Alert>
         </Snackbar>
         <Snackbar open={this.state.openErr400} autoHideDuration={6000} onClose={handleClose}>
@@ -189,7 +192,7 @@ class CustomToolbarSelect extends React.Component {
         </Snackbar>
         <Snackbar open={this.state.openErr500} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error">
-                Somthing went wrong with the service!
+                {("somthing_went_wrong_with_the_service!")}
             </Alert>
         </Snackbar>
       </div>
@@ -197,4 +200,4 @@ class CustomToolbarSelect extends React.Component {
   }
 }
 
-export default withStyles(defaultToolbarSelectStyles, { name: "CustomToolbarSelect" })(CustomToolbarSelect);
+export default withStyles(defaultToolbarSelectStyles, { name: "CustomToolbarSelect" })(withTranslation(["translation", "countries/validations"])(CustomToolbarSelect));

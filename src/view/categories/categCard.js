@@ -1,4 +1,6 @@
 import React from 'react';
+import {compose} from 'redux'
+import { withTranslation } from "react-i18next";
 import ReactHtmlParser from "react-html-parser";
 import {connect} from 'react-redux';
 import {deleteCategoriesAction} from '../../auth/Actions/deleteCategoriesAction'
@@ -17,7 +19,8 @@ import {
   FormControlLabel,
   Checkbox,
   Snackbar,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import EditIcon from '@material-ui/icons/Edit';
@@ -60,11 +63,13 @@ function unescapeHTML(html) {
 
 const ProductCard = props => {
   // console.log('render')
-  const { className, product, ...rest } = props;
+  const { className, product, t, ...rest } = props;
 
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
   const [openErr, setOpenErr] = React.useState(false);
   const [open404, setOpen404] = React.useState(false);
+  const [softDeliting, setSoftDeliting] = React.useState(false);
+  const [forceDeliting, setForceDeliting] = React.useState(false);
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -93,28 +98,34 @@ const ProductCard = props => {
   }
   
   const deleteCategory = (id)=> {
+    setSoftDeliting(true)
     console.log('/categories/'+id+'/soft')
     Axios.delete('/categories/'+id+'/soft')
     .then(res=> {
       if(res.status === 200) {
         console.log(res)
+        setSoftDeliting(false)
         setOpenSuccess(true)
       setTimeout(()=>window.location.reload(false), 1500);
       }
     })
     .catch(err=> {
-      setOpen404(true)
+      setOpenErr(true)
+      setForceDeliting(false)
       console.log(err.response)
     })
   }
   const forceDeleteCategory = (id)=> {
+    setForceDeliting(true)
     console.log('/categories/'+id+'/soft')
     Axios.delete('/categories/'+id+'/soft').then(res=> {
       console.log(res)
+      setForceDeliting(false)
       setOpenSuccess(true)
-      setTimeout(()=>window.location.reload(false), 1500);
+      window.location.reload(false)
     })
     .catch(err=> {
+      setForceDeliting(false)
       setOpenErr(true)
       console.log(err.response)
     })
@@ -172,14 +183,17 @@ const ProductCard = props => {
           className={classes.statsItem}
           item
         >
-          <Tooltip title={"Soft Delete"}>
+          {softDeliting&& <CircularProgress />}
+         {!softDeliting && <Tooltip title={t("soft_delete")}>
           <IconButton
           onClick={()=>deleteCategory(product._id)}
           >
            <DeleteIcon className={classes.statsIcon} />
           </IconButton>
-          </Tooltip>
-          <Tooltip title={"Force Delete"}>
+          </Tooltip>}
+
+          {forceDeliting&& <CircularProgress />}
+         {!forceDeliting && <Tooltip title={t("force_delete")}>
           <IconButton
           onClick={()=>forceDeleteCategory(product._id)}
           >
@@ -187,7 +201,7 @@ const ProductCard = props => {
            color="secondary"
            className={classes.statsIcon} />
           </IconButton>
-          </Tooltip>
+          </Tooltip>}
           <Tooltip title={"Edit"}>
           <Link
           style={{margin: '0px 20px'}}
@@ -229,7 +243,7 @@ const ProductCard = props => {
         <Alert
         style={{backgroundColor: 'red', color: 'white'}}
         onClose={handleClose} severity="error">
-          Somthing went wrong please try again!
+          {t("please_try_again")}
         </Alert>
       </Snackbar>
   </Card>
@@ -245,4 +259,4 @@ function mapStateToProps(state) {
     data: state
   }
 }
-export default connect(mapStateToProps, {deleteCategoriesAction})(ProductCard);
+export default compose(withTranslation(["categories/addUpdate", "countries/validations"]) , connect(mapStateToProps, {deleteCategoriesAction}))(ProductCard);

@@ -17,5 +17,7 @@
     "password_is_required" : "Password Is Required",
     "passwords_must_match" : "Passwords Must Match",
     "please_try_again" : "Please, Try Again.",
-    "cancele" : "Cancele" 
+    "cancele" : "Cancele",
+    "the_Items_has_deleted_successfuly": "تم حذف العنصر بنجاح",
+    "somthing_went_wrong_with_the_service": "هناك مشكلة في السيرفة الرجاء المحاولة مرة ثانية"
   }

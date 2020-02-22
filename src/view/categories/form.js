@@ -29,7 +29,7 @@ const useStyles = (() => ({
     display: 'flex'
   },
   avatar: {
-    marginLeft: 'auto',
+    // marginLeft: 'auto',
     height: 110,
     width: 100,
     flexShrink: 0,
@@ -52,6 +52,9 @@ const useStyles = (() => ({
     },
     margin: {
       marginTop: 15
+    },
+    TypographyMargin : {
+      // margin: 40
     }
 }));
 
@@ -63,8 +66,12 @@ class AccountDetails extends React.Component {
           showLoading: false,
           openSnackErr: false,
           selectedFile: null,
-          image: '',
-          file:{},
+          icon: '',
+          iconFile:{},
+          cover: '',
+          coverFile: {},
+          banner: '',
+          bannerFile: {},
           checked: ''
         };
       }
@@ -72,8 +79,42 @@ class AccountDetails extends React.Component {
         if (event.target.files && event.target.files[0]) {
           let reader = new FileReader();
           reader.onload = (e) => {
-            this.setState({image: e.target.result,
-            file: document.getElementById('contained-button-file').files[0]
+            console.log(document.getElementById('icon').files[0])
+            this.setState({icon: e.target.result,
+            iconFile: document.getElementById('icon').files[0]
+            });
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        }
+      }
+      onCoverChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+          let reader = new FileReader();
+          reader.onload = (e) => {
+            this.setState({cover: e.target.result,
+            coverFile: document.getElementById('cover').files[0]
+            });
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        }
+      }
+      onCImgChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+          let reader = new FileReader();
+          reader.onload = (e) => {
+            this.setState({img: e.target.result,
+            imgFile: document.getElementById('img').files[0]
+            });
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        }
+      }
+      onCBannerChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+          let reader = new FileReader();
+          reader.onload = (e) => {
+            this.setState({banner: e.target.result,
+            bannerFile: document.getElementById('banner').files[0]
             });
           };
           reader.readAsDataURL(event.target.files[0]);
@@ -85,7 +126,9 @@ class AccountDetails extends React.Component {
         }
         this.setState({
           openSnackSucc: false,
-          openSnackErr:false
+          openSnackErr:false,
+          open500status:false,
+          open422status: false 
         })
       };
      handleChange = event => {
@@ -97,7 +140,8 @@ class AccountDetails extends React.Component {
       // const SUPPORTED_FORMATS = [
       //   "image/svg+xml"
       // ];        
-        const { t ,classes} = this.props;
+        const { t ,classes, data} = this.props;
+        console.log(data)
         return (
             <div
               // {...rest}
@@ -105,25 +149,30 @@ class AccountDetails extends React.Component {
             >
             <Formik
                 initialValues={{
-                    name:'',
-                    arname: '',
-                    description: '',
-                    // file: undefined
+                    name:data===undefined? '': data.name.en,
+                    arname: data===undefined? '': data.name.ar,
+                    description: data===undefined? '': data.description.en,
+                    icon: data===undefined? this.state.file : data.icon,
                   }}
                   onSubmit={data => {
-                      let dataa = new FormData();
+                    console.log(data)
+                      let values = new FormData();
                       let myInt = this.state.checked ? 1 : 0;
-                        dataa.append('name[en]', data.name);
-                        dataa.append('name[ar]', data.arname);
-                        dataa.append('parent', null);
-                        dataa.append('icon', this.state.file);
-                        dataa.append('is_real_estate', myInt);
-                        this.props.patch && dataa.append('_method', 'patch');
+                        values.append('name[en]', data.name);
+                        values.append('name[ar]', data.arname);
+                        // values.append('description', data.description);
+                        values.append('parent', null);
+                        values.append('icon', this.state.iconFile==={}? data.icon : this.state.iconFile);
+                        values.append('media[cover]', this.state.coverFile);
+                        values.append('media[banner]', this.state.bannerFile);
+                        values.append('media[image]', this.state.imgFile);
+                        values.append('is_real_estate', myInt);
+                        this.props.patch && values.append('_method', 'patch');
                     this.setState({
                       showLoading:true
                     })
-                    console.log(dataa)
-                this.props.requist(dataa)
+                    console.log(values)
+                this.props.requist(values)
                            .then(res =>{
                              console.log(res)
                              if(res.status === 201) {
@@ -143,10 +192,16 @@ class AccountDetails extends React.Component {
                            })
                            .catch(err => {
                              console.log(err.response)
-                             if(err.response.status === 244) {
+                             if(err.response.status === 422) {
                               this.setState({
-                                openSnackErr:true,
                                 showLoading: false,
+                                openSnackErr:true,
+                              })
+                             }
+                             if(err.response.status === 500) {
+                              this.setState({
+                                showLoading: false,
+                                open500status:true,
                               })
                              }
                            })
@@ -165,30 +220,31 @@ class AccountDetails extends React.Component {
                                   <Card>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Typography
+                                      <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.cover}
+                                        />
+                                        <Typography
+                                        className={classes.TypographyMargin}
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("category")}
+                                        {("cover")}
                                       </Typography>
-                                      <Avatar
-                                          className={classes.avatar}
-                                          src={this.state.image}
-                                        />
                                       </div>
                                     </CardContent>
                                     <Divider />
                                     <CardActions>
                                     <input
                                       // helperText={(props.errors.file && props.touched.file) && props.errors.file}
-                                      onChange={this.onImageChange}
+                                      onChange={this.onCoverChange}
                                       accept="image/*"
-                                      id="contained-button-file"
+                                      id="cover"
                                       multiple
                                       type="file"
                                       className={classes.input}
                                     />
-                                    <label htmlFor="contained-button-file">
+                                    <label htmlFor="cover">
                                       <Button variant="contained" color="primary" component="span">
                                         Upload
                                       </Button>
@@ -201,29 +257,34 @@ class AccountDetails extends React.Component {
                                   <Card className={classes.margin}>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Typography
+                                         {data !== undefined&&<Avatar
+                                          className={classes.avatar}
+                                          src={this.state.icon===''? data.icon: this.state.icon}
+                                        />}
+                                       {data === undefined && <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.icon}
+                                        />}
+                                        <Typography
+                                        className={classes.TypographyMargin}
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("category")}
+                                        {("icon")}
                                       </Typography>
-                                      <Avatar
-                                          className={classes.avatar}
-                                          // src={this.state.image}
-                                        />
                                       </div>
                                     </CardContent>
                                     <Divider />
                                     <CardActions>
                                     <input
-                                      // onChange={this.onImageChange}
+                                      onChange={this.onImageChange}
                                       accept="image/*"
-                                      id="contained-button-file"
+                                      id="icon"
                                       multiple
                                       type="file"
                                       className={classes.input}
                                     />
-                                    <label htmlFor="contained-button-file">
+                                    <label htmlFor="icon">
                                       <Button variant="contained" color="primary" component="span">
                                         Upload
                                       </Button>
@@ -235,30 +296,31 @@ class AccountDetails extends React.Component {
                                   <Card className={classes.margin}>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Typography
+                                      <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.banner}
+                                        />
+                                        <Typography
+                                        className={classes.TypographyMargin}
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("category")}
+                                        {("banner")}
                                       </Typography>
-                                      <Avatar
-                                          className={classes.avatar}
-                                          // src={this.state.image}
-                                        />
                                       </div>
                                     </CardContent>
                                     <Divider />
                                     <CardActions>
                                     <input
                                     name="file"
-                                      // onChange={this.onImageChange}
+                                      onChange={this.onCBannerChange}
                                       accept="image/*"
-                                      id="contained-button-file"
+                                      id="banner"
                                       multiple
                                       type="file"
                                       className={classes.input}
                                     />
-                                    <label htmlFor="contained-button-file">
+                                    <label htmlFor="banner">
                                       <Button variant="contained" color="primary" component="span">
                                         Upload
                                       </Button>
@@ -270,29 +332,30 @@ class AccountDetails extends React.Component {
                                 <Card className={classes.margin}>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Typography
+                                      <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.img}
+                                        />
+                                        <Typography
+                                        className={classes.TypographyMargin}
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("category")}
+                                        {("image")}
                                       </Typography>
-                                      <Avatar
-                                          className={classes.avatar}
-                                          // src={this.state.image}
-                                        />
                                       </div>
                                     </CardContent>
                                     <Divider />
                                     <CardActions>
                                     <input
-                                      // onChange={this.onImageChange}
+                                      onChange={this.onCImgChange}
                                       accept="image/*"
-                                      id="contained-button-file"
+                                      id="img"
                                       multiple
                                       type="file"
                                       className={classes.input}
                                     />
-                                    <label htmlFor="contained-button-file">
+                                    <label htmlFor="img">
                                       <Button variant="contained" color="primary" component="span">
                                         Upload
                                       </Button>
@@ -304,7 +367,7 @@ class AccountDetails extends React.Component {
                                     <Grid item xs={9}>
                                     <Card className={classes.form}>
                               <CardHeader
-                                      title="Category Form"
+                                      title={t("category_form")}
                                       />
                                       <Divider />
                                       <CardContent >
@@ -318,6 +381,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
+                                                defaultValue={data !== undefined? data.name.en : '' }
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
@@ -333,6 +397,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
+                                                 defaultValue={data!== undefined? data.name.ar : ''}
                                                 label={("arabic_name")}
                                                 name="arname"
                                                 onChange={props.handleChange}
@@ -348,6 +413,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
+                                                defaultValue={data!== undefined? data.description.en : ''}
                                                 label={("category_discription")}
                                                 name="description"
                                                 onChange={props.handleChange}
@@ -378,7 +444,7 @@ class AccountDetails extends React.Component {
                                               value="primary"
                                               inputProps={{ 'aria-label': 'primary checkbox' }} />
                                             }
-                                            label="Is it a real estate?"
+                                            label={t("is_it_a_real_estate")}
                                           />
                                     </Grid>
                                   </Grid>
@@ -406,7 +472,7 @@ class AccountDetails extends React.Component {
                                                 severity="error"
                                                 style={{backgroundColor: 'red', color: 'white'}}
                                               >
-                                                {t("please_try_again")}
+                                                {t("please_add_svg_icon")}
                                               </Alert>
                                             </Snackbar>
                                             <Snackbar
@@ -470,4 +536,4 @@ class AccountDetails extends React.Component {
 AccountDetails.propTypes = {
     classes: PropTypes.object.isRequired,
   };
-  export default withStyles(useStyles)(withTranslation(["countries/addApdate", "countries/validations"])(AccountDetails));
+  export default withStyles(useStyles)(withTranslation(["categories/addUpdate", "countries/validations"])(AccountDetails));

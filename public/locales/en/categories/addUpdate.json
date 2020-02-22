@@ -1,0 +1,10 @@
+{
+    "category_form": "Category Form",
+    "is_it_a_real_estate" : "Is it a real estate?",
+    "done" : "Done",
+    "soft_delete" : "Soft Delete",
+    "force_delete" : "Force Delete",
+    "the_category_has_deleted_successfuly": "The Category Has Deleted Successfuly",
+    "please_try_again" : "Somthing went wrong, Please try again",
+    "add_category" : "Add Category"
+}

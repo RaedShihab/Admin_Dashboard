@@ -17,5 +17,7 @@
     "password_is_required" : "الرجاء إدخال كلمة المرور",
     "passwords_must_match" : "كلمات المرور غير متطابقة",
     "please_try_again" : "حاول مرة ثانية",
-    "cancele" : "إلغاء" 
+    "cancele" : "إلغاء",
+    "the_Items_has_deleted_successfuly": "The item has deleted successfuly",
+    "somthing_went_wrong_with_the_service" : "Somthing went wrong with the server, Please try again."
   }

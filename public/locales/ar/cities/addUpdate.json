@@ -10,5 +10,6 @@
     "the_city_has_added_successfuly": "تمت أضافة المدينة بنجاح",
     "the_city_has_updated_successfuly" : "تم تعديل المدينة بنجاح",
     "update_district": "تعديل معلومات المنطقة",
-    "city_form": "إدخال معلومات المدينة"
+    "city_form": "إدخال معلومات المدينة",
+    "please_check_if_you_selected_a_country": "الرجاء التأكد من هختيار دولة"
 }
