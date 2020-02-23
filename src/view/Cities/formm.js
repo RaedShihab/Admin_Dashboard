@@ -85,9 +85,9 @@ class AccountDetails extends React.Component {
                     name:data===undefined? '': data.name.en,
                     arname: data===undefined? '': data.name.ar,
                     order: data===undefined? '': data.order,
-                    lon: data===undefined? '': data.geoloc.lon,
-                    lat: data===undefined? '':  data.geoloc.lat,
-                    id: data===undefined? '':  data.country_id,
+                    // lon: data===undefined? '': data.geoloc.lon,
+                    // lat: data===undefined? '':  data.geoloc.lat,
+                    id: data===undefined? '':  data.old_country_id,
                   }}
                   
                   onSubmit={data => {
@@ -209,7 +209,7 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                         <TextField
-                                        defaultValue={data!== undefined? data.geoloc.lon : ''}
+                                        // defaultValue={data!== undefined? data.geoloc.lon : ''}
                                         fullWidth
                                         margin="dense"
                                         label={t("lon")}
@@ -225,7 +225,7 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                     <TextField
-                                    defaultValue={data!== undefined? data.geoloc.lat : ''}
+                                    // defaultValue={data!== undefined? data.geoloc.lat : ''}
                                     fullWidth
                                     margin="dense"
                                         label={t("lat")}

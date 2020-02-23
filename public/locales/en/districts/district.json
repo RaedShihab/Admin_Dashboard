@@ -1,4 +1,7 @@
 {
     "add_district" : "Add District",
-    "district_name" : "District Name"
+    "district_name" : "District Name",
+    "district_form" : "District Form",
+    "disrict_name" : "District Name",
+    "arabic_name" : "Name in Arabic"
 }

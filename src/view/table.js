@@ -10,6 +10,7 @@ import CustomToolbarSelect from './CustomSelectToolBar';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
+import { act } from "react-dom/test-utils";
 
 
 
@@ -18,7 +19,8 @@ class App extends React.Component {
     submitFilter: false,
     open: true,
     openAlert: false,
-    page: 0,
+    page: 1,
+    rows: 5,
     count: 100,
     data: [],
     searchText: '',
@@ -35,19 +37,24 @@ class App extends React.Component {
   });
 
   componentDidMount() {
-    this.getData();
+    this.getData(this.state.page, this.state.rows);
   }
 
   // get data
-  getData = () => {
-    this.props.Axios.then(res=> {
+  getData = (page, rows) => {
+    console.log(page, rows)
+    this.props.Axios(page, rows).then(res=> {
       console.log(res)
-      this.setState({data: res.data.data})
+      this.setState({data: res.data.data.data})
       this.setState({isFetching: false})
       this.setState({open: false})
-    }).catch(err=> this.setState({
-      open: false,
-      openAlert: true}))
+    }).catch(err=> {
+      console.log(err.response)
+      this.setState({
+        open: false,
+        openAlert: true})
+    }
+      )
     // this.xhrRequest().then(data => { 
     //   this.setState({ data });
     // });
@@ -98,9 +105,10 @@ class App extends React.Component {
   };
 
   changePage = page => {
-    this.xhrRequest(`/myApiServer?page=${page}`).then(data => {
+    axios.get(`https://api.glowyhan.com/gateway/districts?page=${page}&per_page=5`).then(data => {
+      console.log(data.data.data.data)
       this.setState({
-        page: page,
+        page: page, 
         data
       });
     });
@@ -123,7 +131,7 @@ class App extends React.Component {
     })
   };
   render() {
-    console.log(this.state.data)
+    console.log('render')
     const {t, column, deleteURL} = this.props
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -158,20 +166,21 @@ class App extends React.Component {
         );
       },
       onTableChange: (action, tableState) => {
+        console.log(tableState.page, tableState.rowsPerPage)
         switch (action) {
-          case "changePage":
-            this.changePage(tableState.page);
+          case "changePage":  
+            this.getData(tableState.page, tableState.rowsPerPage);
             break;
             default:
             return
         }
-        switch (action) {
-          case "delete":
-            console.log(action)
-            break;
-            default:
-            return
-        }
+        // switch (action) {
+        //   case "changeRowsPerPage":
+        //     this.getData(tableState.page, tableState.rowsPerPage);
+        //     break;
+        //     default:
+        //     return
+        // }
       },
       customSearchRender: (searchText, handleSearch, hideSearch, options) => {
         return (

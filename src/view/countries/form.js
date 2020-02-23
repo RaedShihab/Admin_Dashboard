@@ -110,8 +110,8 @@ class AccountDetails extends React.Component {
                     icon: data===undefined? this.state.file : data.flag,
                     currency: data===undefined? '': data.currency.en,
                     arCurrency: data===undefined? '': data.currency.ar,
-                    lon: data===undefined? '': data.geoloc.lon,
-                    lat: data===undefined? '':  data.geoloc.lat,
+                    // lon: data===undefined? '': data.geoloc.lon,
+                    // lat: data===undefined? '':  data.geoloc.lat,
                     order: data===undefined? '': data.order
                   }}
                   onSubmit={data => {
@@ -119,7 +119,7 @@ class AccountDetails extends React.Component {
                     this.setState({
                       showLoading:true
                     })
-                    
+                    console.log(data)
                     let values = new FormData();
                         values.append('name[en]', data.name);
                         values.append('name[ar]', data.name);
@@ -132,7 +132,7 @@ class AccountDetails extends React.Component {
                         values.append('order', data.order);
                         values.append('flag', this.state.file==={}? data.flag : this.state.file);
                         this.props.patch && values.append('_method', 'patch');
-
+                    console.log(values)
                     this.props.requist(values)
                            .then(res =>{
                              console.log(res)
@@ -343,7 +343,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                // defaultValue={data.geoloc.lon}
+                                                // defaultValue={data!== undefined? data.geoloc.lon: ''}
                                                 label={t("lon")}
                                                 name="lon"
                                                 onChange={props.handleChange}
@@ -359,7 +359,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                // defaultValue={data.geoloc.lat}
+                                                // defaultValue={data!== undefined? data.geoloc.lat: ''}
                                                 label={t("lat")}
                                                 name="lat"
                                                 onChange={props.handleChange}

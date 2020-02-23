@@ -10,6 +10,7 @@ const Update = (props)=> {
     return(
       <div>
         <Form 
+        data={data}
         response={"the_district_has_updated_successfuly"} 
         id={data._id} 
         requist={requist}

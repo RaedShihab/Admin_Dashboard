@@ -27,7 +27,7 @@ class CustomizedTables extends React.Component {
   state= {
     users: [],
   }
-  Axios = Axios.get('/cities')
+  Axios = (page, rows)=> Axios.get(`/cities/?page=${page}&per_page=${rows}`)
   render() {
     return(
       <LayOut>

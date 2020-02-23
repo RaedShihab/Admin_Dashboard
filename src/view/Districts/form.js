@@ -73,8 +73,7 @@ class AccountDetails extends React.Component {
         Axios.get('/cities').then(res=> this.setState({cities: res.data.data}))
       }
     render() {
-        const { t , id, classes, ...rest } = this.props;
-        const data = id
+        const { t , data, classes, ...rest } = this.props;
         console.log(data)
         return (
             <Card
@@ -86,12 +85,12 @@ class AccountDetails extends React.Component {
                     name:data===undefined? '': data.name.en,
                     arname: data===undefined? '': data.name.ar,
                     order: data===undefined? '': data.order,
-                    lon: data===undefined? '': data.geoloc.lon,
-                    lat: data===undefined? '':  data.geoloc.lat,
-                    id: data===undefined? '':  data.city_id
+                    // lon: data===undefined? '': data.geoloc.lon,
+                    // lat: data===undefined? '':  data.geoloc.lat,
+                    id: data===undefined? '':  data.old_city_id
                   }}
                   onSubmit={data => {
-
+                    console.log(data)
                       let dataa = new FormData();
                         dataa.append('name[en]', data.name);
                         dataa.append('name[ar]', data.arname);
@@ -148,7 +147,7 @@ class AccountDetails extends React.Component {
                         >
                         <CardHeader
                             // subheader={t("City Form")}
-                            title={t("District Form")}
+                            title={t("district_form")}
                             />
                             <Divider />
                             <CardContent>
@@ -162,9 +161,10 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                     <TextField
+                                    defaultValue={data !== undefined? data.name.en : '' }
                                     fullWidth
                                     margin="dense"
-                                    label={t("city_name")}
+                                    label={t("disrict_name")}
                                     name="name"
                                     onChange={props.handleChange}
                                     variant="outlined"
@@ -177,6 +177,7 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                         <TextField
+                                        defaultValue={data !== undefined? data.name.ar : '' }
                                         fullWidth
                                         margin="dense"
                                     label={t("arabic_name")}
@@ -192,9 +193,10 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                         <TextField
+                                        // defaultValue={data!== undefined? data.geoloc.lon: ''}
                                         fullWidth
                                         margin="dense"
-                                        label={t("lon")}
+                                        label={t("countries/addApdate:lon")}
                                         name="lon"
                                         onChange={props.handleChange}
                                         variant="outlined"
@@ -207,9 +209,10 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                     <TextField
+                                    // defaultValue={data!== undefined? data.geoloc.lat: ''}
                                     fullWidth
                                     margin="dense"
-                                        label={t("lat")}
+                                        label={t("countries/addApdate:lat")}
                                         name="lat"
                                         onChange={props.handleChange}
                                         variant="outlined"
@@ -222,9 +225,10 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                 >
                                     <TextField
+                                    defaultValue={data!== undefined? data.order : ''}
                                     fullWidth
                                     margin="dense"
-                                        label={t("order_number")}
+                                        label={t("countries/addApdate:order_number")}
                                         name="order"
                                         onChange={props.handleChange}
                                         variant="outlined"
@@ -304,7 +308,7 @@ class AccountDetails extends React.Component {
                                                 severity="error"
                                                 style={{backgroundColor: 'red', color: 'white'}}
                                                 >
-                                                {t("please check if you reapeated city names or don't selecting a country")}
+                                                {t("please select a city")}
                                                 </Alert>
                                             </Snackbar>
                                 </div>
@@ -331,4 +335,4 @@ class AccountDetails extends React.Component {
 AccountDetails.propTypes = {
     classes: PropTypes.object.isRequired,
   };
-  export default withStyles(useStyles)(withTranslation(["countries/addApdate", "countries/validations"])(AccountDetails));
+  export default withStyles(useStyles)(withTranslation(["districts/district", "countries/addApdate"])(AccountDetails));
