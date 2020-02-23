@@ -38,6 +38,7 @@ const ProductList = () => {
   // Axios.get(`/categories/?page=${page}&per_page=${rows}`)
   Axios.get('/categories')
   .then(res=>{
+    // console.log(res.data.data.map(cat=> cat.parent_id))
     setCategories(res.data.data)
     setOpen(false)  
   })
@@ -131,5 +132,4 @@ const ProductList = () => {
       </Layout>
   );
 };
-
 export default ProductList;

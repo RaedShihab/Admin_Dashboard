@@ -17,6 +17,12 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+import CategoryIcon from '@material-ui/icons/Category';
+
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
     root: {
@@ -77,22 +83,31 @@ const useStyles = makeStyles(theme => ({
       flexGrow: 1,
       padding: theme.spacing(3),
     },
+    roott: {
+      width: '100%',
+      maxWidth: 360,
+      backgroundColor: theme.palette.background.paper,
+    },
+    nested: {
+      paddingLeft: theme.spacing(4),
+    },
   }));
-  const options = [
-    'None',
-    'Atria',
-  ];
  const SideBar = (props)=> {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  // const [anchorEl, setAnchorEl] = React.useState(null);
+  // const open = Boolean(anchorEl);
+  // const handleClick = event => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
         const classes = useStyles();
         const {t} = props;
         // const theme = useTheme();
@@ -119,36 +134,37 @@ const useStyles = makeStyles(theme => ({
           </IconButton> */}
         </div>
         {/* <Divider /> */}
+        <List
+      component="nav"
+      aria-labelledby="nested-list-subheader"
+      // subheader={
+      //   <ListSubheader component="div" id="nested-list-subheader">
+      //     Nested List Items
+      //   </ListSubheader>
+      // }
+      className={classes.roott}
+    >
+      <ListItem button onClick={handleClick}>
+        <ListItemIcon>
+          <CategoryIcon />
+        </ListItemIcon>
+        <ListItemText primary="categories list" />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <a href='/categories'>
+              <CategoryIcon />
+              </a>
+            </ListItemIcon>
+            <ListItemText primary="Main cagtegoris" />
+          </ListItem>
+        </List>
+      </Collapse>
+    </List>
         <List>
-        <div>
-      <IconButton
-        aria-label="more"
-        aria-controls="long-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        id="long-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: 48 * 4.5,
-            width: 200,
-          },
-        }}
-      >
-        {options.map(option => (
-          <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-    </div>
             <ListItem button>
               <ListItemIcon><a href="/"><DashboardIcon/></a></ListItemIcon>
               <ListItemText primary={t('dashboard')} />
