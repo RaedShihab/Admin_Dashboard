@@ -1,10 +1,17 @@
 import React from 'react';
-import {Snackbar, Button, CircularProgress} from '@material-ui/core';
+import {compose} from 'redux';
+import { withTranslation } from "react-i18next";
+import {Snackbar, Button, CircularProgress, IconButton, MenuItem, Menu, FormControlLabel, Checkbox, Tooltip, Typography} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MuiAlert from '@material-ui/lab/Alert';
 import {Axios} from '../axiosConfig';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import SearchIcon from '@material-ui/icons/Search';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { makeStyles } from '@material-ui/styles';
 
 import SearchInput from './searchInput';
@@ -34,12 +41,20 @@ const useStyles = makeStyles(theme => ({
   searchInput: {
     marginRight: theme.spacing(1)
   },
+  search: {
+    margin: '0px 15px'
+  },
   btn: {
     margin: 10
+  },
+  filterBtn: {
+    margin: '0px 10px'
   }
 }));
 
 const ProductsToolbar = props => {
+  const checkedCategoriesNumber = props.data.deleteCategories.length
+  const {t} = props
   console.log(props)
   const Alert = (props)=> {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -62,24 +77,26 @@ const ProductsToolbar = props => {
     setOpenSuccess(false)
   };
 
-  const deleteCategories = ()=> {
+  const softDelete = ()=> {
     const ids = props.data.deleteCategories
-    console.log('/brands/'+ids+'/soft')
+    console.log('/brands/'+ids+'/force')
     // Axios.delete('/categories')
     setloading(true)
-    Axios.delete('/brands/'+ids+'/soft')
+    Axios.delete('/brands/'+ids+'/force')
     .then(res=> {
       // setOpen(true);
+      console.log(res)
       setloading(false)
       setOpenSuccess(true)
-       console.log(res)
+      window.location.reload(false)
       })
       .catch(err => {
+        console.log(err.response)
         setOpenErr(true)
         setloading(false) 
       })
   }
-  const forceDeleteCategories = ()=> {
+  const forceDelete = ()=> {
     const ids = props.data.deleteCategories
     console.log('/brands/'+ids+'/force')
     // Axios.delete('/categories')
@@ -87,50 +104,84 @@ const ProductsToolbar = props => {
     Axios.delete('/brands/'+ids+'/force')
     .then(res=> {
       // setOpen(true);
+      console.log(res)
       setWaiting(false)
       setOpenSuccess(true)
-       console.log(res)
+      window.location.reload(false)
       })
       .catch(err => {
+        console.log(err.response)
         setOpenErr(true)
-        setWaiting(false) 
+        setWaiting(false)
       })
+  }
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenueList = Boolean(anchorEl);
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClosse = () => {
+    setAnchorEl(null);
+  };
+  const ITEM_HEIGHT = 48;
+
+  const options = [
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+  ];
+  const filteredData = []
+  const handleCheckChange = (e)=> {
+    let index
+    console.log(e.target.checked)
+    if(e.target.checked) {
+      filteredData.push(e.target.value)
+    }
+    else{
+      index = filteredData.indexOf(e.target.value)
+      filteredData.splice(index, 1)
+    }
+    console.log(filteredData)
   }
   return (
     <div
       {...rest}
       className={clsx(classes.root, className)}
     >
-
       <div className={classes.row}>
         <span className={classes.spacer} />
-
-        {props.data.deleteCategories.length>0&&<React.Fragment>
         {loading&&<div >
       <CircularProgress />
     </div>}
-    {!loading&&<Button
-        onClick={deleteCategories}
+    {!loading&&
+    <Tooltip title={t("categories/addUpdate:soft_delete")}>
+      <IconButton onClick={softDelete}>
+      <DeleteIcon
           color="primary"
           variant="contained"
-        >
-          delete
-        </Button>}
+        />
+    </IconButton>
+    </Tooltip>
+    }
 
         {waiting&&<div >
-      <CircularProgress style={{margin: '0px 45px'}}/>
+      <CircularProgress/>
     </div>}
-    {!waiting&&<Button
-        onClick={forceDeleteCategories}
+    {!waiting&&
+    <Tooltip title={t("categories/addUpdate:force_delete")}>
+      <IconButton onClick={forceDelete}>
+      <DeleteForeverIcon
           color="secondary"
           variant="contained"
-        >
-          force delete
-        </Button>}
-        </React.Fragment>}
-        
-        
-
+        />
+    </IconButton>
+    </Tooltip>
+    }
 
         <Button
         className={classes.btn}
@@ -138,7 +189,7 @@ const ProductsToolbar = props => {
           color="primary"
           variant="contained"
         >
-          Add brand
+          {t("add_brand")}
         </Button>
       </div>
       <div className={classes.row}>
@@ -146,16 +197,115 @@ const ProductsToolbar = props => {
           className={classes.searchInput}
           placeholder="Search product"
         />
+
+        <IconButton className={classes.search}>
+           <SearchIcon/>
+        </IconButton>
+
+        <PopupState variant="popover" popupId="demo-popup-menu">
+        {popupState => (
+          <React.Fragment>
+            <Tooltip title="filter">
+            <IconButton
+            variant="contained" color="primary" {...bindTrigger(popupState)}>
+              <FilterListIcon/>
+            </IconButton>
+            </Tooltip>
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem 
+              >
+              <PopupState variant="popover" popupId="demo-popup-menu">
+              {popupState => (
+                <React.Fragment>
+                  <Typography variant="h7">filter</Typography>
+                  <Tooltip title="filter">
+                  <IconButton
+                  variant="contained" color="primary" {...bindTrigger(popupState)}>
+              <FilterListIcon/>
+            </IconButton>
+            </Tooltip>
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem 
+              >
+              <FormControlLabel
+                    control={
+                      <Checkbox 
+                      onChange={handleCheckChange} 
+                      value="is_real_estate" />
+                    }
+                    label="Real estate"
+                  />
+              </MenuItem>
+              <MenuItem 
+              >
+              <FormControlLabel
+                    control={
+                      <Checkbox 
+                      onChange={handleCheckChange} 
+                      value="is_parent_category" />
+                    }
+                    label="Parant Categories"
+                  />  
+              </MenuItem>
+              <Button variant="contained"
+              className={classes.filterBtn}
+               color="primary">Apply</Button>
+            </Menu>
+          </React.Fragment>
+        )}
+    </PopupState>
+              </MenuItem>
+              <MenuItem 
+              >
+            <React.Fragment>
+              <Typography variant="h7">filter</Typography>
+            <Tooltip title="filter by Parent category">
+              <IconButton
+                aria-label="more"
+                aria-controls="long-menu"
+                aria-haspopup="true"
+                onClick={handleClick}
+              >
+                  <FilterListIcon />
+              </IconButton>
+              </Tooltip>
+              <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={openMenueList}
+                onClose={handleClosse}
+                PaperProps={{
+                  style: {
+                    maxHeight: ITEM_HEIGHT * 4.5,
+                    width: 200,
+                  },
+                }}
+              >
+                {options.map(option => (
+                  <MenuItem key={option} selected={option === 'Pyxis'} 
+                  onClick={handleClosse}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </React.Fragment>
+              </MenuItem>
+            </Menu>
+          </React.Fragment>
+        )}
+    </PopupState>
       </div>
       <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
-          This is a success message!
+          {t("the_category_has_deleted_successfuly")}
         </Alert>
       </Snackbar>
       <Snackbar open={openErr} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
-          This is an error message!
+          {t("please_select_item_to_delete")}
         </Alert>
       </Snackbar>
       <Snackbar
@@ -168,7 +318,7 @@ const ProductsToolbar = props => {
       severity="success"
       style={{backgroundColor: 'green', color: 'white'}}
       >
-      The items has deleted successfuly
+      {t("the_items_has_deleted_successfuly")}
       </Alert>
   </Snackbar>
     </div>
@@ -184,4 +334,5 @@ function mapStateToProps(state) {
     data: state
   }
 }
-export default connect(mapStateToProps)(ProductsToolbar);
+
+export default compose(withTranslation(["brand/brand", "categories/addUpdate"]) , connect(mapStateToProps))(ProductsToolbar);

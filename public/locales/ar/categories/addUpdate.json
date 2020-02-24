@@ -6,5 +6,6 @@
     "force_delete" : "حذف للأبد",
     "the_category_has_deleted_successfuly": "تم حذف التصنيف بنجاح",
     "please_try_again" : "حدث خطأ, الرجاء المحولة مرة ثانية",
-    "add_category" : "إضافة تصنيف"
+    "add_category" : "إضافة تصنيف",
+    "please_select_item_to_delete" : "اختر عنصر للحذف"
 }

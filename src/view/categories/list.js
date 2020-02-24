@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { IconButton, Grid, Typography, CircularProgress, InputLabel, MenuItem, FormControl, Select } from '@material-ui/core';
+import { IconButton, Grid, Typography, CircularProgress, MenuItem, FormControl, Select } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -34,9 +34,9 @@ const ProductList = () => {
   
   let page = 1;
 
-  const categoriesAxios = (page, rows)=> 
-  // Axios.get(`/categories/?page=${page}&per_page=${rows}`)
-  Axios.get('/categories')
+  const categoriesAxios = (page, itemsPerPage)=> 
+  Axios.get(`/categories`)
+  // Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
     // console.log(res.data.data.map(cat=> cat.parent_id))
     setCategories(res.data.data)
@@ -58,12 +58,16 @@ const ProductList = () => {
     console.log(page, itemsPerPage)
     // categoriesAxios(page, itemsPerPage)
   }
+
+  const handleChange = event => {
+    setItemsPerPage(event.target.value)
+  };
   
   React.useEffect(() => {
     setOpen(true)
     categoriesAxios(page, itemsPerPage)
-    
   }, []);
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -71,16 +75,12 @@ const ProductList = () => {
     setOpenAlrt(false)
       };
 
-    const handleChange = event => {
-      setItemsPerPage(event.target.value)
-    };
-
   return (
       <Layout>
         {open&&<CircularProgress size='100px' style={{display: 'block', margin:'350px 500px'}}/>}
         {!open&&
           <div className={classes.root}>
-      <CategToolbar path={{add:'/categories-list/add-category'}} />
+      <CategToolbar path={{add:'/categories/create'}} />
       <div className={classes.content}>
         <Grid
           container

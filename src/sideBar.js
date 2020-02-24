@@ -9,18 +9,14 @@ import { Drawer,
     ListItemIcon,
     ListItemText, 
   } from '@material-ui/core';
-  import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import PostAddIcon from '@material-ui/icons/PostAdd';
-
+import EmojiTransportationIcon from '@material-ui/icons/EmojiTransportation';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 import CategoryIcon from '@material-ui/icons/Category';
 
 const drawerWidth = 240;
@@ -153,13 +149,21 @@ const useStyles = makeStyles(theme => ({
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+        <ListItem button className={classes.nested}>
             <ListItemIcon>
               <a href='/categories'>
               <CategoryIcon />
               </a>
             </ListItemIcon>
             <ListItemText primary="Main cagtegoris" />
+          </ListItem>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <a href='/brands'>
+              <EmojiTransportationIcon />
+              </a>
+            </ListItemIcon>
+            <ListItemText primary="Brands"/>
           </ListItem>
         </List>
       </Collapse>

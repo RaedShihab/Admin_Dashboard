@@ -6,5 +6,6 @@
     "force_delete" : "Force Delete",
     "the_category_has_deleted_successfuly": "The Category Has Deleted Successfuly",
     "please_try_again" : "Somthing went wrong, Please try again",
-    "add_category" : "Add Category"
+    "add_category" : "Add Category",
+    "please_select_item_to_delete" : "Please Select an item"
 }

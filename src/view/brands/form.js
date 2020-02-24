@@ -29,7 +29,7 @@ const useStyles = (() => ({
     display: 'flex'
   },
   avatar: {
-    marginLeft: 'auto',
+    // marginLeft: 'auto',
     height: 110,
     width: 100,
     flexShrink: 0,
@@ -68,7 +68,7 @@ class AccountDetails extends React.Component {
           reader.onload = (e) => {
               console.log(e.target)
             this.setState({image: e.target.result,
-            file: e.target
+            file: document.getElementById('icon').files[0]
             });
           };
           reader.readAsDataURL(event.target.files[0]);
@@ -88,27 +88,29 @@ class AccountDetails extends React.Component {
       }
     render() {
       console.log(this.props)
-        const { t ,classes } = this.props;
+        const { t, classes, data } = this.props;
+        console.log(data)
         return (
             <div>
             <Formik
                 initialValues={{
-                    name:'',
-                    arname: '',
-                    id: '',
-                    order: ''
+                    name:data===undefined? '': data.name.en,
+                    arname: data===undefined? '': data.name.ar,
+                    id: data===undefined? '':  data.old_category_id,
+                    order: data===undefined? '': data.order,
+                    icon: data===undefined? this.state.file : data.icon,
                   }}
                   onSubmit={data => {
-                      const values     = {
-                          "name" : {
-                              "en" : data.name,
-                              "ar" : data.arname
-                          },
-                          "category_id": data.id,
-                          "order": data.order,
-                          "icon" : this.state.file,
-                      }
-                      console.log(values)
+                    console.log(data)
+
+                      let values = new FormData();
+                      values.append('name[en]', data.name);
+                        values.append('name[ar]', data.arname);
+                        values.append('category_id', data.id);
+                        values.append('order', data.order);
+                        values.append('icon', this.state.file==={}? data.icon : this.state.file);
+                        this.props.data !== undefined && values.append('_method', 'patch');
+
                     this.setState({
                       showLoading:true
                     })
@@ -116,17 +118,36 @@ class AccountDetails extends React.Component {
                 this.props.requist(values)
                            .then(res =>{
                              console.log(res)
-                             this.setState({
-                               showLoading: false,
-                               openSnackSucc: true,
-                             })
+                             if(res.status === 201) {
+                              console.log(res)
+                              this.setState({
+                                showLoading: false,
+                                openSnackSucc: true,
+                              })
+                             }
+                             if(res.status === 200) {
+                              console.log(res)
+                              this.setState({
+                                showLoading: false,
+                                openSnackSucc: true,
+                              })
+                             }
                            })
+                           
                            .catch(err => {
                              console.log(err.response)
-                             this.setState({
-                               openSnackErr:true,
-                               showLoading: false,
-                             })
+                             if(err.response.status === 422) {
+                              this.setState({
+                                showLoading: false,
+                                openSnackErr:true,
+                              })
+                             }
+                             if(err.response.status === 500) {
+                              this.setState({
+                                showLoading: false,
+                                open500status:true,
+                              })
+                             }
                            })
                   }
                   }
@@ -151,16 +172,20 @@ class AccountDetails extends React.Component {
                                   <Card>
                                     <CardContent>
                                       <div className={classes.details}>
+                                      {data !== undefined&&<Avatar
+                                          className={classes.avatar}
+                                          src={this.state.image===''? data.icon: this.state.image}
+                                        />}
+                                       {data === undefined && <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.image}
+                                        />}
                                       <Typography
                                         gutterBottom
                                         variant="h6"
                                       >
                                         {t("brand_icon")}
                                       </Typography>
-                                      <Avatar
-                                          className={classes.avatar}
-                                          src={this.state.image}
-                                        />
                                       </div>
                                     </CardContent>
                                     <Divider />
@@ -168,12 +193,12 @@ class AccountDetails extends React.Component {
                                     <input
                                       onChange={this.onImageChange}
                                       accept="image/*"
-                                      id="contained-button-file"
+                                      id="icon"
                                       multiple
                                       type="file"
                                       className={classes.input}
                                     />
-                                    <label htmlFor="contained-button-file">
+                                    <label htmlFor="icon">
                                       <Button variant="contained" color="primary" component="span">
                                         Upload
                                       </Button>
@@ -204,6 +229,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
+                                                defaultValue={data !== undefined? data.name.en : '' }
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
@@ -219,6 +245,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
+                                                defaultValue={data!== undefined? data.name.ar : ''}
                                                 label={t("arabic_name")}
                                                 name="arname"
                                                 onChange={props.handleChange}
@@ -234,6 +261,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
+                                                defaultValue={data!== undefined? data.order : ''}
                                                 label={t("order")}
                                                 name="order"
                                                 onChange={props.handleChange}
@@ -244,12 +272,13 @@ class AccountDetails extends React.Component {
                                                 />
                                             </Grid>
                                             <Grid
-                                    item
-                                    sm={6}
-                                    xs={12}
-                                    >
+                                                item
+                                                sm={6}
+                                                xs={12}
+                                                >
                                     <FormControl fullWidth
-                                    margin="dense" variant="filled">
+                                       margin="dense" variant="filled"
+                                       >
                                         <InputLabel htmlFor="filled-age-native-simple">{t("category")}</InputLabel>
                                             <Select
                                             native
@@ -292,7 +321,7 @@ class AccountDetails extends React.Component {
                                                 severity="success"
                                                 style={{backgroundColor: 'green', color: 'white'}}
                                               >
-                                                {t("the_country_has_added_successfuly")}
+                                                {t("the_brand_has_added_successfuly")}
                                               </Alert>
                                             </Snackbar>
                                             <Snackbar
@@ -305,7 +334,7 @@ class AccountDetails extends React.Component {
                                                 severity="error"
                                                 style={{backgroundColor: 'red', color: 'white'}}
                                               >
-                                                {t("please_try_again")}
+                                                {t("please_add_category_svg")}
                                               </Alert>
                                             </Snackbar>
                                           </div>
@@ -314,7 +343,7 @@ class AccountDetails extends React.Component {
                              </LayOut>
                     </form>
                   })}
-                  validationSchema={Yup.object().shape({
+                  validationSchema={ data === undefined && Yup.object().shape({
                     name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
                     .min(2, 'Seems a bit short...'),
                     arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
@@ -330,4 +359,4 @@ class AccountDetails extends React.Component {
 AccountDetails.propTypes = {
     classes: PropTypes.object.isRequired,
   };
-  export default withStyles(useStyles)(withTranslation(["countries/addApdate", "countries/validations"])(AccountDetails));
+  export default withStyles(useStyles)(withTranslation(["brand/brand", "categories/addUpdate"])(AccountDetails));

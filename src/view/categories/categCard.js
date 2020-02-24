@@ -1,7 +1,7 @@
 import React from 'react';
 import {compose} from 'redux'
 import { withTranslation } from "react-i18next";
-import ReactHtmlParser from "react-html-parser";
+// import ReactHtmlParser from "react-html-parser";
 import {connect} from 'react-redux';
 import {deleteCategoriesAction} from '../../auth/Actions/deleteCategoriesAction'
 import {Link} from 'react-router-dom';
@@ -206,7 +206,7 @@ const ProductCard = props => {
           <Link
           style={{margin: '0px 20px'}}
           to={{
-            pathname: '/categories-list/category/'+product._id,
+            pathname: '/categories/category/'+product._id,
             state: {
             data: product
             }

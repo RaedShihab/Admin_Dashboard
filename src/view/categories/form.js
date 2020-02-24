@@ -55,6 +55,9 @@ const useStyles = (() => ({
     },
     TypographyMargin : {
       // margin: 40
+    },
+    deleteBtn: {
+      margin: '0px 15px'
     }
 }));
 
@@ -72,6 +75,8 @@ class AccountDetails extends React.Component {
           coverFile: {},
           banner: '',
           bannerFile: {},
+          img: '',
+          imgFile: {},
           checked: ''
         };
       }
@@ -152,7 +157,10 @@ class AccountDetails extends React.Component {
                     name:data===undefined? '': data.name.en,
                     arname: data===undefined? '': data.name.ar,
                     description: data===undefined? '': data.description.en,
-                    icon: data===undefined? this.state.file : data.icon,
+                    icon: data===undefined? this.state.iconFile : data.icon,
+                    cover: data===undefined? this.state.coverFile : data.cover,
+                    banner: data===undefined? this.state.bannerFile : data.banner,
+                    img: data===undefined? this.state.imgFile : data.img,
                   }}
                   onSubmit={data => {
                     console.log(data)
@@ -163,9 +171,9 @@ class AccountDetails extends React.Component {
                         // values.append('description', data.description);
                         values.append('parent', null);
                         values.append('icon', this.state.iconFile==={}? data.icon : this.state.iconFile);
-                        values.append('media[cover]', this.state.coverFile);
-                        values.append('media[banner]', this.state.bannerFile);
-                        values.append('media[image]', this.state.imgFile);
+                        values.append('media[cover]', this.state.coverFile==={}? data.cover : this.state.coverFile);
+                        values.append('media[banner]', this.state.bannerFile==={}? data.banner : this.state.bannerFile);
+                        values.append('media[image]', this.state.imgFile==={}? data.image : this.state.imgFile);
                         values.append('is_real_estate', myInt);
                         this.props.patch && values.append('_method', 'patch');
                     this.setState({
@@ -249,6 +257,9 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
+                                    {data !==undefined&&<Button className={classes.deleteBtn} variant="contained" color="secondary" component="span">
+                                        delete
+                                      </Button>}
                                     </CardActions>
                                   </Card>
                                 </Grid> 
@@ -289,6 +300,9 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
+                                    {data !==undefined&&<Button className={classes.deleteBtn} variant="contained" color="secondary" component="span">
+                                        delete
+                                      </Button>}
                                     </CardActions>
                                   </Card>
                                 </Grid>
@@ -325,6 +339,9 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
+                                    {data !==undefined&&<Button className={classes.deleteBtn} variant="contained" color="secondary" component="span">
+                                        delete
+                                      </Button>}
                                     </CardActions>
                                   </Card>
                               </Grid>
@@ -360,6 +377,9 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
+                                    {data !==undefined&&<Button className={classes.deleteBtn} variant="contained" color="secondary" component="span">
+                                        delete
+                                      </Button>}
                                     </CardActions>
                                   </Card>
                                   </Grid>

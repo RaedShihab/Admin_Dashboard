@@ -48,7 +48,6 @@ const useStyles = makeStyles(theme => ({
 const idsArray = [];
 
 const ProductCard = props => {
-  console.log('render')
   const { className, product, ...rest } = props;
   
   // const [idsArray, setIdsArray] = React.useState([])
@@ -67,7 +66,6 @@ const ProductCard = props => {
       index = idsArray.indexOf(e.target.value)
       idsArray.splice(index, 1)
     }
-    // console.log(idsArray)
     props.deleteCategoriesAction(idsArray)
     // setIdsArray(options)
     
@@ -131,7 +129,7 @@ const ProductCard = props => {
           </IconButton>
           <Link
           to={{
-            pathname: '/brands-list/brand/'+product._id,
+            pathname: '/brands/brand/'+product._id,
             state: {
             data: product
             }

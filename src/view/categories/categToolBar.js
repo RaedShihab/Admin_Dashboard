@@ -1,7 +1,7 @@
 import React from 'react';
 import {compose} from 'redux';
 import { withTranslation } from "react-i18next";
-import {Snackbar, Button, CircularProgress, IconButton, MenuItem, Menu, FormControlLabel, Checkbox, Tooltip} from '@material-ui/core';
+import {Snackbar, Button, CircularProgress, IconButton, MenuItem, Menu, FormControlLabel, Checkbox, Tooltip, Typography} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -10,7 +10,6 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import SearchIcon from '@material-ui/icons/Search';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { makeStyles } from '@material-ui/styles';
@@ -113,7 +112,7 @@ const ProductsToolbar = props => {
       })
   }
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const openn = Boolean(anchorEl);
+  const openMenueList = Boolean(anchorEl);
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -123,44 +122,35 @@ const ProductsToolbar = props => {
   const ITEM_HEIGHT = 48;
 
   const options = [
-    'None',
-    'Atria',
-    'Callisto',
-    'Dione',
-    'Ganymede',
-    'Hangouts Call',
-    'Luna',
-    'Oberon',
-    'Phobos',
-    'Pyxis',
-    'Sedna',
-    'Titania',
-    'Triton',
-    'Umbriel',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
+    'Category',
   ];
-  const arr = []
+  const filteredData = []
   const handleCheckChange = (e)=> {
     let index
     console.log(e.target.checked)
     if(e.target.checked) {
-      arr.push(e.target.value)
+      filteredData.push(e.target.value)
     }
     else{
-      index = arr.indexOf(e.target.value)
-      arr.splice(index, 1)
+      index = filteredData.indexOf(e.target.value)
+      filteredData.splice(index, 1)
     }
-    console.log(arr)
+    console.log(filteredData)
   }
   return (
     <div
       {...rest}
       className={clsx(classes.root, className)}
     >
-
       <div className={classes.row}>
         <span className={classes.spacer} />
-
-
         {loading&&<div >
       <CircularProgress />
     </div>}
@@ -217,19 +207,29 @@ const ProductsToolbar = props => {
           <React.Fragment>
             <Tooltip title="filter">
             <IconButton
-            className={classes.filterBtn}
             variant="contained" color="primary" {...bindTrigger(popupState)}>
               <FilterListIcon/>
             </IconButton>
             </Tooltip>
             <Menu {...bindMenu(popupState)}>
               <MenuItem 
-              // onClick={popupState.close}
+              >
+              <PopupState variant="popover" popupId="demo-popup-menu">
+              {popupState => (
+                <React.Fragment>
+                  <Typography variant="h7">filter</Typography>
+                  <Tooltip title="filter">
+                  <IconButton
+                  variant="contained" color="primary" {...bindTrigger(popupState)}>
+              <FilterListIcon/>
+            </IconButton>
+            </Tooltip>
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem 
               >
               <FormControlLabel
                     control={
                       <Checkbox 
-                      // checked={state.checkedA} 
                       onChange={handleCheckChange} 
                       value="is_real_estate" />
                     }
@@ -237,12 +237,10 @@ const ProductsToolbar = props => {
                   />
               </MenuItem>
               <MenuItem 
-              // onClick={popupState.close}
               >
               <FormControlLabel
                     control={
                       <Checkbox 
-                      // checked={state.checkedA} 
                       onChange={handleCheckChange} 
                       value="is_parent_category" />
                     }
@@ -256,41 +254,48 @@ const ProductsToolbar = props => {
           </React.Fragment>
         )}
     </PopupState>
-
-    <div>
-    <Tooltip title="filter by Parent category">
-      <IconButton
-        aria-label="more"
-        aria-controls="long-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-          <FilterListIcon />
-      </IconButton>
-      </Tooltip>
-      <Menu
-        id="long-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={openn}
-        onClose={handleClosse}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: 200,
-          },
-        }}
-      >
-        {options.map(option => (
-          <MenuItem key={option} selected={option === 'Pyxis'} 
-          onClick={handleClosse}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-    </div>
-
+              </MenuItem>
+              <MenuItem 
+              >
+            <React.Fragment>
+              <Typography variant="h7">filter</Typography>
+            <Tooltip title="filter by Parent category">
+              <IconButton
+                aria-label="more"
+                aria-controls="long-menu"
+                aria-haspopup="true"
+                onClick={handleClick}
+              >
+                  <FilterListIcon />
+              </IconButton>
+              </Tooltip>
+              <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={openMenueList}
+                onClose={handleClosse}
+                PaperProps={{
+                  style: {
+                    maxHeight: ITEM_HEIGHT * 4.5,
+                    width: 200,
+                  },
+                }}
+              >
+                {options.map(option => (
+                  <MenuItem key={option} selected={option === 'Pyxis'} 
+                  onClick={handleClosse}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </React.Fragment>
+              </MenuItem>
+            </Menu>
+          </React.Fragment>
+        )}
+    </PopupState>
       </div>
       <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
@@ -300,7 +305,7 @@ const ProductsToolbar = props => {
       </Snackbar>
       <Snackbar open={openErr} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
-          Plrease Select an item to delete
+          {("please_select_item_to_delete")}
         </Alert>
       </Snackbar>
       <Snackbar
