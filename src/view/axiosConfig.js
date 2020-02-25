@@ -3,6 +3,7 @@ import axios from 'axios';
 const token = ()=> {
     return localStorage.getItem('user')
   }
+  
   let parcedToken
   if(JSON.parse(token())!==null) {
     parcedToken = JSON.parse(token()).token

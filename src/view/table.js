@@ -73,8 +73,8 @@ models = [
   getData = (page, rows) => {
     console.log(page, rows)
     this.props.Axios(page, rows).then(res=> {
-      this.setState({data: this.models})//this is for models
-      // this.setState({data: res.data.data.data})
+      // this.setState({data: this.models})//this is for models
+      this.setState({data: res.data.data.data})
       this.setState({isFetching: false})
       this.setState({open: false})
     }).catch(err=> {
