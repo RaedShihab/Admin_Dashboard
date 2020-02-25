@@ -2,6 +2,10 @@
   "name": "myyadmin",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "npm": "6.10.1",
+    "node": "12.14.1"
+  },
   "dependencies": {
     "@material-ui/core": "^4.9.0",
     "@material-ui/icons": "^4.5.1",
