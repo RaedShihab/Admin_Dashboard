@@ -17,7 +17,11 @@ import {
   Divider,
   Grid,
   Button,
-  TextField
+  TextField, 
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Typography
 } from '@material-ui/core';
 import LayOut from '../../layOut';
 import {Axios} from '../axiosConfig';
@@ -59,7 +63,7 @@ class AccountDetails extends React.Component {
           openSnackErr: false,
           open422status: false,
           selectedFile: null,
-          countries: [],
+          brands: [],
         };
       }
       handleClose = (event, reason) => {
@@ -73,37 +77,48 @@ class AccountDetails extends React.Component {
         })
       };
       componentDidMount() {
-        Axios.get('/countries').then(res=> this.setState({countries: res.data.data}))
+        Axios.get('/brands').then(res=> this.setState({brands: res.data.data}))
       }
+      
     render() {
-        const { t ,classes, id} = this.props;
-        const data = id
-        console.log(data)
+      const idsArray = [];
+
+      const handleCheckBox = (e)=> {
+        let index
+        
+        if(e.target.checked) {
+          idsArray.push(e.target.value)
+        }
+        else {
+          index = idsArray.indexOf(e.target.value)
+          idsArray.splice(index, 1)
+        }
+        console.log(idsArray)
+      }
+
+        const { t ,classes, data, patch} = this.props;
+        console.log(patch)
         return (
             <Formik
                 initialValues={{
                     name:data===undefined? '': data.name.en,
                     arname: data===undefined? '': data.name.ar,
                     order: data===undefined? '': data.order,
-                    // lon: data===undefined? '': data.geoloc.lon,
-                    // lat: data===undefined? '':  data.geoloc.lat,
-                    id: data===undefined? '':  data.old_country_id,
+                    id: data===undefined? '':  data.brand_id,
                   }}
                   
                   onSubmit={data => {
-                    console.log(data)
+                    // console.log(data)
                       let dataa = new FormData();
                         dataa.append('name[en]', data.name);
                         dataa.append('name[ar]', data.arname);
-                        dataa.append('country_id', data.id);
-                        dataa.append('geoloc[lon]', data.lon);
-                        dataa.append('geoloc[lat]', data.lat);
+                        dataa.append('brand_id', data.id);
                         dataa.append('order', data.order);
-                        this.props.patch && dataa.append('_method', 'patch');
+                        patch !== undefined && dataa.append('_method', 'patch');
                     this.setState({
                       showLoading:true
                     })
-                    console.log(dataa)
+                    // console.log(dataa)
                this.props.requist(dataa)
                 .then(res =>{
                     console.log(res)
@@ -163,7 +178,7 @@ class AccountDetails extends React.Component {
                         >
                         <CardHeader
                             // subheader={t("City Form")}
-                            title={t("city_form")}
+                            title={t("model_form")}
                             />
                             <Divider />
                             <CardContent>
@@ -180,7 +195,7 @@ class AccountDetails extends React.Component {
                                     defaultValue={data !== undefined? data.name.en : '' }
                                     fullWidth
                                     margin="dense"
-                                    label={t("city_name")}
+                                    label={t("name")}
                                     name="name"
                                     onChange={props.handleChange}
                                     variant="outlined"
@@ -208,38 +223,6 @@ class AccountDetails extends React.Component {
                                     sm={6}
                                     xs={12}
                                 >
-                                        <TextField
-                                        // defaultValue={data!== undefined? data.geoloc.lon : ''}
-                                        fullWidth
-                                        margin="dense"
-                                        label={t("lon")}
-                                        name="lon"
-                                        onChange={props.handleChange}
-                                        variant="outlined"
-                                        helperText={(props.errors.lon && props.touched.lon) && props.errors.lon}
-                                        />
-                                </Grid>
-                                <Grid
-                                    item
-                                    sm={6}
-                                    xs={12}
-                                >
-                                    <TextField
-                                    // defaultValue={data!== undefined? data.geoloc.lat : ''}
-                                    fullWidth
-                                    margin="dense"
-                                        label={t("lat")}
-                                        name="lat"
-                                        onChange={props.handleChange}
-                                        variant="outlined"
-                                        helperText={(props.errors.lat && props.touched.lat) && props.errors.lat}
-                                        />
-                                </Grid>
-                                <Grid
-                                    item
-                                    sm={6}
-                                    xs={12}
-                                >
                                     <TextField
                                     defaultValue={data!== undefined? data.order : ''}
                                     fullWidth
@@ -257,24 +240,30 @@ class AccountDetails extends React.Component {
                                     xs={12}
                                     >
                                     <FormControl fullWidth
-                                    margin="dense" variant="filled">
-                                        <InputLabel htmlFor="filled-age-native-simple">Country</InputLabel>
+                                    margin="dense" variant="filled"
+                                    >
+                                        <InputLabel htmlFor="filled-age-native-simple">Brand</InputLabel>
                                             <Select
                                             native
                                             onChange={props.handleChange('id')}
                                             name='id'
                                             >
                                             {
-                                            this.state.countries.map(country=> {
+                                            this.state.brands.map(country=> {
                                                 return <option value={country._id}>{country.name.en}</option>
                                             })
                                             }
                                         </Select>
                                     </FormControl>
                                     </Grid>
+                                    <Grid
+                                    item
+                                    sm={12}
+                                    xs={12}
+                                >
+                                </Grid>
                                 </Grid>
                             </CardContent>
-                            <Divider />
                             <CardActions>
                             <Button
                                 color="primary"
@@ -324,7 +313,7 @@ class AccountDetails extends React.Component {
                                     severity="error"
                                     style={{backgroundColor: 'red', color: 'white'}}
                                     >
-                                    {t("please_check_if_you_selected_a_country")}
+                                    {t("please_check_if_you_selected_a_brand")}
                                     </Alert>
                                 </Snackbar>
                                 </div>
@@ -339,8 +328,6 @@ class AccountDetails extends React.Component {
         .min(2, 'Seems a bit short...'),
         arname: Yup.string('Enter a name').required(t('cities/validations:arabic_name_is_required'))
         .min(2, 'Seems a bit short...'),
-        lon: Yup.number().min(-180).max(180).required(t('countries/validations:required')),
-        lat: Yup.number().min(-90).max(90).required(t('countries/validations:required')),
         order: Yup.number().integer().required(t('countries/validations:required')),
         })}
             />
@@ -351,4 +338,4 @@ class AccountDetails extends React.Component {
 AccountDetails.propTypes = {
     classes: PropTypes.object.isRequired,
   };
-  export default withStyles(useStyles)(withTranslation(["cities/addUpdate", "countries/validations"])(AccountDetails));
+  export default withStyles(useStyles)(withTranslation(["model/model", "countries/addUpdate"])(AccountDetails));

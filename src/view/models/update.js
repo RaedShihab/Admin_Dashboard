@@ -3,15 +3,17 @@ import Form from './formm';
 import {Axios} from '../axiosConfig';
 
 const Update = (props)=> {
-    const id = props.location.state.data[0]
+  console.log(props.location.state.data[0])
+    const data = props.location.state.data[0]
+    console.log(data._id)
    const requist =(values)=> {
-     console.log(id._id)
-    return Axios.post('/cities/'+id._id, values)}
+    return Axios.post('/models/'+data._id, values)}
     return(
       <div>
         <Form 
-        response={"the_city_has_updated_successfuly"}  
-        id={id} 
+        response={"the_model_has_updated_successfuly"}  
+        data={data}
+        id={data._id}
         requist={requist}
         patch={true}
         />

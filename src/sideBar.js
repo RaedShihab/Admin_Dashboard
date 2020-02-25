@@ -18,6 +18,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import CategoryIcon from '@material-ui/icons/Category';
+import ExtensionIcon from '@material-ui/icons/Extension';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -164,6 +165,14 @@ const useStyles = makeStyles(theme => ({
               </a>
             </ListItemIcon>
             <ListItemText primary="Brands"/>
+          </ListItem>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <a href='/models'>
+              <ExtensionIcon />
+              </a>
+            </ListItemIcon>
+            <ListItemText primary="Models"/>
           </ListItem>
         </List>
       </Collapse>

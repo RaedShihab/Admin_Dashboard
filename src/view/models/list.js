@@ -27,7 +27,8 @@ class CustomizedTables extends React.Component {
   state= {
     users: [],
   }
-  Axios = (page, rows)=> Axios.get(`/cities/?page=${page}&per_page=${rows}`)
+  Axios = (page, rows)=> Axios.get(`/models/?page=${page}&per_page=${rows}`)
+  // Axios = (page, rows)=> Axios.get(`/models`)
   render() {
     return(
       <LayOut>
@@ -35,8 +36,8 @@ class CustomizedTables extends React.Component {
      <CountriesTable
      deleteURL={'/cities'}
      Axios = {this.Axios}
-     path={{update:'/cities/edit/', add: '/cities/create'}} 
-     column={"cities"} 
+     path={{update:'/models/model/', add: '/models/create'}} 
+     column={"models"} 
      url={'https://jsonplaceholder.typicode.com/users/'}
      searchUrl={'https://jsonplaceholder.typicode.com/cuntries/'}
      filterUrl={'https://jsonplaceholder.typicode.com/ocuntries/'}

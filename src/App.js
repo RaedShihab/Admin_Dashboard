@@ -23,7 +23,7 @@ import AddCity from './view/Cities/add'
 import UpdateCity from './view/Cities/update'
 import CitiesList from './view/Cities/list';
 
-import AddDistric from './view/Districts/add'
+import AddDistric from './view/Districts/add';
 import UpdateDistrict from './view/Districts/update'
 import DistrictsList from './view/Districts/list';
 
@@ -33,7 +33,11 @@ import CategoriesList from './view/categories/list';
 
 import AddBrand from './view/brands/add';
 import updateBrand from './view/brands/update';
-import brandList from './view/brands/list'
+import brandList from './view/brands/list';
+
+import AddModel from './view/models/add';
+import updateModel from './view/models/update';
+import ModeslList from './view/models/list';
 
 import LoginPage from './auth/LoginPage/loginPage';
 
@@ -94,6 +98,10 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/brands/create" component={AddBrand} />
                                 <PrivateRoute exact path="/brands/brand/:id" component={updateBrand} />    
                                 <PrivateRoute exact path="/brands" component={brandList} />
+
+                                <PrivateRoute exact path="/models/create" component={AddModel} />
+                                <PrivateRoute exact path="/models/model/:id" component={updateModel} />    
+                                <PrivateRoute exact path="/models" component={ModeslList} />
 
                                 <Route path="/login" component={LoginPage} />
                             </div>

@@ -3,5 +3,10 @@
     "please_add_category_svg" : "Please choose just SVG files and choose category",
     "add_brand": "add brand",
     "the_items_has_deleted_successfuly" : "The Brand has deleted successfuly",
-    "please_select_item_to_delete" : "Please select item to delete"
+    "please_select_item_to_delete" : "Please select item to delete",
+    "brand_form" : "Brand Form",
+    "brand_icon" : "Brand Icon",
+    "name": "Name",
+    "order" : "Order",
+    "arabic_name" : "Arabic Name"
 }

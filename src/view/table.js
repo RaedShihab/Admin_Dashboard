@@ -39,13 +39,42 @@ class App extends React.Component {
   componentDidMount() {
     this.getData(this.state.page, this.state.rows);
   }
-
+models = [
+  {
+    "_id": "5e4d32190e26001fd365b5d2",
+    "old_id": "1",
+    "name": {
+        "ar": "افانتي",
+        "en": "Avante"
+    },
+    "colors" : [
+      {"name": "red", "code": "#ff000"}
+    ],
+    "manf_year" : 2019,
+    "order" : 2,
+    "brand_id": "5e4d321820800027d97f2b93"
+},
+{
+  "_id": "5e4d32190e26001fd365b5d2",
+  "old_id": "1",
+  "name": {
+      "ar": "افانتي",
+      "en": "Avante"
+  },
+  "colors" : [
+    {"name": "red", "code": "#ff000"}
+  ],
+  "manf_year" : 2019,
+  "order" : 2,
+  "brand_id": "5e4d321820800027d97f2b93"
+},
+]
   // get data
   getData = (page, rows) => {
     console.log(page, rows)
     this.props.Axios(page, rows).then(res=> {
-      console.log(res)
-      this.setState({data: res.data.data.data})
+      this.setState({data: this.models})//this is for models
+      // this.setState({data: res.data.data.data})
       this.setState({isFetching: false})
       this.setState({open: false})
     }).catch(err=> {
@@ -235,6 +264,12 @@ class App extends React.Component {
         { name: "name.en", label: t("countries/list:name")},
         { name: "geoloc.lon", label: t("countries/lon")},
         { name: "geoloc.lat", label: t("countries/lat")},
+      ],
+      models: [
+        { name: "_id", label: "ID" },
+        { name: "name.en", label: t("model_name")},
+        { name: 'brand_id', label: t("brand")},
+        { name: "manf_year", label: t("manf_year")},
       ]
     }
     return (
