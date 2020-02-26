@@ -7,6 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import {Container, Box, Grid, Link, Avatar, Typography} from '@material-ui/core';
 import {Radio , FormControlLabel, FormControl, RadioGroup} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTranslation } from "react-i18next";
 import { userActions } from '../Actions/userAcion';
 import { withStyles } from '@material-ui/core/styles';
@@ -68,6 +69,13 @@ class LoginPage extends React.Component {
       this.props.i18n.changeLanguage(newlang);
     };
     render() {
+      console.log(this.props)
+      // if(this.props.loggingIn) {
+      //   alert('loginn')
+      // }
+      // if(this.props.loggingIn === undefined) {
+      //   alert('not')
+      // }
         const {classes, t} = this.props;
         return (
             <div>
@@ -159,7 +167,10 @@ class LoginPage extends React.Component {
                                 fullWidth
                                 className={classes.submit}
                               >
-                                {t("sign_in")}
+
+                                {this.props.loggingIn === undefined && t("sign_in")}
+                                {this.props.loggingIn && <CircularProgress color="white"/>}
+                                
                               </Button>
                               <Grid container>
                           <Grid item xs>

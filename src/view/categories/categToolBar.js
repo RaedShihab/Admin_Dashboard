@@ -227,9 +227,9 @@ const ProductsToolbar = props => {
   placeholder="Search product"
 />
 
-<IconButton className={classes.search}>
-   <SearchIcon/>
-</IconButton>
+<Button variant="contained" color="primary">
+    search
+</Button>
 
 <PopupState variant="popover" popupId="demo-popup-menu">
 {popupState => (
@@ -237,7 +237,7 @@ const ProductsToolbar = props => {
     <Tooltip title="filter">
     <IconButton
     variant="contained" color="primary" {...bindTrigger(popupState)}>
-      <FilterListIcon/>
+      <FilterListIcon fontSize="large"/>
     </IconButton>
     </Tooltip>
     <Menu {...bindMenu(popupState)}>
