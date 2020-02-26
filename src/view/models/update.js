@@ -11,7 +11,7 @@ const Update = (props)=> {
     return(
       <div>
         <Form 
-        response={"the_model_has_updated_successfuly"}  
+        response={"the_model_has_updated_successfuly"}
         data={data}
         id={data._id}
         requist={requist}

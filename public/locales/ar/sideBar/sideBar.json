@@ -1,5 +1,12 @@
 {
     "dashboard": "المعرض",
-    "posts": "المنشورات",
-    "users": "المستخدمين"
+    "posts": "الاعلانات",
+    "users": "المستخدمين",
+    "categories" : "التصنيفات",
+    "locations" : "الدول و الأماكن",
+    "brands" :  "الماركات",
+    "models": "العنصر",
+    "countries": "الدول",
+    "cities" : "المدن",
+    "districts" : "المناطق"
 }

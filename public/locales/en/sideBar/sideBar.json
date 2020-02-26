@@ -1,5 +1,12 @@
 {
     "dashboard": "Dashboard",
-    "posts": "Posts",
-    "users": "Users"
+    "posts": "Advertisments",
+    "users": "Users",
+    "categories" : "Categories",
+    "locations" : "Locations",
+    "brands" : "Brands",
+    "models": "Models",
+    "countries": "Countries",
+    "cities" : "Cities",
+    "districts" : "Districts"
 }

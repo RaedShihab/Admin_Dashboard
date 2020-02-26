@@ -279,15 +279,12 @@ models = [
         <MuiThemeProvider theme={this.getMuiTheme()}>
           <MUIDataTable
         title={
-          <Avatar>
-            <IconButton
-        href={this.props.path.add}
-        >
-          <AddIcon
-           color="primary" variant="contained"
-           />
-        </IconButton>
-          </Avatar>}
+                <Button href={this.props.path.add} 
+                variant="contained"
+                color="primary"
+                >add
+                </Button>
+            }
         data={data}
         columns={columns[column]}
         options={options}

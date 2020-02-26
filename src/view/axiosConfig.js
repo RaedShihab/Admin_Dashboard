@@ -3,10 +3,10 @@ import axios from 'axios';
 const token = ()=> {
     return localStorage.getItem('user')
   }
-  
-  let parcedToken
-  if(JSON.parse(token())!==null) {
-    parcedToken = JSON.parse(token()).token
+
+  let parsedToken
+  if(JSON.parse(token()) !== null) {
+    parsedToken = JSON.parse(token()).token
   }
   
 export const Axios = axios.create({
@@ -14,7 +14,7 @@ export const Axios = axios.create({
     headers: {
       'Accept': 'application/json',
       'Content-Type' : 'multipart/form-data',
-      'Authorization': 'Bearer ' + parcedToken
+      'Authorization': 'Bearer ' + parsedToken
   }
   });
   

@@ -64,7 +64,7 @@ function unescapeHTML(html) {
 const ProductCard = props => {
   // console.log('render')
   const { className, product, t, ...rest } = props;
-
+  // console.log(product)
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
   const [openErr, setOpenErr] = React.useState(false);
   const [open404, setOpen404] = React.useState(false);
@@ -106,12 +106,12 @@ const ProductCard = props => {
         console.log(res)
         setSoftDeliting(false)
         setOpenSuccess(true)
-      setTimeout(()=>window.location.reload(false), 1500);
+      window.location.reload(false)
       }
     })
     .catch(err=> {
       setOpenErr(true)
-      setForceDeliting(false)
+      setSoftDeliting(false)
       console.log(err.response)
     })
   }
@@ -142,7 +142,7 @@ const ProductCard = props => {
     </IconButton> */}
     <FormControlLabel
          onChange={handleCheckBox}
-          value={product._id}
+          value={product.id}
           control={<Checkbox color="primary" />}
           // label="Top"
           // labelPlacement="top"
@@ -186,7 +186,7 @@ const ProductCard = props => {
           {softDeliting&& <CircularProgress />}
          {!softDeliting && <Tooltip title={t("soft_delete")}>
           <IconButton
-          onClick={()=>deleteCategory(product._id)}
+          onClick={()=>deleteCategory(product.id)}
           >
            <DeleteIcon className={classes.statsIcon} />
           </IconButton>
@@ -195,7 +195,7 @@ const ProductCard = props => {
           {forceDeliting&& <CircularProgress />}
          {!forceDeliting && <Tooltip title={t("force_delete")}>
           <IconButton
-          onClick={()=>forceDeleteCategory(product._id)}
+          onClick={()=>forceDeleteCategory(product.id)}
           >
            <DeleteForeverIcon
            color="secondary"
@@ -206,7 +206,7 @@ const ProductCard = props => {
           <Link
           style={{margin: '0px 20px'}}
           to={{
-            pathname: '/categories/category/'+product._id,
+            pathname: '/categories/category/'+product.id,
             state: {
             data: product
             }

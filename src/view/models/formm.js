@@ -114,7 +114,7 @@ class AccountDetails extends React.Component {
                         dataa.append('name[ar]', data.arname);
                         dataa.append('brand_id', data.id);
                         dataa.append('order', data.order);
-                        patch !== undefined && dataa.append('_method', 'patch');
+                        patch && dataa.append('_method', 'patch');
                     this.setState({
                       showLoading:true
                     })

@@ -4,7 +4,7 @@ import {Axios} from '../axiosConfig';
 
 const Update = (props)=> {
   const data = props.location.state.data;
-  const id = data._id
+  const id = data.id
   console.log(id)
    const requist =(values)=> {
      console.log(values)

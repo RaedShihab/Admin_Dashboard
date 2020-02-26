@@ -7,7 +7,8 @@ import { Drawer,
     List,
     ListItem, 
     ListItemIcon,
-    ListItemText, 
+    ListItemText,
+    Tooltip
   } from '@material-ui/core';
 
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -19,6 +20,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import CategoryIcon from '@material-ui/icons/Category';
 import ExtensionIcon from '@material-ui/icons/Extension';
+import FlagIcon from '@material-ui/icons/Flag';
+import PlaceIcon from '@material-ui/icons/Place';
+import PublicIcon from '@material-ui/icons/Public';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -88,6 +92,9 @@ const useStyles = makeStyles(theme => ({
     nested: {
       paddingLeft: theme.spacing(4),
     },
+    link:{
+      textDecoration: 'none', color: 'black'
+    }
   }));
  const SideBar = (props)=> {
   // const [anchorEl, setAnchorEl] = React.useState(null);
@@ -100,9 +107,13 @@ const useStyles = makeStyles(theme => ({
   // };
 
   const [open, setOpen] = React.useState(false);
+  const [openCountries, setOpenCountries] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
+  };
+  const handleClickCountries = () => {
+    setOpenCountries(!openCountries);
   };
 
         const classes = useStyles();
@@ -141,66 +152,132 @@ const useStyles = makeStyles(theme => ({
       // }
       className={classes.roott}
     >
+      <List component="div" disablePadding>
+        <a className={classes.link} href="/dasboard">
+            <ListItem button>
+              <ListItemIcon>
+                <Tooltip title={t("dashboard")}>
+                <DashboardIcon color="primary"/>
+                </Tooltip>
+                </ListItemIcon>
+              <ListItemText primary={t('dashboard')} />
+            </ListItem>
+        </a>
+        </List>
+
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
-          <CategoryIcon />
+        <Tooltip title={t("categories")}>
+        <CategoryIcon color="primary"/>
+        </Tooltip>
         </ListItemIcon>
-        <ListItemText primary="categories list" />
+        <ListItemText primary="Categories List" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
+        <a className={classes.link} href='/categories'>
         <ListItem button className={classes.nested}>
             <ListItemIcon>
-              <a href='/categories'>
-              <CategoryIcon />
-              </a>
+              <Tooltip title={t("categories")}>
+              <CategoryIcon color="action"/>
+              </Tooltip>
             </ListItemIcon>
             <ListItemText primary="Main cagtegoris" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+        </a> 
+        <a className={classes.link} href='/brands'>
+        <ListItem button className={classes.nested}>
             <ListItemIcon>
-              <a href='/brands'>
-              <EmojiTransportationIcon />
-              </a>
+              <Tooltip title={t("brands")}>
+              <EmojiTransportationIcon color="action"/>
+              </Tooltip>
             </ListItemIcon>
             <ListItemText primary="Brands"/>
           </ListItem>
-          <ListItem button className={classes.nested}>
+        </a>
+        <a className={classes.link} href='/models'>
+        <ListItem button className={classes.nested}>
             <ListItemIcon>
-              <a href='/models'>
-              <ExtensionIcon />
-              </a>
+              <Tooltip title={t("models")}>
+              <ExtensionIcon color="action"/>
+              </Tooltip>
             </ListItemIcon>
             <ListItemText primary="Models"/>
           </ListItem>
+        </a>
         </List>
       </Collapse>
+
+      <ListItem button onClick={handleClickCountries}>
+        <ListItemIcon>
+          <Tooltip title={t("locations")}>
+          <PublicIcon color="primary"/>
+          </Tooltip>
+        </ListItemIcon>
+        <ListItemText primary="Countries List" />
+        {openCountries ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={openCountries} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+        <a className={classes.link} href='/countries'>
+        <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <Tooltip title={t("countries")}>
+              <FlagIcon color="action"/>
+              </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="Main Countries" />
+          </ListItem>
+        </a>
+          <a className={classes.link} href='/cities'>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+            <Tooltip title={t("cities")}>
+             <EmojiTransportationIcon color="action"/>
+            </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="Cities"/>
+          </ListItem>
+          </a>
+          <a className={classes.link} href='/districts'>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+            <Tooltip title={t("districts")}>
+            <PlaceIcon color="action"/>
+            </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="Districts"/>
+          </ListItem>
+          </a>
+        </List>
+      </Collapse>
+
     </List>
-        <List>
-            <ListItem button>
-              <ListItemIcon><a href="/"><DashboardIcon/></a></ListItemIcon>
-              <ListItemText primary={t('dashboard')} />
-            </ListItem>
-        </List>
         {/* <Divider /> */}
-        <List>
-            <ListItem button>
-              <ListItemIcon><a href="/users"><PeopleIcon/></a></ListItemIcon>
+        <List component="div" disablePadding>
+        <a className={classes.link} href='/users'>
+        <ListItem button>
+              <ListItemIcon>
+                <Tooltip title={t("users")}>
+                <PeopleIcon color="primary"/>
+                </Tooltip>
+                </ListItemIcon>
               <ListItemText primary={t('users')} />
             </ListItem>
+        </a>
         </List>
-        <List>
-            <ListItem button>
-              <ListItemIcon><a href="/posts"><PostAddIcon/></a></ListItemIcon>
-              <ListItemText primary={t('posts')} />
+        <List component="div" disablePadding>
+        <a className={classes.link} href='/ads'>
+        <ListItem button>
+              <ListItemIcon>
+                <Tooltip title={t("posts")}>
+                <PostAddIcon color="primary"/>
+                </Tooltip>
+                </ListItemIcon>
+              <ListItemText primary={t('ads')} />
             </ListItem>
-        </List>
-        <List>
-            <ListItem button>
-              <ListItemIcon><a href="/posts"><PostAddIcon/></a></ListItemIcon>
-              <ListItemText primary={t('users')} />
-            </ListItem>
+        </a>
         </List>
       </Drawer>
          );

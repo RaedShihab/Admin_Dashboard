@@ -13,7 +13,11 @@ import SearchIcon from '@material-ui/icons/Search';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { makeStyles } from '@material-ui/styles';
-
+import Grid from '@material-ui/core/Grid';
+import FormLabel from '@material-ui/core/FormLabel';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Radio from '@material-ui/core/Radio';
+import Paper from '@material-ui/core/Paper';
 import SearchInput from './searchInput';
 
 const useStyles = makeStyles(theme => ({
@@ -27,7 +31,14 @@ const useStyles = makeStyles(theme => ({
     height: '42px',
     display: 'flex',
     alignItems: 'center',
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
+    width: 700
+  },
+  row2: {
+    height: '42px',
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: theme.spacing(1),
   },
   spacer: {
     flexGrow: 1
@@ -48,8 +59,14 @@ const useStyles = makeStyles(theme => ({
     margin: 10
   },
   filterBtn: {
-    margin: '0px 10px'
-  }
+    // margin: '0px 10px'
+  },
+  grid: {
+    flexGrow: 1,
+  },
+  control: {
+    padding: theme.spacing(2),
+  },
 }));
 
 const ProductsToolbar = props => {
@@ -77,6 +94,9 @@ const ProductsToolbar = props => {
     setOpenSuccess(false)
   };
 
+  const [spacing, setSpacing] = React.useState(2);
+
+
   const deleteCategories = ()=> {
     const ids = props.data.deleteCategories
     console.log('/categories/'+ids+'/force')
@@ -88,6 +108,7 @@ const ProductsToolbar = props => {
       setloading(false)
       setOpenSuccess(true)
        console.log(res)
+       window.location.reload(false)
       })
       .catch(err => {
         setOpenErr(true)
@@ -105,6 +126,7 @@ const ProductsToolbar = props => {
       setWaiting(false)
       setOpenSuccess(true)
        console.log(res)
+       window.location.reload(false)
       })
       .catch(err => {
         setOpenErr(true)
@@ -149,8 +171,21 @@ const ProductsToolbar = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <div className={classes.row}>
-        <span className={classes.spacer} />
+      
+      <Grid container className={classes.root} spacing={2}>
+      {/* <Grid item xs={12}> */}
+        <Grid container spacing={4}>
+          <Grid item>
+          <div className={classes.row2}>
+        {/* <span className={classes.spacer} /> */}
+        <Button
+        className={classes.btn}
+        href={props.path.add}
+          color="primary"
+          variant="contained"
+        >
+          {t("add_category")}
+        </Button>
         {loading&&<div >
       <CircularProgress />
     </div>}
@@ -182,121 +217,121 @@ const ProductsToolbar = props => {
     </IconButton>
     </Tooltip>
     }
-
-        <Button
-        className={classes.btn}
-        href={props.path.add}
-          color="primary"
-          variant="contained"
-        >
-          {t("add_category")}
-        </Button>
       </div>
-      <div className={classes.row}>
-        <SearchInput
-          className={classes.searchInput}
-          placeholder="Search product"
-        />
+          </Grid>
 
-        <IconButton className={classes.search}>
-           <SearchIcon/>
-        </IconButton>
+          <Grid item>
+          <div className={classes.row}>
+<SearchInput
+  className={classes.searchInput}
+  placeholder="Search product"
+/>
 
-        <PopupState variant="popover" popupId="demo-popup-menu">
-        {popupState => (
-          <React.Fragment>
-            <Tooltip title="filter">
-            <IconButton
-            variant="contained" color="primary" {...bindTrigger(popupState)}>
-              <FilterListIcon/>
-            </IconButton>
-            </Tooltip>
-            <Menu {...bindMenu(popupState)}>
-              <MenuItem 
-              >
-              <PopupState variant="popover" popupId="demo-popup-menu">
-              {popupState => (
-                <React.Fragment>
-                  <Typography variant="h7">filter</Typography>
-                  <Tooltip title="filter">
-                  <IconButton
-                  variant="contained" color="primary" {...bindTrigger(popupState)}>
-              <FilterListIcon/>
-            </IconButton>
-            </Tooltip>
-            <Menu {...bindMenu(popupState)}>
-              <MenuItem 
-              >
-              <FormControlLabel
-                    control={
-                      <Checkbox 
-                      onChange={handleCheckChange} 
-                      value="is_real_estate" />
-                    }
-                    label="Real estate"
-                  />
-              </MenuItem>
-              <MenuItem 
-              >
-              <FormControlLabel
-                    control={
-                      <Checkbox 
-                      onChange={handleCheckChange} 
-                      value="is_parent_category" />
-                    }
-                    label="Parant Categories"
-                  />  
-              </MenuItem>
-              <Button variant="contained"
-              className={classes.filterBtn}
-               color="primary">Apply</Button>
-            </Menu>
-          </React.Fragment>
-        )}
-    </PopupState>
-              </MenuItem>
-              <MenuItem 
-              >
-            <React.Fragment>
-              <Typography variant="h7">filter</Typography>
-            <Tooltip title="filter by Parent category">
-              <IconButton
-                aria-label="more"
-                aria-controls="long-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-              >
-                  <FilterListIcon />
-              </IconButton>
-              </Tooltip>
-              <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={openMenueList}
-                onClose={handleClosse}
-                PaperProps={{
-                  style: {
-                    maxHeight: ITEM_HEIGHT * 4.5,
-                    width: 200,
-                  },
-                }}
-              >
-                {options.map(option => (
-                  <MenuItem key={option} selected={option === 'Pyxis'} 
-                  onClick={handleClosse}
-                  >
-                    {option}
-                  </MenuItem>
-                ))}
-              </Menu>
-            </React.Fragment>
-              </MenuItem>
-            </Menu>
-          </React.Fragment>
-        )}
-    </PopupState>
-      </div>
+<IconButton className={classes.search}>
+   <SearchIcon/>
+</IconButton>
+
+<PopupState variant="popover" popupId="demo-popup-menu">
+{popupState => (
+  <React.Fragment>
+    <Tooltip title="filter">
+    <IconButton
+    variant="contained" color="primary" {...bindTrigger(popupState)}>
+      <FilterListIcon/>
+    </IconButton>
+    </Tooltip>
+    <Menu {...bindMenu(popupState)}>
+      <MenuItem 
+      >
+      <PopupState variant="popover" popupId="demo-popup-menu">
+      {popupState => (
+        <React.Fragment>
+          <Typography variant="h7">filter</Typography>
+          <Tooltip title="filter">
+          <IconButton
+          variant="contained" color="primary" {...bindTrigger(popupState)}>
+      <FilterListIcon/>
+    </IconButton>
+    </Tooltip>
+    <Menu {...bindMenu(popupState)}>
+      <MenuItem 
+      >
+      <FormControlLabel
+            control={
+              <Checkbox 
+              onChange={handleCheckChange} 
+              value="is_real_estate" />
+            }
+            label="Real estate"
+          />
+      </MenuItem>
+      <MenuItem 
+      >
+      <FormControlLabel
+            control={
+              <Checkbox 
+              onChange={handleCheckChange} 
+              value="is_parent_category" />
+            }
+            label="Parant Categories"
+          />  
+      </MenuItem>
+      <Button variant="contained"
+      className={classes.filterBtn}
+       color="primary">Apply</Button>
+    </Menu>
+  </React.Fragment>
+)}
+</PopupState>
+      </MenuItem>
+      <MenuItem 
+      >
+    <React.Fragment>
+      <Typography variant="h7">filter</Typography>
+    <Tooltip title="filter by Parent category">
+      <IconButton
+        aria-label="more"
+        aria-controls="long-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+      >
+          <FilterListIcon />
+      </IconButton>
+      </Tooltip>
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={openMenueList}
+        onClose={handleClosse}
+        PaperProps={{
+          style: {
+            maxHeight: ITEM_HEIGHT * 4.5,
+            width: 200,
+          },
+        }}
+      >
+        {options.map(option => (
+          <MenuItem key={option} selected={option === 'Pyxis'} 
+          onClick={handleClosse}
+          >
+            {option}
+          </MenuItem>
+        ))}
+      </Menu>
+    </React.Fragment>
+      </MenuItem>
+    </Menu>
+  </React.Fragment>
+)}
+</PopupState>
+</div>
+          </Grid>
+        </Grid>
+
+      </Grid>
+    {/* </Grid> */}
+
       <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">

@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     fontSize: '14px',
     lineHeight: '16px',
-    letterSpacing: '-0.05px'
+    letterSpacing: '-0.05px',
   }
 }));
 
@@ -36,7 +36,6 @@ const SearchInput = props => {
       className={clsx(classes.root, className)}
       style={style}
     >
-      <SearchIcon className={classes.icon} />
       <Input
         {...rest}
         className={classes.input}
