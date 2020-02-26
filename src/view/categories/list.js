@@ -39,7 +39,7 @@ const ProductList = () => {
   // Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
     // console.log(res.data.data.map(cat=> cat.parent_id))
-    // setCategories(res.data.data)
+    setCategories(res.data.data)
     setOpen(false)  
   })
   .catch(err=> {
