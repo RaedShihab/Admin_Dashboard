@@ -7,12 +7,25 @@ import MUIDataTable from "mui-datatables";
 import {Button, CircularProgress, IconButton, Avatar} from '@material-ui/core'
 import CustomSearchRender from './CustomSearchRender';
 import CustomToolbarSelect from './CustomSelectToolBar';
+import CustomToolbar from './CustomToolbar';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
 import { act } from "react-dom/test-utils";
 
-
+import {
+  FormGroup,
+  FormLabel,
+  FormControl,
+  ListItemText,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Select,
+  InputLabel,
+  MenuItem
+} from '@material-ui/core';
 
 class App extends React.Component {
   state = {
@@ -24,7 +37,9 @@ class App extends React.Component {
     count: 100,
     data: [],
     searchText: '',
-    textAlign: 'left'
+    textAlign: 'left',
+    filterData: '',
+    listedData: []
   };
   getMuiTheme = () => createMuiTheme({
     overrides: {
@@ -38,6 +53,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getData(this.state.page, this.state.rows);
+    this.props.showFilter && this.props.getAxios().then(res => this.setState({listedData: res.data.data}))
   }
 models = [
   {
@@ -89,7 +105,15 @@ models = [
     // });
   };
   getDataBySearch = (data)=> {
-    this.setState({open: true})
+    console.log(data)
+    if(data === '') {
+      this.setState({
+        open: false,
+        openAlert: true
+        })
+    }
+    else {
+      this.setState({open: true})
     axios.get(this.props.searchUrl, data).then(res=>{
       console.log('res1', res)
       this.setState({data:res.data})
@@ -102,6 +126,7 @@ models = [
         openAlert: true
         })
     })
+    }
   }
   // getFilterdData = ()=> {
   //   axios.get('https://jsonplaceholder.typicode.com/users').then(res=>{
@@ -142,26 +167,31 @@ models = [
       });
     });
   };
-  handleFilterSubmit = filterList => () => {
+  submitFilters = filterData => () => {
     this.setState({submitFilter: true})
-    console.log('Submitting filters: ', filterList);
-    axios.get(this.props.filterUrl, filterList).then(res=>{
+    console.log('Submitting filters: ', filterData);
+    this.props.getById(filterData)
+    .then(res=>{
       console.log(res)
       this.setState({
         submitFilter: false,
-        data: res.data });
+        data: res.data.data});
     })
-    .catch(err=> {
-      this.setState({
-        open: false,
-        submitFilter: false,
-        openAlert: true
-        })
-    })
+    // .catch(err=> {
+    //   this.setState({
+    //     open: false,
+    //     submitFilter: false,
+    //     openAlert: true
+    //     })
+    // })
   };
+    handleFilterSelect = (e)=> {
+      this.setState({filterData: e.target.value})
+    }
   render() {
-    console.log('render')
     const {t, column, deleteURL} = this.props
+    const {filterData, listedData} = this.state
+    console.log(filterData)
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -173,13 +203,20 @@ models = [
         };
     const { data, page, count } = this.state;
     const options = {
-      filter: true,
+      filter: this.props.showFilter ? true : false,
+      search: false,
+      print: false,
+      download: false,
       filterType: "dropdown",
+      filterType: "custom",
       responsive: "stacked",
       searchText: this.state.searchText,
       serverSide: true,
       count: count,
       page: page,
+      onRowClick: (rowData, rowMeta, e) => {
+        console.log(rowData[0]);
+      },
       onFilterChange: (column, filterList, type) => {
         if (type === 'chip') {
           console.log('updating filters via chip');
@@ -188,9 +225,26 @@ models = [
       },
       customFilterDialogFooter: filterList => {
         return (
-          <div style={{marginTop: '40px'}}>
+          <div>
+            <FormControl>
+              <InputLabel style={{marginTop: 10}}>
+                country
+              </InputLabel>
+              <Select
+              style={{marginTop: 50}}
+              onChange={this.handleFilterSelect}
+              >
+                {
+                  listedData.map(item => {
+                  return <MenuItem value={item.id}>{item.name.en}</MenuItem>
+                  })
+                }
+              </Select>
+            </FormControl>
+            <div style={{marginTop: '40px'}}>
             {this.state.submitFilter&&<CircularProgress/>}
-            {!this.state.submitFilter&&<Button variant="contained" onClick={this.handleFilterSubmit(filterList)}>Apply Filters</Button>}
+            {!this.state.submitFilter&&<Button variant="contained" onClick={this.submitFilters(filterData)}>Apply Filters</Button>}
+          </div>
           </div>
         );
       },
@@ -211,14 +265,21 @@ models = [
         //     return
         // }
       },
-      customSearchRender: (searchText, handleSearch, hideSearch, options) => {
+      // customSearchRender: (searchText, handleSearch, hideSearch, options) => {
+      //   return (
+      //     <CustomSearchRender
+      //       searchText={searchText}
+      //       onSearch={handleSearch}
+      //       onHide={hideSearch}
+      //       options={options}
+      //       getDataBySearch={this.getDataBySearch}
+      //     />
+      //   );
+      // },
+      customToolbar: () => {
         return (
-          <CustomSearchRender
-            searchText={searchText}
-            onSearch={handleSearch}
-            onHide={hideSearch}
-            options={options}
-            getDataBySearch={this.getDataBySearch}
+          <CustomToolbar 
+          path={this.props.path.add}
           />
         );
       },
@@ -274,16 +335,12 @@ models = [
     }
     return (
       <React.Fragment>
-        {this.state.open&&<CircularProgress size='100px' style={{display: 'block', margin:'350px 500px'}}/>}
+        {this.state.open&&<CircularProgress size='100px' style={{display: 'block', margin:'200px 500px'}}/>}
         {!this.state.open&&
         <MuiThemeProvider theme={this.getMuiTheme()}>
           <MUIDataTable
         title={
-                <Button href={this.props.path.add} 
-                variant="contained"
-                color="primary"
-                >add
-                </Button>
+               <CustomSearchRender getDataBySearch={this.getDataBySearch}/>
             }
         data={data}
         columns={columns[column]}

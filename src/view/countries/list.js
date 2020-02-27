@@ -37,6 +37,7 @@ class CustomizedTables extends React.Component {
      add={'COUNTRY'} 
      path={{update:'/countries/edit/', add: '/countries/create'}} 
      column={"countries"}
+     showFilter={false}
      />
     </TableContainer>
       </LayOut>

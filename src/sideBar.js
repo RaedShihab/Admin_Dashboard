@@ -153,7 +153,7 @@ const useStyles = makeStyles(theme => ({
       className={classes.roott}
     >
       <List component="div" disablePadding>
-        <a className={classes.link} href="/dasboard">
+        <a className={classes.link} href="/">
             <ListItem button>
               <ListItemIcon>
                 <Tooltip title={t("dashboard")}>
@@ -168,11 +168,10 @@ const useStyles = makeStyles(theme => ({
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
         <Tooltip title={t("categories")}>
-        <CategoryIcon color="primary"/>
+          {open ? <ExpandMore /> : <CategoryIcon color="primary"/>}
         </Tooltip>
         </ListItemIcon>
-        <ListItemText primary="Categories List" />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        <ListItemText primary="Categories" />
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
@@ -212,11 +211,10 @@ const useStyles = makeStyles(theme => ({
       <ListItem button onClick={handleClickCountries}>
         <ListItemIcon>
           <Tooltip title={t("locations")}>
-          <PublicIcon color="primary"/>
+          {openCountries ? <ExpandMore /> : <PublicIcon color="primary"/>}
           </Tooltip>
         </ListItemIcon>
-        <ListItemText primary="Countries List" />
-        {openCountries ? <ExpandLess /> : <ExpandMore />}
+        <ListItemText primary="Countries" />
       </ListItem>
       <Collapse in={openCountries} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>

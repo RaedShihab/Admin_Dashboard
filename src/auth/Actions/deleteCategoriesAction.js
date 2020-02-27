@@ -1,8 +1,9 @@
 import {deleteCategoriesConstant} from '../Constants/deleteCattegoriesConstat';
 
-export const deleteCategoriesAction = (idsArray)=> {
+export const deleteCategoriesAction = (idsArray, checked)=> {
     return {
         type: deleteCategoriesConstant.DELETE_CATEGOROES_CONSTANT,
-        idsArray: idsArray
+        idsArray: idsArray,
+        checked: checked
     }
 }

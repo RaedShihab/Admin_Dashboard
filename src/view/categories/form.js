@@ -207,6 +207,7 @@ class AccountDetails extends React.Component {
                               })
                              }
                              if(err.response.status === 500) {
+                              console.log(err.response)
                               this.setState({
                                 showLoading: false,
                                 open500status:true,

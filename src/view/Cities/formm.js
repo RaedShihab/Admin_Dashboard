@@ -73,7 +73,9 @@ class AccountDetails extends React.Component {
         })
       };
       componentDidMount() {
-        Axios.get('/countries').then(res=> this.setState({countries: res.data.data}))
+        Axios.get('/countries').then(res=> {
+          console.log(res.data.data)
+          this.setState({countries: res.data.data})})
       }
     render() {
         const { t ,classes, id} = this.props;

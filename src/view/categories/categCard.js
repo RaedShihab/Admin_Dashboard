@@ -62,7 +62,7 @@ function unescapeHTML(html) {
 }
 
 const ProductCard = props => {
-  // console.log('render')
+  console.log(props.data.deleteCategories)
   const { className, product, t, ...rest } = props;
   // console.log(product)
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
@@ -91,8 +91,8 @@ const ProductCard = props => {
       index = idsArray.indexOf(e.target.value)
       idsArray.splice(index, 1)
     }
-    console.log(idsArray)
-    props.deleteCategoriesAction(idsArray)
+    // console.log(idsArray)
+    props.deleteCategoriesAction(idsArray, e.target.checked)
     // setIdsArray(options)
     
   }

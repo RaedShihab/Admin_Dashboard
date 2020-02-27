@@ -27,7 +27,10 @@ class CustomizedTables extends React.Component {
     users: [],
     open: false
   }
-  Axios = (page, rows)=> Axios.get(`/districts/?page=${page}&per_page=${rows}`)
+  Axios = (page, rows)=> Axios.get(`/districts/?page=${page}&per_page=${rows}`);
+  getAxios = ()=> Axios.get(`/locations/cities`)
+  getById = (id)=> Axios.get(`https://api.glowyhan.com/gateway/locations/cities/${id}/districts`);
+
   render() {
     return(
       <LayOut>
@@ -35,11 +38,13 @@ class CustomizedTables extends React.Component {
      <Table 
      deleteURL={'/districts'}
      Axios = {this.Axios}
+     getAxios={this.getAxios}
       path={{update:'/districts-list/update-district/', add: '/districts-list/add-district/'}}
       column={"districts"} 
       url={'https://jsonplaceholder.typicode.com/users/'}
       searchUrl={'https://jsonplaceholder.typicode.com/countries/'}
-      filterUrl={'https://jsonplaceholder.typicode.com/countries/'}
+      getById={this.getById}
+      showFilter={true}
       />
     </TableContainer>
       </LayOut>

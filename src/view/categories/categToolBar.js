@@ -70,9 +70,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProductsToolbar = props => {
+  console.log(props.data.deleteCategories[1])
   const checkedCategoriesNumber = props.data.deleteCategories.length
   const {t} = props
-  console.log(props)
   const Alert = (props)=> {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
@@ -98,11 +98,11 @@ const ProductsToolbar = props => {
 
 
   const deleteCategories = ()=> {
-    const ids = props.data.deleteCategories
-    console.log('/categories/'+ids+'/force')
+    const ids = props.data.deleteCategories[0]
+    console.log('/categories/'+ids+'/soft')
     // Axios.delete('/categories')
     setloading(true)
-    Axios.delete('/categories/'+ids+'/force')
+    Axios.delete('/categories/'+ids+'/soft')
     .then(res=> {
       // setOpen(true);
       setloading(false)
@@ -111,12 +111,13 @@ const ProductsToolbar = props => {
        window.location.reload(false)
       })
       .catch(err => {
+        console.log(err.response)
         setOpenErr(true)
         setloading(false) 
       })
   }
   const forceDeleteCategories = ()=> {
-    const ids = props.data.deleteCategories
+    const ids = props.data.deleteCategories[0]
     console.log('/categories/'+ids+'/force')
     // Axios.delete('/categories')
     setWaiting(true)
@@ -129,6 +130,7 @@ const ProductsToolbar = props => {
        window.location.reload(false)
       })
       .catch(err => {
+        console.log(err.response)
         setOpenErr(true)
         setWaiting(false)
       })
@@ -186,10 +188,11 @@ const ProductsToolbar = props => {
         >
           {t("add_category")}
         </Button>
-        {loading&&<div >
-      <CircularProgress />
-    </div>}
-    {!loading&&
+        {loading&&
+      <CircularProgress />}
+
+          {props.data.deleteCategories[1]>0 && <div>
+          {!loading&&
     <Tooltip title={t("soft_delete")}>
       <IconButton onClick={deleteCategories}>
       <DeleteIcon
@@ -201,10 +204,11 @@ const ProductsToolbar = props => {
     </IconButton>
     </Tooltip>
     }
+    {waiting&&
+      <CircularProgress/>}
+          </div>}
 
-        {waiting&&<div >
-      <CircularProgress/>
-    </div>}
+    {props.data.deleteCategories[1]>0 &&<div>
     {!waiting&&
     <Tooltip title={t("force_delete")}>
       <IconButton onClick={forceDeleteCategories}>
@@ -217,6 +221,8 @@ const ProductsToolbar = props => {
     </IconButton>
     </Tooltip>
     }
+    </div>}
+    
       </div>
           </Grid>
 

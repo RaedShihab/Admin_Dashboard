@@ -12,6 +12,7 @@ const defaultSearchStyles = theme => ({
   },
   searchText: {
     flex: '0.8 0',
+    // height: 
   },
   clearIcon: {
     '&:hover': {
@@ -19,56 +20,58 @@ const defaultSearchStyles = theme => ({
     },
   },
   btn: {
-    marginRight: 20
+    margin: '0 10px',
+    height: 55
   }
 });
 
 class CustomSearchRender extends React.Component {
+  state={
+    text : ''
+  }
   handleTextChange = event => {
-    this.props.onSearch(event.target.value);
+    // this.props.onSearch(event.target.value);
+    this.setState({text: event.target.value})
   };
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeyDown, false);
-  }
+  // componentDidMount() {
+  //   document.addEventListener('keydown', this.onKeyDown, false);
+  // }
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyDown, false);
-  }
+  // componentWillUnmount() {
+  //   document.removeEventListener('keydown', this.onKeyDown, false);
+  // }
 
-  onKeyDown = event => {
-    if (event.keyCode === 27) {
-      this.props.onHide();
-    }
-  };
+  // onKeyDown = event => {
+  //   if (event.keyCode === 27) {
+  //     this.props.onHide();
+  //   }
+  // };
 
   render() {
-    const { classes, options, onHide, searchText, getDataBySearch } = this.props;
+    const {classes, getDataBySearch} = this.props
+    const {text} = this.state;
+    // const { classes, options, onHide, searchText, getDataBySearch } = this.props;
     return (
       <Grow appear in={true} timeout={300}>
-        <div className={classes.main} ref={el => (this.rootRef = el)}>
-        <Button
-        className={classes.btn} 
-        onClick={()=>getDataBySearch(searchText)} variant="contained" color="primary"> Search</Button>
+        <div>
           <TextField
+            onChange={this.handleTextChange}
+            variant="filled"
             placeholder={'Search'}
             className={classes.searchText}
-            InputProps={{
-              'aria-label': options.textLabels.toolbar.search,
-            }}
-            value={searchText || ''}
-            onChange={this.handleTextChange}
-            fullWidth={true}
-            inputRef={el => (this.searchField = el)}
           />
-          <IconButton className={classes.clearIcon} onClick={onHide}>
-            <ClearIcon />
-          </IconButton>
+          <Button
+          onClick={()=>getDataBySearch(text)}
+            className={classes.btn}
+            variant="contained" color="primary">
+           Search
+         </Button>
         </div>
       </Grow>
     );
   }
 }
 
-export default withStyles(defaultSearchStyles, { name: 'CustomSearchRender' })(CustomSearchRender);
+export default withStyles(defaultSearchStyles)(CustomSearchRender);
 
