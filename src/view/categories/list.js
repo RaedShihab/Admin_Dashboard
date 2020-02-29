@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'flex-end'
   }
 }));
+
 let page = 1;
 
 const ProductList = () => {
