@@ -4,7 +4,8 @@ import { withTranslation } from 'react-i18next';
 import {connect} from 'react-redux';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import MUIDataTable from "mui-datatables";
-import {Button, CircularProgress, IconButton, Avatar} from '@material-ui/core'
+import {Button, CircularProgress, IconButton, Avatar} from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomSearchRender from './CustomSearchRender';
 import CustomToolbarSelect from './CustomSelectToolBar';
 import CustomToolbar from './CustomToolbar';
@@ -57,6 +58,7 @@ class App extends React.Component {
       console.log(res)
       this.setState({listedData: res.data.data})})
   }
+  
 models = [
   {
     "_id": "5e4d32190e26001fd365b5d2",
@@ -171,8 +173,8 @@ models = [
     });
   };
   submitFilters = filterData => () => {
+    console.log(filterData)
     this.setState({submitFilter: true})
-    console.log('Submitting filters: ', filterData);
     this.props.getById(filterData)
     .then(res=>{
       console.log(res.data.data.models)
@@ -192,13 +194,21 @@ models = [
         })
     })
   };
-    handleFilterSelect = (e)=> {
+    handleFilterSelect = (e, values)=> {
+      console.log(values)
+      this.props.getBrands ? this.setState({filterData: values.id}) :
       this.setState({filterData: e.target.value})
     }
   render() {
+
     const {t, column, deleteURL} = this.props
     const {filterData, listedData} = this.state
-    console.log(filterData)
+    console.log(listedData.map(item => {return {name: item.name.en, id: item.id}}))
+    const dataList = listedData.map(item => {return {name: item.name.en, id: item.id}});
+    const defaultProps = {
+      options: dataList,
+      getOptionLabel: option => option.name,
+    };
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -233,7 +243,24 @@ models = [
       customFilterDialogFooter: filterList => {
         return (
           <div>
-            <FormControl>
+          {this.props.getBrands ? <Autocomplete
+                      {...defaultProps}
+                      id="disable-open-on-focus"
+                      disableOpenOnFocus
+                      onChange={this.handleFilterSelect}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label={this.props.list}
+                          placeholder="Favorites"
+                          margin="normal"
+                          fullWidth
+                        />
+                      )}
+                    />
+                  :
+                  <FormControl>
               <InputLabel style={{marginTop: 10}}>
                 {this.props.list}
               </InputLabel>
@@ -248,6 +275,7 @@ models = [
                 }
               </Select>
             </FormControl>
+                  }
             <div style={{marginTop: '40px'}}>
             {this.state.submitFilter&&<CircularProgress/>}
             {!this.state.submitFilter&&<Button variant="contained" onClick={this.submitFilters(filterData)}>Apply Filters</Button>}

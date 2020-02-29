@@ -62,7 +62,7 @@ function unescapeHTML(html) {
 }
 
 const ProductCard = props => {
-  console.log(props.data.deleteCategories)
+  // console.log(props.data.deleteCategories)
   const { className, product, t, ...rest } = props;
   // console.log(product)
   const [openSnackSucc, setOpenSuccess] = React.useState(false);

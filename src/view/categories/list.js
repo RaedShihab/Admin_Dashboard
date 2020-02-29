@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'flex-end'
   }
 }));
+let page = 1;
 
 const ProductList = () => {
   const classes = useStyles();
@@ -32,11 +33,11 @@ const ProductList = () => {
   const [categories, setCategories] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(5)
   
-  let page = 1;
+ 
 
   const categoriesAxios = (page, itemsPerPage)=> 
-  Axios.get(`/categories`)
-  // Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
+  // Axios.get(`/categories`)
+  Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
     setCategories(res.data.data)
     setOpen(false)  
@@ -50,12 +51,12 @@ const ProductList = () => {
   const incrimentPage = ()=> {
     page+=1
     console.log(page, itemsPerPage)
-    // categoriesAxios(page, itemsPerPage)
+    categoriesAxios(page, itemsPerPage)
   }
   const decrimentPage = ()=> {
     page-=1
     console.log(page, itemsPerPage)
-    // categoriesAxios(page, itemsPerPage)
+    categoriesAxios(page, itemsPerPage)
   }
 
   const handleChange = event => {
