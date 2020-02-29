@@ -26,7 +26,7 @@ class CustomizedTables extends React.Component {
     countries: [],
     open: false
   }
-  Axios = (page, rows)=> Axios.get(`/countries/?page=${page}&per_page=${rows}`)
+  Axios = (page, rows)=> Axios.get(`/locations/countries/?page=${page}&per_page=${rows}`)
   render() {
     return(
       <LayOut>
@@ -38,6 +38,7 @@ class CustomizedTables extends React.Component {
      path={{update:'/countries/edit/', add: '/countries/create'}} 
      column={"countries"}
      showFilter={false}
+     getBrands={false}
      />
     </TableContainer>
       </LayOut>

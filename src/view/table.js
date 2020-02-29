@@ -53,7 +53,9 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getData(this.state.page, this.state.rows);
-    this.props.showFilter && this.props.getAxios().then(res => this.setState({listedData: res.data.data}))
+    this.props.showFilter && this.props.getAxios().then(res => {
+      console.log(res)
+      this.setState({listedData: res.data.data})})
   }
 models = [
   {
@@ -89,8 +91,9 @@ models = [
   getData = (page, rows) => {
     console.log(page, rows)
     this.props.Axios(page, rows).then(res=> {
+      console.log(res.data.data)
       // this.setState({data: this.models})//this is for models
-      this.setState({data: res.data.data.data})
+      this.setState({data: res.data.data})
       this.setState({isFetching: false})
       this.setState({open: false})
     }).catch(err=> {
@@ -172,18 +175,22 @@ models = [
     console.log('Submitting filters: ', filterData);
     this.props.getById(filterData)
     .then(res=>{
-      console.log(res)
-      this.setState({
+      console.log(res.data.data.models)
+      this.props.getBrands ? this.setState({
         submitFilter: false,
-        data: res.data.data});
+        data: res.data.data.models
+      }) : this.setState({
+        submitFilter: false,
+        data: res.data.data
+      });
     })
-    // .catch(err=> {
-    //   this.setState({
-    //     open: false,
-    //     submitFilter: false,
-    //     openAlert: true
-    //     })
-    // })
+    .catch(err=> {
+      this.setState({
+        open: false,
+        submitFilter: false,
+        openAlert: true
+        })
+    })
   };
     handleFilterSelect = (e)=> {
       this.setState({filterData: e.target.value})
@@ -228,7 +235,7 @@ models = [
           <div>
             <FormControl>
               <InputLabel style={{marginTop: 10}}>
-                country
+                {this.props.list}
               </InputLabel>
               <Select
               style={{marginTop: 50}}

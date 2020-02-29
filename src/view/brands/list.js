@@ -28,16 +28,16 @@ const ProductList = () => {
   const classes = useStyles();
   const [open, setOpen] = useState();
   const [openAlert, setOpenAlrt] = useState();
-  const [categories, setCategories] = useState([]);
+  const [item, setItem] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(5)
   let page = 1;
 
-  const categoriesAxios = (page, itemsPerPage)=> 
+  const brandsAxios = (page, itemsPerPage)=>
   Axios.get(`/brands`)
   // Axios.get(`/brands/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
     // console.log(res.data.data.map(cat=> cat.parent_id))
-    setCategories(res.data.data)
+    setItem(res.data.data)
     setOpen(false)  
   })
   .catch(err=> {
@@ -45,16 +45,33 @@ const ProductList = () => {
     setOpen(false)
     setOpenAlrt(true)
   })
+  
+
+  const handelChoose = (e)=> {
+    console.log(e.target.value)
+    const parentId = e.target.value
+    Axios.get(`/categories/${parentId}`)
+    .then(res=> {
+      console.log(res.data.data.brands)
+      setItem(res.data.data.brands)
+      setOpen(false)  
+      })
+      .catch(err=> {
+        console.log(err.response)
+        setOpen(false)
+        setOpenAlrt(true)
+      })
+  }
 
   const incrimentPage = ()=> {
     page+=1
     console.log(page, itemsPerPage)
-    // categoriesAxios(page, itemsPerPage)
+    // brandsAxios(page, itemsPerPage)
   }
   const decrimentPage = ()=> {
     page-=1
     console.log(page, itemsPerPage)
-    // categoriesAxios(page, itemsPerPage)
+    // brandsAxios(page, itemsPerPage)
   }
 
   const handleChange = event => {
@@ -63,7 +80,7 @@ const ProductList = () => {
 
   React.useEffect(() => {
     setOpen(true)
-    categoriesAxios(page, itemsPerPage)
+    brandsAxios(page, itemsPerPage)
     
   }, []);
 
@@ -79,13 +96,15 @@ const ProductList = () => {
         {open&&<CircularProgress size='100px' style={{display: 'block', margin:'350px 500px'}}/>}
         {!open&&
           <div className={classes.root}>
-      <BrandToolbar path={{add:'/brands/create'}} />
+      <BrandToolbar 
+      handelChoose={handelChoose}
+      path={{add:'/brands/create'}} />
       <div className={classes.content}>
         <Grid
           container
           spacing={3}
         >
-          {categories.map(product => {
+          {item.map(product => {
             return <Grid
               item
               key={product.id}

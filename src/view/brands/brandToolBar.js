@@ -49,6 +49,9 @@ const useStyles = makeStyles(theme => ({
   },
   filterBtn: {
     margin: '0px 10px'
+  },
+  option: {
+    cursor: 'pointer', textAlign: 'center', margin: '10px 0px'
   }
 }));
 
@@ -67,6 +70,26 @@ const ProductsToolbar = props => {
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
   const [loading, setloading] = React.useState(false);
   const [waiting, setWaiting] = React.useState(false);
+  const [categories, setCategories] = React.useState([]);
+
+  const categoriesAxios = (page, itemsPerPage)=> 
+  Axios.get(`/categories`)
+  // Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
+  .then(res=>{
+    console.log(res.data.data)
+    setCategories(res.data.data)
+    // setOpen(false)  
+  })
+  .catch(err=> {
+    console.log(err.response)
+    // setOpen(false)
+    // setOpenAlrt(true)
+  })
+
+  React.useEffect(() => {
+    // setOpen(true)
+    categoriesAxios()
+  }, []);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -217,14 +240,14 @@ const ProductsToolbar = props => {
               <PopupState variant="popover" popupId="demo-popup-menu">
               {popupState => (
                 <React.Fragment>
-                  <Typography variant="h7">filter</Typography>
+                  {/* <Typography variant="h7">filter</Typography>
                   <Tooltip title="filter">
                   <IconButton
                   variant="contained" color="primary" {...bindTrigger(popupState)}>
               <FilterListIcon/>
             </IconButton>
-            </Tooltip>
-            <Menu {...bindMenu(popupState)}>
+            </Tooltip> */}
+            {/* <Menu {...bindMenu(popupState)}>
               <MenuItem 
               >
               <FormControlLabel
@@ -250,7 +273,7 @@ const ProductsToolbar = props => {
               <Button variant="contained"
               className={classes.filterBtn}
                color="primary">Apply</Button>
-            </Menu>
+            </Menu> */}
           </React.Fragment>
         )}
     </PopupState>
@@ -259,7 +282,7 @@ const ProductsToolbar = props => {
               >
             <React.Fragment>
               <Typography variant="h7">filter</Typography>
-            <Tooltip title="filter by Parent category">
+            <Tooltip title="filter by category">
               <IconButton
                 aria-label="more"
                 aria-controls="long-menu"
@@ -270,6 +293,7 @@ const ProductsToolbar = props => {
               </IconButton>
               </Tooltip>
               <Menu
+              onClick={props.handelChoose}
                 id="long-menu"
                 anchorEl={anchorEl}
                 keepMounted
@@ -282,12 +306,15 @@ const ProductsToolbar = props => {
                   },
                 }}
               >
-                {options.map(option => (
-                  <MenuItem key={option} selected={option === 'Pyxis'} 
+                {categories.map(option => (
+                  <option 
+                  className={classes.option}
+                  value={option.id}
+                  // key={option} selected={option === 'Pyxis'} 
                   onClick={handleClosse}
                   >
-                    {option}
-                  </MenuItem>
+                    {option.name.en}
+                  </option>
                 ))}
               </Menu>
             </React.Fragment>

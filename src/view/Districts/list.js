@@ -27,7 +27,7 @@ class CustomizedTables extends React.Component {
     users: [],
     open: false
   }
-  Axios = (page, rows)=> Axios.get(`/districts/?page=${page}&per_page=${rows}`);
+  Axios = (page, rows)=> Axios.get(`/locations/districts/?page=${page}&per_page=${rows}`);
   getAxios = ()=> Axios.get(`/locations/cities`)
   getById = (id)=> Axios.get(`https://api.glowyhan.com/gateway/locations/cities/${id}/districts`);
 
@@ -45,6 +45,8 @@ class CustomizedTables extends React.Component {
       searchUrl={'https://jsonplaceholder.typicode.com/countries/'}
       getById={this.getById}
       showFilter={true}
+      getBrands={false}
+      list={"Cities"}
       />
     </TableContainer>
       </LayOut>

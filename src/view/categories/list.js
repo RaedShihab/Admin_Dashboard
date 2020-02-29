@@ -38,7 +38,6 @@ const ProductList = () => {
   Axios.get(`/categories`)
   // Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
-    // console.log(res.data.data.map(cat=> cat.parent_id))
     setCategories(res.data.data)
     setOpen(false)  
   })
@@ -76,7 +75,18 @@ const ProductList = () => {
       };
       const handelChoose = (e)=> {
         console.log(e.target.value)
-        // categoriesAxios(page, itemsPerPage)
+        const parentId = e.target.value
+        Axios.get(`/categories/${parentId}`)
+        .then(res=> {
+          console.log(res.data.data)
+          setCategories(res.data.data.childrens)
+          setOpen(false)  
+          })
+          .catch(err=> {
+            console.log(err.response)
+            setOpen(false)
+            setOpenAlrt(true)
+          })
       }
 
   return (
