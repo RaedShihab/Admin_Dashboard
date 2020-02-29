@@ -74,13 +74,20 @@ const ProductList = () => {
     }
     setOpenAlrt(false)
       };
+      const handelChoose = (e)=> {
+        console.log(e.target.value)
+        // categoriesAxios(page, itemsPerPage)
+      }
 
   return (
       <Layout>
         {open&&<CircularProgress size='100px' style={{display: 'block', margin:'350px 500px'}}/>}
         {!open&&
           <div className={classes.root}>
-      <CategToolbar path={{add:'/categories/create'}} />
+      <CategToolbar
+      categories={categories} 
+      handelChoose={handelChoose}
+      path={{add:'/categories/create'}} />
       <div className={classes.content}>
         <Grid
           container
