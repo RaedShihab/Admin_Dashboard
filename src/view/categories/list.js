@@ -33,14 +33,28 @@ const ProductList = () => {
   const [openAlert, setOpenAlrt] = useState();
   const [categories, setCategories] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(5)
-  
+  const [allCtegories, setAllCategories] = useState([]) 
  
 
   const categoriesAxios = (page, itemsPerPage)=> 
   // Axios.get(`/categories`)
   Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
+    console.log(res.data.data)
     setCategories(res.data.data)
+    setOpen(false)  
+  })
+  .catch(err=> {
+    console.log(err.response)
+    setOpen(false)
+    setOpenAlrt(true)
+  })
+
+  const getAllCategories = ()=> 
+  Axios.get(`/categories`)
+  .then(res=>{
+    console.log(res.data.data)
+    setAllCategories(res.data.data)
     setOpen(false)  
   })
   .catch(err=> {
@@ -67,6 +81,7 @@ const ProductList = () => {
   React.useEffect(() => {
     setOpen(true)
     categoriesAxios(page, itemsPerPage)
+    getAllCategories()
   }, []);
 
   const handleClose = (event, reason) => {
@@ -80,7 +95,7 @@ const ProductList = () => {
         const parentId = e.target.value
         Axios.get(`/categories/${parentId}`)
         .then(res=> {
-          console.log(res.data.data)
+          console.log(res.data.data.childrens)
           setCategories(res.data.data.childrens)
           setOpen(false)  
           })
@@ -97,7 +112,7 @@ const ProductList = () => {
         {!open&&
           <div className={classes.root}>
       <CategToolbar
-      categories={categories} 
+      categories={allCtegories} 
       handelChoose={handelChoose}
       path={{add:'/categories/create'}} />
       <div className={classes.content}>

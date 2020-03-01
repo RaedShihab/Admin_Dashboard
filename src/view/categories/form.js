@@ -75,44 +75,157 @@ class AccountDetails extends React.Component {
           coverFile: {},
           banner: '',
           bannerFile: {},
-          img: '',
+          image: '',
           imgFile: {},
           checked: ''
         };
       }
+
+      componentDidMount() {
+        this.props.getCategory(this.props.data.id).then(res=>{
+          this.setState({
+            icon: res.data.data.icon,
+            cover: res.data.data.media.cover,
+            image: res.data.data.media.image,
+            banner: res.data.data.media.banner
+          })
+          console.log(res.data.data.icon)})
+      }
+
+      chengeMedia = (media, type)=> {
+        this.props.updateMedia(media, type)
+        .then(res =>{
+          console.log(res)
+          if(res.status === 201) {
+           console.log(res)
+           this.setState({
+             showLoading: false,
+             openSnackSucc: true,
+           })
+          }
+          if(res.status === 200) {
+            if(type === 'cover'){
+              this.setState({
+                cover: res.data.data,
+               })
+            }
+            if(type === 'image'){
+              this.setState({
+                image: res.data.data,
+               })
+            }
+            if(type === 'banner'){
+              this.setState({
+                banner: res.data.data,
+               })
+            }
+           this.setState({
+             showLoading: false,
+             openSnackSucc: true,
+           })
+          }
+        })
+        .catch(err => {
+          console.log(err.response)
+          if(err.response.status === 422) {
+           this.setState({
+             showLoading: false,
+             openSnackErr:true,
+           })
+          }
+          if(err.response.status === 500) {
+           console.log(err.response)
+           this.setState({
+             showLoading: false,
+             open500status:true,
+           })
+          }
+        })
+      }
+
       onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-          let reader = new FileReader();
-          reader.onload = (e) => {
-            console.log(document.getElementById('icon').files[0])
-            this.setState({icon: e.target.result,
-            iconFile: document.getElementById('icon').files[0]
-            });
-          };
-          reader.readAsDataURL(event.target.files[0]);
-        }
+        // if (event.target.files && event.target.files[0]) {
+        //   let reader = new FileReader();
+        //   reader.onload = (e) => {
+        //     this.setState({icon: e.target.result,
+        //     // iconFile: document.getElementById('icon').files[0]
+        //     });
+        //   };
+        //   reader.readAsDataURL(event.target.files[0]);
+        // }
+        const values = document.getElementById('icon').files[0]
+        const media = new FormData();
+        media.append('icon', values)
+        media.append('_method', 'patch')
+        this.props.updateIconRequist(media, '/icon')
+        .then(res =>{
+          console.log(res)
+          if(res.status === 201) {
+           console.log(res)
+           this.setState({
+             showLoading: false,
+             openSnackSucc: true,
+           })
+          }
+          if(res.status === 200) {
+           console.log(res)
+           this.setState({
+             icon: res.data.data,
+             showLoading: false,
+             openSnackSucc: true,
+           })
+          }
+        })
+        .catch(err => {
+          console.log(err.response)
+          if(err.response.status === 422) {
+           this.setState({
+             showLoading: false,
+             openSnackErr:true,
+           })
+          }
+          if(err.response.status === 500) {
+           console.log(err.response)
+           this.setState({
+             showLoading: false,
+             open500status:true,
+           })
+          }
+        })
       }
       onCoverChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-          let reader = new FileReader();
-          reader.onload = (e) => {
-            this.setState({cover: e.target.result,
-            coverFile: document.getElementById('cover').files[0]
-            });
-          };
-          reader.readAsDataURL(event.target.files[0]);
-        }
+        // if (event.target.files && event.target.files[0]) {
+        //   let reader = new FileReader();
+        //   reader.onload = (e) => {
+        //     this.setState({cover: e.target.result,
+        //     coverFile: document.getElementById('cover').files[0]
+        //     });
+        //   };
+        //   reader.readAsDataURL(event.target.files[0]);
+        // }
+        const values = document.getElementById('cover').files[0]
+        const media = new FormData();
+        media.append('image', values)
+        media.append('_method', 'patch')
+        const type = 'cover'
+        this.chengeMedia(media, type)
       }
       onCImgChange = (event) => {
         if (event.target.files && event.target.files[0]) {
           let reader = new FileReader();
           reader.onload = (e) => {
-            this.setState({img: e.target.result,
+            this.setState({image: e.target.result,
             imgFile: document.getElementById('img').files[0]
             });
           };
           reader.readAsDataURL(event.target.files[0]);
         }
+        const values = document.getElementById('img').files[0]
+        const media = new FormData();
+        media.append('image', values)
+        media.append('_method', 'patch')
+        const type = 'image'
+        this.chengeMedia(media, type)
       }
       onCBannerChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -124,6 +237,12 @@ class AccountDetails extends React.Component {
           };
           reader.readAsDataURL(event.target.files[0]);
         }
+        const values = document.getElementById('banner').files[0]
+        const media = new FormData();
+        media.append('image', values)
+        media.append('_method', 'patch')
+        const type = 'banner'
+        this.chengeMedia(media, type)
       }
       handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -157,10 +276,10 @@ class AccountDetails extends React.Component {
                     name:data===undefined? '': data.name.en,
                     arname: data===undefined? '': data.name.ar,
                     description: data===undefined? '': data.description.en,
-                    icon: data===undefined? this.state.iconFile : data.icon,
-                    cover: data===undefined? this.state.coverFile : data.cover,
-                    banner: data===undefined? this.state.bannerFile : data.banner,
-                    img: data===undefined? this.state.imgFile : data.img,
+                    // icon: data===undefined? this.state.iconFile : data.icon,
+                    // cover: data===undefined? this.state.coverFile : data.cover,
+                    // banner: data===undefined? this.state.bannerFile : data.banner,
+                    // img: data===undefined? this.state.imgFile : data.img,
                   }}
                   onSubmit={data => {
                     console.log(data)
@@ -170,10 +289,10 @@ class AccountDetails extends React.Component {
                         values.append('name[ar]', data.arname);
                         // values.append('description', data.description);
                         values.append('parent', null);
-                        values.append('icon', this.state.iconFile==={}? data.icon : this.state.iconFile);
-                        values.append('media[cover]', this.state.coverFile==={}? data.cover : this.state.coverFile);
-                        values.append('media[banner]', this.state.bannerFile==={}? data.banner : this.state.bannerFile);
-                        values.append('media[image]', this.state.imgFile==={}? data.image : this.state.imgFile);
+                        // values.append('icon', this.state.iconFile==={}? data.icon : this.state.iconFile);
+                        // values.append('media[cover]', this.state.coverFile==={}? data.cover : this.state.coverFile);
+                        // values.append('media[banner]', this.state.bannerFile==={}? data.banner : this.state.bannerFile);
+                        // values.append('media[image]', this.state.imgFile==={}? data.image : this.state.imgFile);
                         values.append('is_real_estate', myInt);
                         this.props.patch && values.append('_method', 'patch');
                     this.setState({
@@ -269,14 +388,18 @@ class AccountDetails extends React.Component {
                                   <Card className={classes.margin}>
                                     <CardContent>
                                       <div className={classes.details}>
-                                         {data !== undefined&&<Avatar
+                                      <Avatar
+                                          className={classes.avatar}
+                                          src={this.state.icon}
+                                        />
+                                         {/* {data !== undefined&&<Avatar
                                           className={classes.avatar}
                                           src={this.state.icon===''? data.icon: this.state.icon}
                                         />}
                                        {data === undefined && <Avatar
                                           className={classes.avatar}
                                           src={this.state.icon}
-                                        />}
+                                        />} */}
                                         <Typography
                                         className={classes.TypographyMargin}
                                         gutterBottom
@@ -352,7 +475,7 @@ class AccountDetails extends React.Component {
                                       <div className={classes.details}>
                                       <Avatar
                                           className={classes.avatar}
-                                          src={this.state.img}
+                                          src={this.state.image}
                                         />
                                         <Typography
                                         className={classes.TypographyMargin}

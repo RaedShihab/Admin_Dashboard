@@ -73,7 +73,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProductsToolbar = props => {
-  const checkedCategoriesNumber = props.data.deleteCategories.length
   const {t} = props
   const Alert = (props)=> {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -146,17 +145,6 @@ const ProductsToolbar = props => {
     setAnchorEl(null);
   };
   const ITEM_HEIGHT = 48;
-
-  const options = [
-    'Category',
-    'Category',
-    'Category',
-    'Category',
-    'Category',
-    'Category',
-    'Category',
-    'Category',
-  ];
 
   const filteredData = []
   const handleCheckChange = (e)=> {
