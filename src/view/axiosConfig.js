@@ -10,7 +10,7 @@ const token = ()=> {
   }
   
 export const Axios = axios.create({
-    baseURL: 'https://api.glowyhan.com/gateway',
+    baseURL: 'https://api.glowyhan.com',
     headers: {
       'Accept': 'application/json',
       'Content-Type' : 'multipart/form-data',

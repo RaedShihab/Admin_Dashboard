@@ -93,9 +93,9 @@ models = [
   getData = (page, rows) => {
     console.log(page, rows)
     this.props.Axios(page, rows).then(res=> {
-      console.log(res.data.data)
+      console.log(res.data.data.data)
       // this.setState({data: this.models})//this is for models
-      this.setState({data: res.data.data})
+      this.setState({data: res.data.data.data})
       this.setState({isFetching: false})
       this.setState({open: false})
     }).catch(err=> {
@@ -203,7 +203,6 @@ models = [
 
     const {t, column, deleteURL} = this.props
     const {filterData, listedData} = this.state
-    console.log(listedData.map(item => {return {name: item.name.en, id: item.id}}))
     const dataList = listedData.map(item => {return {name: item.name.en, id: item.id}});
     const defaultProps = {
       options: dataList,

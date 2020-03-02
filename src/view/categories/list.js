@@ -6,6 +6,7 @@ import Alert from '@material-ui/lab/Alert';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import {Axios} from '../axiosConfig';
+import axios from 'axios';
 import CategToolbar from './categToolBar';
 import CategCard from './categCard'
 import Layout from '../../layOut';
@@ -40,7 +41,7 @@ const ProductList = () => {
   // Axios.get(`/categories`)
   Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
-    console.log(res.data.data)
+    console.log(res)
     setCategories(res.data.data)
     setOpen(false)  
   })
@@ -50,10 +51,10 @@ const ProductList = () => {
     setOpenAlrt(true)
   })
 
-  const getAllCategories = ()=> 
-  Axios.get(`/categories`)
-  .then(res=>{
-    console.log(res.data.data)
+  const getAllCategories = ()=>
+  Axios.get('/categories')
+  .then(res=> {
+    console.log(res)
     setAllCategories(res.data.data)
     setOpen(false)  
   })

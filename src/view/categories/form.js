@@ -6,6 +6,8 @@ import {Formik, Field} from 'formik'
 import PropTypes from 'prop-types';
 import { CircularProgress, Avatar, Typography} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
 import {
   Card,
   CardHeader,
@@ -77,12 +79,15 @@ class AccountDetails extends React.Component {
           bannerFile: {},
           image: '',
           imgFile: {},
-          checked: ''
+          checked: '',
+          listedData: [],
+          parentId: null
         };
       }
 
-      componentDidMount() {
-        this.props.getCategory(this.props.data.id).then(res=>{
+       componentDidMount() {
+        this.props.data !== undefined && this.props.getCategory(this.props.data.id)
+        .then(res=> {
           this.setState({
             icon: res.data.data.icon,
             cover: res.data.data.media.cover,
@@ -90,6 +95,18 @@ class AccountDetails extends React.Component {
             banner: res.data.data.media.banner
           })
           console.log(res.data.data.icon)})
+          .catch(err=>console.log(err))
+          this.props.getParentCategories().then(res =>{
+              this.setState({listedData: res.data.data})
+             console.log(res.data.data)
+            })
+             .catch(err=> console.log(err))
+
+             this.props.data === undefined && this.props.getParentCategories().then(res =>{
+              this.setState({listedData: res.data.data})
+             console.log(res.data.data)
+            })
+             .catch(err=> console.log(err))
       }
 
       chengeMedia = (media, type)=> {
@@ -259,13 +276,20 @@ class AccountDetails extends React.Component {
         this.setState({checked:event.target.checked});
       };
     render() {
-
-      // const FILE_SIZE = 160 * 1024;
-      // const SUPPORTED_FORMATS = [
-      //   "image/svg+xml"
-      // ];        
         const { t ,classes, data} = this.props;
-        console.log(data)
+        const {listedData} = this.state
+        const dataList = listedData.map(item => {return {name: item.name.en, id: item.id}});
+        console.log(dataList)
+        const defaultProps = {
+            options: dataList,
+            getOptionLabel: option => option.name,
+          };
+         const handleParentSelect = (e, values)=> {
+            // console.log( .id)
+            this.setState({
+              parentId: values.id
+            })
+          }
         return (
             <div
               // {...rest}
@@ -288,7 +312,7 @@ class AccountDetails extends React.Component {
                         values.append('name[en]', data.name);
                         values.append('name[ar]', data.arname);
                         // values.append('description', data.description);
-                        values.append('parent', null);
+                        values.append('parent', this.state.parentId);
                         // values.append('icon', this.state.iconFile==={}? data.icon : this.state.iconFile);
                         // values.append('media[cover]', this.state.coverFile==={}? data.cover : this.state.coverFile);
                         // values.append('media[banner]', this.state.bannerFile==={}? data.banner : this.state.bannerFile);
@@ -553,7 +577,7 @@ class AccountDetails extends React.Component {
                                             </Grid>
                                             <Grid
                                               item
-                                              sm={12}
+                                              sm={6}
                                               xs={12}
                                             >
                                                 <TextField
@@ -566,6 +590,28 @@ class AccountDetails extends React.Component {
                                                 variant="outlined"
                                                 helperText={(props.errors.description && props.touched.description) && props.errors.description}
                                                 />
+                                            </Grid>
+                                            <Grid
+                                              item
+                                              sm={6}
+                                              xs={12}
+                                            >
+                                              <Autocomplete
+                                            {...defaultProps}
+                                            id="disable-open-on-focus"
+                                            disableOpenOnFocus
+                                            onChange={handleParentSelect}
+                                            renderInput={params => (
+                                              <TextField
+                                                {...params}
+                                                variant="standard"
+                                                label={this.props.list}
+                                                placeholder="Favorites"
+                                                margin="normal"
+                                                fullWidth
+                                              />
+                                            )}
+                                          />
                                             </Grid>
                                           </Grid>
                                       </CardContent>

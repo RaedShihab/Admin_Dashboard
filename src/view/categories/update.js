@@ -10,6 +10,9 @@ const Update = (props)=> {
      console.log(values)
     return Axios.post('/categories/'+id, values)}
 
+    const getParentCategories =()=> {
+     return Axios.get('/categories')}
+
     const getCategory =(id)=> {
      return Axios.get('/categories/'+id)}
 
@@ -31,6 +34,7 @@ const Update = (props)=> {
         updateIconRequist={updateIconRequist}
         updateMedia={updateMedia}
         getCategory={getCategory}
+        getParentCategories={getParentCategories}
         />
       </div>
     );
