@@ -40,12 +40,12 @@ const ProductList = () => {
   // Axios.get(`/categories`)
   Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
-    console.log(res.data.data)
+    console.log(res)
     setCategories(res.data.data)
     setOpen(false)  
   })
   .catch(err=> {
-    console.log(err.response)
+    console.log(err)
     setOpen(false)
     setOpenAlrt(true)
   })
@@ -53,12 +53,12 @@ const ProductList = () => {
   const getAllCategories = ()=> 
   Axios.get(`/categories`)
   .then(res=>{
-    console.log(res.data.data)
+    console.log(res)
     setAllCategories(res.data.data)
     setOpen(false)  
   })
   .catch(err=> {
-    console.log(err.response)
+    console.log(err)
     setOpen(false)
     setOpenAlrt(true)
   })
