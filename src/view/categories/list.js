@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'
 import { makeStyles } from '@material-ui/styles';
 import { IconButton, Grid, Typography, CircularProgress, MenuItem, FormControl, Select } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -50,17 +51,27 @@ const ProductList = () => {
     setOpenAlrt(true)
   })
 
+  const options = {
+    method: 'GET',
+    url: 'https://api.glowyhan.com/locations/countries',
+    headers: {},
+  };
+
+
+
   const getAllCategories = ()=> 
-  Axios.get(`/categories`)
+  axios.get('https://api.glowyhan.com/categories?lang=en', { headers: {
+	  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS'
+	}, })
   .then(res=>{
     console.log(res)
-    setAllCategories(res.data.data)
-    setOpen(false)  
+    // setAllCategories(res.data.data)
+    // setOpen(false)
   })
   .catch(err=> {
     console.log(err)
-    setOpen(false)
-    setOpenAlrt(true)
+    // setOpen(false)
+    // setOpenAlrt(true)
   })
 
   const incrimentPage = ()=> {
@@ -79,8 +90,8 @@ const ProductList = () => {
   };
   
   React.useEffect(() => {
-    setOpen(true)
-    categoriesAxios(page, itemsPerPage)
+    // setOpen(true)
+    // categoriesAxios(page, itemsPerPage)
     getAllCategories()
   }, []);
 
