@@ -1,7 +1,12 @@
 import React from 'react';
 import {compose} from 'redux';
 import { withTranslation } from "react-i18next";
-import {Snackbar, Button, CircularProgress, IconButton, MenuItem, Menu, FormControlLabel, Checkbox, Tooltip, Typography} from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import {Snackbar, Button, CircularProgress,TextField, 
+  Avatar,IconButton, MenuItem, Menu, FormControlLabel, Checkbox, Tooltip, Typography} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -19,13 +24,15 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Paper from '@material-ui/core/Paper';
 import SearchInput from './searchInput';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-  },
+  //   width: '100%',
+  //   '& > * + *': {
+  //     marginTop: theme.spacing(2),
+  // },
+  flexGrow: 1,
 },
   row: {
     height: '42px',
@@ -56,7 +63,8 @@ const useStyles = makeStyles(theme => ({
     margin: '0px 15px'
   },
   btn: {
-    margin: 10
+    margin: '0 10px',
+    padding: 15
   },
   filterBtn: {
     // margin: '0px 10px'
@@ -69,7 +77,12 @@ const useStyles = makeStyles(theme => ({
   },
   option: {
     cursor: 'pointer', textAlign: 'center', margin: '10px 0px'
-  }
+  },
+  formControl: {
+    // margin: theme.spacing(1),
+    minWidth: 80,
+    width: 200
+  },
 }));
 
 const ProductsToolbar = props => {
@@ -91,7 +104,6 @@ const ProductsToolbar = props => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpenErr(false);
     setOpenSuccess(false)
   };
@@ -100,7 +112,6 @@ const ProductsToolbar = props => {
   const deleteCategories = ()=> {
     const ids = props.data.deleteCategories[0]
     console.log('/categories/'+ids+'/soft')
-    // Axios.delete('/categories')
     setloading(true)
     Axios.delete('/categories/'+ids+'/soft')
     .then(res=> {
@@ -162,130 +173,97 @@ const ProductsToolbar = props => {
   return (
     <div
       {...rest}
-      className={clsx(classes.root, className)}
+      // className={clsx(classes.root, className)}
     >
-      
       <Grid container className={classes.root} spacing={2}>
-      {/* <Grid item xs={12}> */}
-        <Grid container spacing={4}>
-          <Grid item>
-          <div className={classes.row2}>
-        {/* <span className={classes.spacer} /> */}
-        <Button
-        className={classes.btn}
-        href={props.path.add}
-          color="primary"
-          variant="contained"
+      <Grid item xs={12}>
+        <Grid container 
+        justify="center"
+         spacing={6}
+         >
+            <Grid  item>
+              <TextField
+              variant='filled'
+              placeholder={'search'}/>
+              <Button 
+              className={classes.btn}
+              color="primary"
+              variant="contained">search</Button>
+            </Grid>
+            <Grid item>
+            
+      <FormControl variant="filled" className={classes.formControl}>
+        <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={""}
+          onChange={props.handleParentCategorySelect}
         >
-          {t("add_category")}
-        </Button>
-        {loading&&
-      <CircularProgress />}
+          {
+            categories.map(category => {
+            return <MenuItem value={category.id}>{category.name.en}</MenuItem>
+            })
+          }
+        </Select>
+      </FormControl>
+            </Grid>
+            <Grid item>
+            <div className={classes.row2}>
+  {/* <span className={classes.spacer} /> */}
+  {loading&&
+<CircularProgress />}
 
-          {props.data.deleteCategories[1]>0 && <div>
-          {!loading&&
-    <Tooltip title={t("soft_delete")}>
-      <IconButton onClick={deleteCategories}>
-      <DeleteIcon
-          color="primary"
-          variant="contained"
-        >
-          delete
-        </DeleteIcon>
-    </IconButton>
-    </Tooltip>
-    }
-    {waiting&&
-      <CircularProgress/>}
-          </div>}
-
-    {props.data.deleteCategories[1]>0 &&<div>
-    {!waiting&&
-    <Tooltip title={t("force_delete")}>
-      <IconButton onClick={forceDeleteCategories}>
-      <DeleteForeverIcon
-          color="secondary"
-          variant="contained"
-        >
-          force delete
-        </DeleteForeverIcon>
-    </IconButton>
-    </Tooltip>
-    }
+    {props.data.deleteCategories[1]>0 && <div>
+    {!loading&&
+<Tooltip title={t("soft_delete")}>
+<IconButton onClick={deleteCategories}>
+<DeleteIcon
+    color="primary"
+    variant="contained"
+  >
+    delete
+  </DeleteIcon>
+</IconButton>
+</Tooltip>
+}
+{waiting&&
+<CircularProgress/>}
     </div>}
-    
-      </div>
-          </Grid>
 
-          <Grid item>
-          <div className={classes.row}>
-<SearchInput
-  className={classes.searchInput}
-  placeholder="Search product"
-/>
+{props.data.deleteCategories[1]>0 &&<div>
+{!waiting&&
+<Tooltip title={t("force_delete")}>
+<IconButton onClick={forceDeleteCategories}>
+<DeleteForeverIcon
+    color="secondary"
+    variant="contained"
+  >
+    force delete
+  </DeleteForeverIcon>
+</IconButton>
+</Tooltip>
+}
+</div>}
 
-<Button variant="contained" color="primary">
-    search
-</Button>
-
-<PopupState variant="popover" popupId="demo-popup-menu">
-{popupState => (
-  <React.Fragment>
-    <Tooltip title="filter">
-    <IconButton
-    variant="contained" color="primary" {...bindTrigger(popupState)}>
-      <FilterListIcon fontSize="large"/>
-    </IconButton>
-    </Tooltip>
-    <Menu {...bindMenu(popupState)}>
-      <MenuItem 
-      >
-      <PopupState variant="popover" popupId="demo-popup-menu">
+</div>
+            </Grid>
+            <Grid className={classes.paper4}  item>
+            {/* <div className={classes.paper3} > */}
+            <PopupState variant="popover" popupId="demo-popup-menu">
       {popupState => (
-        <React.Fragment>
-          {/* <Typography variant="h7">filter</Typography>
-          <Tooltip title="filter">
-          <IconButton
-          variant="contained" color="primary" {...bindTrigger(popupState)}>
-      <FilterListIcon/>
-    </IconButton>
-    </Tooltip> */}
-    {/* <Menu {...bindMenu(popupState)}>
+      <React.Fragment>
+      <Tooltip title="filter">
+      <IconButton
+      variant="contained" color="primary" {...bindTrigger(popupState)}>
+      <FilterListIcon fontSize="large"/>
+      </IconButton>
+      </Tooltip>
+      <Menu {...bindMenu(popupState)}>
       <MenuItem 
       >
-      <FormControlLabel
-            control={
-              <Checkbox 
-              onChange={handleCheckChange} 
-              value="is_real_estate" />
-            }
-            label="Real estate"
-          />
-      </MenuItem>
-      <MenuItem 
-      >
-      <FormControlLabel
-            control={
-              <Checkbox 
-              onChange={handleCheckChange} 
-              value="is_parent_category" />
-            }
-            label="Parant Categories"
-          />  
-      </MenuItem>
-      <Button variant="contained"
-      className={classes.filterBtn}
-       color="primary">Apply</Button>
-    </Menu> */}
-  </React.Fragment>
-)}
-</PopupState>
-      </MenuItem>
-      <MenuItem 
-      >
-    <React.Fragment>
-      {/* <Typography variant="h7">filter</Typography> */}
-    <Tooltip title="filter by Parent category">
+      <React.Fragment>
+      <Tooltip title="filter by Parent category">
       <IconButton
         aria-label="more"
         aria-controls="long-menu"
@@ -293,72 +271,76 @@ const ProductsToolbar = props => {
         onClick={handleClick}
       >
           <FilterListIcon />
-      </IconButton>
-      </Tooltip>
-      <Menu
-      onClick={props.handelChoose}
-        id="long-menu"
-        anchorEl={anchorEl}
-        // keepMounted
-        open={openMenueList}
-        onClose={handleClosse}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: 200,
-          },
-        }}
-      >
-        {categories.map(option => (
-          <option
-          className={classes.option}
-          value={option.id}
-          // key={option} 
-          // selected={option === 'Pyxis'} 
-          onClick={handleClosse}
-          >
-            {option.name.en}
-          </option>
-        ))}
-      </Menu>
-    </React.Fragment>
-      </MenuItem>
-    </Menu>
-  </React.Fragment>
-)}
-</PopupState>
-</div>
-          </Grid>
+              </IconButton>
+              </Tooltip>
+              <Menu
+              onClick={props.handelChoose}
+                id="long-menu"
+                anchorEl={anchorEl}
+                // keepMounted
+                open={openMenueList}
+                onClose={handleClosse}
+                PaperProps={{
+                  style: {
+                    maxHeight: ITEM_HEIGHT * 4.5,
+                    width: 200,
+                  },
+                }}
+              >
+                {categories.map(option => (
+                  <option
+                  className={classes.option}
+                  value={option.id}
+                  // key={option} 
+                  // selected={option === 'Pyxis'} 
+                  onClick={handleClosse}
+                  >
+                    {option.name.en}
+                  </option>
+                ))}
+        </Menu>
+        </React.Fragment>
+        </MenuItem>
+        </Menu>
+        </React.Fragment>
+        )}
+        </PopupState>
+        
+            <IconButton href={'/categories/create'}>
+            <Avatar>
+                <AddIcon/>
+                </Avatar>
+              </IconButton>
+              </Grid>
         </Grid>
-
       </Grid>
-    {/* </Grid> */}
+    </Grid>
 
-      <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          {t("the_category_has_deleted_successfuly")}
+    <div className={classes.root}>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            {t("the_category_has_deleted_successfuly")}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={openErr} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error">
+            {("please_select_item_to_delete")}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+        autoHideDuration={3000}
+        onClose={handleClose}
+        open={openSnackSucc}
+        >
+        <Alert
+        onClose={handleClose}
+        severity="success"
+        style={{backgroundColor: 'green', color: 'white'}}
+        >
+        The items has deleted successfuly
         </Alert>
-      </Snackbar>
-      <Snackbar open={openErr} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {("please_select_item_to_delete")}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-      autoHideDuration={3000}
-      onClose={handleClose}
-      open={openSnackSucc}
-  >
-      <Alert
-      onClose={handleClose}
-      severity="success"
-      style={{backgroundColor: 'green', color: 'white'}}
-      >
-      The items has deleted successfuly
-      </Alert>
-  </Snackbar>
-    </div>
+        </Snackbar>
+        </div>
     </div>
   );
 };

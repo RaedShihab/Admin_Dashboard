@@ -70,7 +70,7 @@ class AccountDetails extends React.Component {
           openSnackErr: false,
           selectedFile: null,
           icon: '',
-          iconFile:{},
+          iconFile: document.getElementById('icon'),
           cover: '',
           coverFile: {},
           banner: '',
@@ -82,7 +82,8 @@ class AccountDetails extends React.Component {
       }
 
       componentDidMount() {
-        this.props.getCategory(this.props.data.id).then(res=>{
+        console.log(document.getElementById('icon'))
+        this.props.data !== undefined &&this.props.getCategory(this.props.data.id).then(res=>{
           this.setState({
             icon: res.data.data.icon,
             cover: res.data.data.media.cover,
@@ -141,23 +142,25 @@ class AccountDetails extends React.Component {
            })
           }
         })
+
       }
 
       onImageChange = (event) => {
-        // if (event.target.files && event.target.files[0]) {
-        //   let reader = new FileReader();
-        //   reader.onload = (e) => {
-        //     this.setState({icon: e.target.result,
-        //     // iconFile: document.getElementById('icon').files[0]
-        //     });
-        //   };
-        //   reader.readAsDataURL(event.target.files[0]);
-        // }
+        if (event.target.files && event.target.files[0]) {
+          let reader = new FileReader();
+          reader.onload = (e) => {
+            this.setState({
+              icon: e.target.result,
+              iconFile: document.getElementById('icon').files[0]
+            });
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        }
         const values = document.getElementById('icon').files[0]
         const media = new FormData();
         media.append('icon', values)
         media.append('_method', 'patch')
-        this.props.updateIconRequist(media, '/icon')
+        this.props.data !== undefined && this.props.updateIconRequist(media, '/icon')
         .then(res =>{
           console.log(res)
           if(res.status === 201) {
@@ -194,24 +197,24 @@ class AccountDetails extends React.Component {
         })
       }
       onCoverChange = (event) => {
-        // if (event.target.files && event.target.files[0]) {
-        //   let reader = new FileReader();
-        //   reader.onload = (e) => {
-        //     this.setState({cover: e.target.result,
-        //     coverFile: document.getElementById('cover').files[0]
-        //     });
-        //   };
-        //   reader.readAsDataURL(event.target.files[0]);
-        // }
+        if (this.props.data === undefined&&event.target.files && event.target.files[0]) {
+          let reader = new FileReader();
+          reader.onload = (e) => {
+            this.setState({cover: e.target.result,
+            coverFile: document.getElementById('cover').files[0]
+            });
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        }
         const values = document.getElementById('cover').files[0]
         const media = new FormData();
         media.append('image', values)
         media.append('_method', 'patch')
         const type = 'cover'
-        this.chengeMedia(media, type)
+        this.props.data !== undefined && this.chengeMedia(media, type)
       }
       onCImgChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
+        if (this.props.data === undefined&&event.target.files && event.target.files[0]) {
           let reader = new FileReader();
           reader.onload = (e) => {
             this.setState({image: e.target.result,
@@ -225,10 +228,10 @@ class AccountDetails extends React.Component {
         media.append('image', values)
         media.append('_method', 'patch')
         const type = 'image'
-        this.chengeMedia(media, type)
+        this.props.data !== undefined &&this.chengeMedia(media, type)
       }
       onCBannerChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
+        if (this.props.data === undefined&&event.target.files && event.target.files[0]) {
           let reader = new FileReader();
           reader.onload = (e) => {
             this.setState({banner: e.target.result,
@@ -242,7 +245,7 @@ class AccountDetails extends React.Component {
         media.append('image', values)
         media.append('_method', 'patch')
         const type = 'banner'
-        this.chengeMedia(media, type)
+        this.props.data !== undefined && this.chengeMedia(media, type)
       }
       handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -259,13 +262,8 @@ class AccountDetails extends React.Component {
         this.setState({checked:event.target.checked});
       };
     render() {
-
-      // const FILE_SIZE = 160 * 1024;
-      // const SUPPORTED_FORMATS = [
-      //   "image/svg+xml"
-      // ];        
+ 
         const { t ,classes, data} = this.props;
-        console.log(data)
         return (
             <div
               // {...rest}
@@ -276,30 +274,31 @@ class AccountDetails extends React.Component {
                     name:data===undefined? '': data.name.en,
                     arname: data===undefined? '': data.name.ar,
                     description: data===undefined? '': data.description.en,
-                    // icon: data===undefined? this.state.iconFile : data.icon,
-                    // cover: data===undefined? this.state.coverFile : data.cover,
-                    // banner: data===undefined? this.state.bannerFile : data.banner,
-                    // img: data===undefined? this.state.imgFile : data.img,
+                    icon: null,
+                    cover:  null,
+                    banner:  this.state.bannerFile,
+                    img:  this.state.imgFile,
                   }}
                   onSubmit={data => {
                     console.log(data)
-                      let values = new FormData();
-                      let myInt = this.state.checked ? 1 : 0;
-                        values.append('name[en]', data.name);
-                        values.append('name[ar]', data.arname);
-                        // values.append('description', data.description);
-                        values.append('parent', null);
-                        // values.append('icon', this.state.iconFile==={}? data.icon : this.state.iconFile);
-                        // values.append('media[cover]', this.state.coverFile==={}? data.cover : this.state.coverFile);
-                        // values.append('media[banner]', this.state.bannerFile==={}? data.banner : this.state.bannerFile);
-                        // values.append('media[image]', this.state.imgFile==={}? data.image : this.state.imgFile);
-                        values.append('is_real_estate', myInt);
-                        this.props.patch && values.append('_method', 'patch');
+                      // let values = new FormData();
+                      // let myInt = this.state.checked ? 1 : 0;
+                      //   values.append('name[en]', data.name);
+                      //   values.append('name[ar]', data.arname);
+                      //   // values.append('description', data.description);
+                      //   values.append('parent', null);
+                      //   this.props.data === undefined&&values.append('icon', this.state.iconFile);
+                      //   this.props.data === undefined&&values.append('media[cover]', this.state.coverFile);
+                      //   this.props.data === undefined&&values.append('media[banner]', this.state.bannerFile);
+                      //   this.props.data === undefined&&values.append('media[image]', this.state.imgFile);
+                      //   values.append('is_real_estate', myInt);
+                      //   this.props.patch && values.append('_method', 'patch');
                     this.setState({
                       showLoading:true
                     })
-                    console.log(values)
-                this.props.requist(values)
+                    // console.log(data)
+                    return false;
+                this.props.requist(data)
                            .then(res =>{
                              console.log(res)
                              if(res.status === 201) {
@@ -364,8 +363,21 @@ class AccountDetails extends React.Component {
                                     <Divider />
                                     <CardActions>
                                     <input
-                                      // helperText={(props.errors.file && props.touched.file) && props.errors.file}
-                                      onChange={this.onCoverChange}
+                                      name='cover'
+                                      onChange={
+                                        (event) => {
+                                          if (event.target.files && event.target.files[0]) {
+                                            let reader = new FileReader();
+                                            reader.onload = (e) => {
+                                              this.setState({
+                                                cover: e.target.result,
+                                              });
+                                            };
+                                            reader.readAsDataURL(event.target.files[0]);
+                                          }
+                                          props.setFieldValue("cover", event.currentTarget.files[0]);
+                                        }
+                                      }
                                       accept="image/*"
                                       id="cover"
                                       multiple
@@ -412,7 +424,19 @@ class AccountDetails extends React.Component {
                                     <Divider />
                                     <CardActions>
                                     <input
-                                      onChange={this.onImageChange}
+                                    name='icon'
+                                      onChange={(event) => {
+                                        if (event.target.files && event.target.files[0]) {
+                                          let reader = new FileReader();
+                                          reader.onload = (e) => {
+                                            this.setState({
+                                              icon: e.target.result,
+                                            });
+                                          };
+                                          reader.readAsDataURL(event.target.files[0]);
+                                        }
+                                        props.setFieldValue("icon", event.currentTarget.files[0]);
+                                      }}
                                       accept="image/*"
                                       id="icon"
                                       multiple

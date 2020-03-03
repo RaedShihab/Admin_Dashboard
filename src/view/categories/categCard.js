@@ -51,20 +51,21 @@ const useStyles = makeStyles(theme => ({
   statsIcon: {
     color: theme.palette.icon,
     marginRight: theme.spacing(1)
+  },
+  title: {
+    fontWeight: 'bold'
   }
 }));
 const idsArray = [];
 
-function unescapeHTML(html) {
-  var escapeEl = document.createElement("textarea");
-  escapeEl.innerHTML = html;
-  return escapeEl.textContent;
-}
+// function unescapeHTML(html) {
+//   var escapeEl = document.createElement("textarea");
+//   escapeEl.innerHTML = html;
+//   return escapeEl.textContent;
+// }
 
 const ProductCard = props => {
-  // console.log(props.data.deleteCategories)
   const { className, product, t, ...rest } = props;
-  // console.log(product)
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
   const [openErr, setOpenErr] = React.useState(false);
   const [open404, setOpen404] = React.useState(false);
@@ -81,7 +82,6 @@ const ProductCard = props => {
   const classes = useStyles();
   const handleCheckBox = (e)=> {
 
-    // const options = idsArray
     let index
 
     if(e.target.checked) {
@@ -91,9 +91,7 @@ const ProductCard = props => {
       index = idsArray.indexOf(e.target.value)
       idsArray.splice(index, 1)
     }
-    // console.log(idsArray)
     props.deleteCategoriesAction(idsArray, e.target.checked)
-    // setIdsArray(options)
     
   }
   
@@ -137,9 +135,6 @@ const ProductCard = props => {
     className={clsx(classes.root, className)}
   >
     <CardContent>
-      {/* <IconButton onClick={deleteCategories}>
-      <DeleteIcon/>
-    </IconButton> */}
     <FormControlLabel
          onChange={handleCheckBox}
           value={product.id}
@@ -159,19 +154,14 @@ const ProductCard = props => {
       } */}
         </div>
       </div>
-      <Typography
+      <p
         align="center"
-        gutterBottom
-        variant="h6"
+        className={classes.title}
+        // gutterBottom
+        // variant="h6"
       >
         {product.name.en}
-      </Typography>
-      <Typography
-        align="center"
-        variant="body1"
-      >
-        {product._id}
-      </Typography>
+      </p>
     </CardContent>
     <Divider />
     <CardActions>

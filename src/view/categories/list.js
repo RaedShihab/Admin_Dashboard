@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'
 import { makeStyles } from '@material-ui/styles';
-import { IconButton, Grid, Typography, CircularProgress, MenuItem, FormControl, Select } from '@material-ui/core';
+import { IconButton, Grid, Typography, Paper, CircularProgress, MenuItem, FormControl, Select } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -34,11 +34,11 @@ const ProductList = () => {
   const [openAlert, setOpenAlrt] = useState();
   const [categories, setCategories] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(5)
-  const [allCtegories, setAllCategories] = useState([]) 
+  const [allCtegories, setAllCategories] = useState([])
+  const [hidepagination, setHidepagination] = useState(false) 
  
 
   const categoriesAxios = (page, itemsPerPage)=> 
-  // Axios.get(`/categories`)
   Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
     console.log(res)
@@ -51,27 +51,17 @@ const ProductList = () => {
     setOpenAlrt(true)
   })
 
-  const options = {
-    method: 'GET',
-    url: 'https://api.glowyhan.com/locations/countries',
-    headers: {},
-  };
-
-
-
   const getAllCategories = ()=> 
-  axios.get('https://api.glowyhan.com/categories?lang=en', { headers: {
-	  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS'
-	}, })
+  Axios.get('/categories')
   .then(res=>{
-    console.log(res)
-    // setAllCategories(res.data.data)
-    // setOpen(false)
+    console.log(res.data.data)
+    setAllCategories(res.data.data)
+    setOpen(false)
   })
   .catch(err=> {
     console.log(err)
-    // setOpen(false)
-    // setOpenAlrt(true)
+    setOpen(false)
+    setOpenAlrt(true)
   })
 
   const incrimentPage = ()=> {
@@ -80,9 +70,11 @@ const ProductList = () => {
     categoriesAxios(page, itemsPerPage)
   }
   const decrimentPage = ()=> {
-    page-=1
+    while(page>1) {
+      page-=1
     console.log(page, itemsPerPage)
     categoriesAxios(page, itemsPerPage)
+    }
   }
 
   const handleChange = event => {
@@ -90,10 +82,11 @@ const ProductList = () => {
   };
   
   React.useEffect(() => {
-    // setOpen(true)
-    // categoriesAxios(page, itemsPerPage)
+    setOpen(true)
+    categoriesAxios(page, itemsPerPage)
     getAllCategories()
   }, []);
+  
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -101,6 +94,24 @@ const ProductList = () => {
     }
     setOpenAlrt(false)
       };
+
+      const handleParentCategorySelect = (e)=> {
+        console.log(e.target.value)
+        const parentId = e.target.value
+        Axios.get(`/categories/${parentId}`)
+        .then(res=> {
+          console.log(res.data.data.childrens)
+          setHidepagination(true)
+          setCategories(res.data.data.childrens)
+          setOpen(false)  
+          })
+          .catch(err=> {
+            console.log(err.response)
+            setOpen(false)
+            setOpenAlrt(true)
+          })
+      }
+
       const handelChoose = (e)=> {
         console.log(e.target.value)
         const parentId = e.target.value
@@ -125,6 +136,7 @@ const ProductList = () => {
       <CategToolbar
       categories={allCtegories} 
       handelChoose={handelChoose}
+      handleParentCategorySelect={handleParentCategorySelect}
       path={{add:'/categories/create'}} />
       <div className={classes.content}>
         <Grid
@@ -144,7 +156,7 @@ const ProductList = () => {
           })}
         </Grid>
       </div>
-      <div className={classes.pagination}>
+     {categories.length>0 && !hidepagination && <div className={classes.pagination}>
         <Typography variant="caption">
         <FormControl variant="filled" className={classes.formControl}>
         <Select
@@ -167,7 +179,14 @@ const ProductList = () => {
         <IconButton onClick={incrimentPage}>
           <ChevronRightIcon />
         </IconButton>
-      </div>
+      </div>}
+      {
+        categories.length === 0 && <div>
+          <Paper style={{ textAlign: 'center'}}>
+            <Typography variant="h6">No Items Founded</Typography>
+            </Paper>
+        </div>
+      }
     </div>}
     <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
             <Alert style={{backgroundColor: 'red', color: 'white'}} onClose={handleClose} severity="error">
