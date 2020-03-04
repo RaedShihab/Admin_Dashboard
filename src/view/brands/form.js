@@ -104,7 +104,7 @@ class AccountDetails extends React.Component {
                     console.log(data)
 
                       let values = new FormData();
-                      values.append('name[en]', data.name);
+                        values.append('name[en]', data.name);
                         values.append('name[ar]', data.arname);
                         values.append('category_id', data.id);
                         values.append('order', data.order);

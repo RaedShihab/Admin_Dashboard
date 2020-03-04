@@ -17,8 +17,15 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
-  Snackbar
+  Snackbar,
+  Radio
 } from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import {Axios} from '../axiosConfig';
 import LayOut from '../../layOut';
 
 const useStyles = (() => ({
@@ -58,7 +65,12 @@ const useStyles = (() => ({
     },
     deleteBtn: {
       margin: '0px 15px'
-    }
+    },
+    formControl: {
+      // margin: theme.spacing(1),
+      // minWidth: 120,
+      width: 100
+    },
 }));
 
 class AccountDetails extends React.Component {
@@ -77,20 +89,31 @@ class AccountDetails extends React.Component {
           bannerFile: {},
           image: '',
           imgFile: {},
-          checked: ''
+          checked: true,
+          selectedValue: 'a',
+          categories: []
         };
       }
 
       componentDidMount() {
-        console.log(document.getElementById('icon'))
-        this.props.data !== undefined &&this.props.getCategory(this.props.data.id).then(res=>{
+        const {update} = this.props
+
+        update &&
+        this.props.getCategory(this.props.data.id).then(res=>{
+          console.log('working')
           this.setState({
             icon: res.data.data.icon,
             cover: res.data.data.media.cover,
             image: res.data.data.media.image,
             banner: res.data.data.media.banner
           })
-          console.log(res.data.data.icon)})
+        })
+
+        Axios.get('/categories').then(res => {
+          console.log('workinggg')
+          console.log(res.data.data)
+          this.setState({categories: res.data.data})
+          })
       }
 
       chengeMedia = (media, type)=> {
@@ -145,22 +168,8 @@ class AccountDetails extends React.Component {
 
       }
 
-      onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-          let reader = new FileReader();
-          reader.onload = (e) => {
-            this.setState({
-              icon: e.target.result,
-              iconFile: document.getElementById('icon').files[0]
-            });
-          };
-          reader.readAsDataURL(event.target.files[0]);
-        }
-        const values = document.getElementById('icon').files[0]
-        const media = new FormData();
-        media.append('icon', values)
-        media.append('_method', 'patch')
-        this.props.data !== undefined && this.props.updateIconRequist(media, '/icon')
+      changeIcon = (media) => {
+        this.props.updateIconRequist(media, '/icon')
         .then(res =>{
           console.log(res)
           if(res.status === 201) {
@@ -196,57 +205,6 @@ class AccountDetails extends React.Component {
           }
         })
       }
-      onCoverChange = (event) => {
-        if (this.props.data === undefined&&event.target.files && event.target.files[0]) {
-          let reader = new FileReader();
-          reader.onload = (e) => {
-            this.setState({cover: e.target.result,
-            coverFile: document.getElementById('cover').files[0]
-            });
-          };
-          reader.readAsDataURL(event.target.files[0]);
-        }
-        const values = document.getElementById('cover').files[0]
-        const media = new FormData();
-        media.append('image', values)
-        media.append('_method', 'patch')
-        const type = 'cover'
-        this.props.data !== undefined && this.chengeMedia(media, type)
-      }
-      onCImgChange = (event) => {
-        if (this.props.data === undefined&&event.target.files && event.target.files[0]) {
-          let reader = new FileReader();
-          reader.onload = (e) => {
-            this.setState({image: e.target.result,
-            imgFile: document.getElementById('img').files[0]
-            });
-          };
-          reader.readAsDataURL(event.target.files[0]);
-        }
-        const values = document.getElementById('img').files[0]
-        const media = new FormData();
-        media.append('image', values)
-        media.append('_method', 'patch')
-        const type = 'image'
-        this.props.data !== undefined &&this.chengeMedia(media, type)
-      }
-      onCBannerChange = (event) => {
-        if (this.props.data === undefined&&event.target.files && event.target.files[0]) {
-          let reader = new FileReader();
-          reader.onload = (e) => {
-            this.setState({banner: e.target.result,
-            bannerFile: document.getElementById('banner').files[0]
-            });
-          };
-          reader.readAsDataURL(event.target.files[0]);
-        }
-        const values = document.getElementById('banner').files[0]
-        const media = new FormData();
-        media.append('image', values)
-        media.append('_method', 'patch')
-        const type = 'banner'
-        this.props.data !== undefined && this.chengeMedia(media, type)
-      }
       handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;
@@ -261,9 +219,13 @@ class AccountDetails extends React.Component {
      handleChange = event => {
         this.setState({checked:event.target.checked});
       };
+      handleChekced = e => {
+        this.setState({selectedValue:e.target.value});
+      }
     render() {
  
-        const { t ,classes, data} = this.props;
+        const { t ,classes, data, update} = this.props;
+
         return (
             <div
               // {...rest}
@@ -276,29 +238,30 @@ class AccountDetails extends React.Component {
                     description: data===undefined? '': data.description.en,
                     icon: null,
                     cover:  null,
-                    banner:  this.state.bannerFile,
-                    img:  this.state.imgFile,
+                    banner:  null,
+                    img:  null,
+                    is_real_estate: '',
+                    select: ''
                   }}
                   onSubmit={data => {
                     console.log(data)
-                      // let values = new FormData();
-                      // let myInt = this.state.checked ? 1 : 0;
-                      //   values.append('name[en]', data.name);
-                      //   values.append('name[ar]', data.arname);
-                      //   // values.append('description', data.description);
-                      //   values.append('parent', null);
-                      //   this.props.data === undefined&&values.append('icon', this.state.iconFile);
-                      //   this.props.data === undefined&&values.append('media[cover]', this.state.coverFile);
-                      //   this.props.data === undefined&&values.append('media[banner]', this.state.bannerFile);
-                      //   this.props.data === undefined&&values.append('media[image]', this.state.imgFile);
-                      //   values.append('is_real_estate', myInt);
-                      //   this.props.patch && values.append('_method', 'patch');
+                      let values = new FormData();
+                        values.append('name[en]', data.name);
+                        values.append('name[ar]', data.arname);
+                        // values.append('description', data.description);
+                        values.append('parent', data.select);
+                        
+                        !update && values.append('icon', data.icon);
+                        !update && values.append('media[cover]', data.cover);
+                        !update && values.append('media[banner]', data.banner);
+                        !update && values.append('media[image]', data.img);
+                        !update && values.append('is_real_estate', data.is_real_estate);
+                        console.log(values)
+                        return;
                     this.setState({
                       showLoading:true
                     })
-                    // console.log(data)
-                    return false;
-                this.props.requist(data)
+                this.props.requist(values)
                            .then(res =>{
                              console.log(res)
                              if(res.status === 201) {
@@ -335,6 +298,7 @@ class AccountDetails extends React.Component {
                   }
                   }
                 render={(props=> {
+                  console.log(props)
                     return <form
                     autoComplete="off"
                      noValidate
@@ -376,6 +340,10 @@ class AccountDetails extends React.Component {
                                             reader.readAsDataURL(event.target.files[0]);
                                           }
                                           props.setFieldValue("cover", event.currentTarget.files[0]);
+                                          const media = new FormData();
+                                          media.append('image', event.currentTarget.files[0])
+                                          media.append('_method', 'patch')
+                                          update&&this.chengeMedia(media, 'cover')
                                         }
                                       }
                                       accept="image/*"
@@ -436,6 +404,10 @@ class AccountDetails extends React.Component {
                                           reader.readAsDataURL(event.target.files[0]);
                                         }
                                         props.setFieldValue("icon", event.currentTarget.files[0]);
+                                        const media = new FormData();
+                                        media.append('icon', event.currentTarget.files[0])
+                                        media.append('_method', 'patch')
+                                        update&&this.changeIcon(media)
                                       }}
                                       accept="image/*"
                                       id="icon"
@@ -474,8 +446,24 @@ class AccountDetails extends React.Component {
                                     <Divider />
                                     <CardActions>
                                     <input
-                                    name="file"
-                                      onChange={this.onCBannerChange}
+                                    name="banner"
+                                      onChange={(event) => {
+                                        if (event.target.files && event.target.files[0]) {
+                                          let reader = new FileReader();
+                                          reader.onload = (e) => {
+                                            this.setState({
+                                              banner: e.target.result,
+                                            });
+                                          };
+                                          reader.readAsDataURL(event.target.files[0]);
+                                        }
+                                        props.setFieldValue("banner", event.currentTarget.files[0]);
+                                        const media = new FormData();
+                                        media.append('image', event.currentTarget.files[0])
+                                        media.append('_method', 'patch')
+                                        const type = 'banner'
+                                        update&&this.chengeMedia(media, type)
+                                      }}
                                       accept="image/*"
                                       id="banner"
                                       multiple
@@ -513,7 +501,24 @@ class AccountDetails extends React.Component {
                                     <Divider />
                                     <CardActions>
                                     <input
-                                      onChange={this.onCImgChange}
+                                    name="image"
+                                      onChange={(event) => {
+                                        if (event.target.files && event.target.files[0]) {
+                                          let reader = new FileReader();
+                                          reader.onload = (e) => {
+                                            this.setState({
+                                              image: e.target.result,
+                                            });
+                                          };
+                                          reader.readAsDataURL(event.target.files[0]);
+                                        }
+                                        props.setFieldValue("img", event.currentTarget.files[0]);
+                                          const media = new FormData();
+                                          media.append('image', event.currentTarget.files[0])
+                                          media.append('_method', 'patch')
+                                          const type = 'image'
+                                          update&&this.chengeMedia(media, type)
+                                      }}
                                       accept="image/*"
                                       id="img"
                                       multiple
@@ -577,7 +582,7 @@ class AccountDetails extends React.Component {
                                             </Grid>
                                             <Grid
                                               item
-                                              sm={12}
+                                              sm={9}
                                               xs={12}
                                             >
                                                 <TextField
@@ -591,11 +596,58 @@ class AccountDetails extends React.Component {
                                                 helperText={(props.errors.description && props.touched.description) && props.errors.description}
                                                 />
                                             </Grid>
+                                            <Grid
+                                              item
+                                              sm={3}
+                                              xs={12}
+                                            >
+                                              <FormControl variant="filled" className={classes.formControl}>
+                                              <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
+                                              <Select
+                                              name="select"
+                                              autoWidth={true}
+                                                labelId="demo-simple-select-filled-label"
+                                                id="demo-simple-select-filled"
+                                                value=""
+                                                onChange={props.handleChange}
+                                              >
+                                                {
+                                                  this.state.categories.map(category => {
+                                                  return <MenuItem value={category.id}>{category.name.en}</MenuItem>
+                                                  })
+                                                }
+                                              </Select>
+                                            </FormControl>
+                                            </Grid>
+                                            <Grid container spacing={2}>
+                                            <Grid item xs={12}>
+                                              <Grid container 
+                                              // justify="center"
+                                              // spacing={6}
+                                              >
+                                                  <Grid  item>
+                                                  <FormControlLabel
+                                                      control={
+                                                        <Checkbox
+                                                          name="is_real_estate"
+                                                          onChange={props.handleChange('is_real_estate')}
+                                                          value={true}
+                                                          inputProps={{ 'aria-label': 'primary checkbox' }} />
+                                                      }
+                                                      label={t("it_is_real_estate")}
+                                                      />
+                                             </Grid>
+                                             </Grid>
+                                             </Grid>
+                                            </Grid>
                                           </Grid>
                                       </CardContent>
                                    </Card>
                                       <Button
                                       className={classes.btn}
+                                      disabled={!(props.isValid && props.dirty)}
+                                      // disabled={props.isValid}
+                                      // disabled={!props.dirty}
                                         color="primary"
                                         variant="contained"
                                         type="submit"
@@ -605,15 +657,6 @@ class AccountDetails extends React.Component {
                                           size={23}
                                         />}
                                         </Button>
-                                        <FormControlLabel
-                                        style={{marginLeft: 20}}
-                                            control={
-                                              <Checkbox checked={this.state.checked} onChange={this.handleChange} 
-                                              value="primary"
-                                              inputProps={{ 'aria-label': 'primary checkbox' }} />
-                                            }
-                                            label={t("is_it_a_real_estate")}
-                                          />
                                     </Grid>
                                   </Grid>
                                   <div>
@@ -670,35 +713,20 @@ class AccountDetails extends React.Component {
                                                 </Alert>
                                             </Snackbar>
                                           </div>
-                      </div>
-                      </LayOut>
-                    </form>
-                  })}
-                  validationSchema={Yup.object().shape({
-                    name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
-                    .min(2, 'Seems a bit short...'),
-                    arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
-                    .min(2, 'Seems a bit short...'),
-                    // description: Yup.string('Enter a description').required(t('countries/validations:description_is_required'))
-                    // .min(2, 'Seems a bit short...'),
-                    // file: Yup
-                    //   .mixed()
-                    //   .required("A file is required")
-                    //   .test(
-                    //     "fileSize",
-                    //     "File too large",
-                    //     value => value && value.size <= FILE_SIZE
-                    //   )
-                    //   .test(
-                    //     "fileFormat",
-                    //     "Unsupported Format",
-                    //     value => value && SUPPORTED_FORMATS.includes(value.type)
-                    //   )
-                  })}
-            />
-            </div>
-          );
-    }  
+                                        </div>
+                                        </LayOut>
+                                      </form>
+                                    })}
+                                    validationSchema={Yup.object().shape({
+                                      name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
+                                      .min(2, 'Seems a bit short...'),
+                                      arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+                                      .min(2, 'Seems a bit short...'),
+                                    })}
+                              />
+                              </div>
+                            );
+                      }  
 };
 
 AccountDetails.propTypes = {

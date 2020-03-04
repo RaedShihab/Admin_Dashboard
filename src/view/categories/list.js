@@ -51,7 +51,7 @@ const ProductList = () => {
     setOpenAlrt(true)
   })
 
-  const getAllCategories = ()=> 
+  const getAllCategories = ()=>
   Axios.get('/categories')
   .then(res=>{
     console.log(res.data.data)
@@ -59,7 +59,7 @@ const ProductList = () => {
     setOpen(false)
   })
   .catch(err=> {
-    console.log(err)
+    console.log(err.response)
     setOpen(false)
     setOpenAlrt(true)
   })

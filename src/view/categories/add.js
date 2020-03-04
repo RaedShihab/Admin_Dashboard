@@ -10,7 +10,7 @@ const Add = ()=> {
     return(
       <div> 
         <Form
-        response={"the_category_has_added_successfuly"} 
+        response={"the_category_has_added_successfuly"}
         patch={false}
         requist={requist}/>
       </div>

@@ -31,6 +31,7 @@ const Update = (props)=> {
         updateIconRequist={updateIconRequist}
         updateMedia={updateMedia}
         getCategory={getCategory}
+        update={true}
         />
       </div>
     );

@@ -6,6 +6,7 @@ const Update = (props)=> {
     const data = props.location.state.data;
     const id = data._id
    const requist =(values)=> {
+     console.log(values)
     return Axios.post('/brands/'+id, values)}
     return(
       <div>
