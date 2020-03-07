@@ -79,6 +79,7 @@ class AccountDetails extends React.Component {
         this.state = {
           openSnackSucc: false,
           showLoading: false,
+          showDeleteLoading: false,
           openSnackErr: false,
           selectedFile: null,
           icon: '',
@@ -110,8 +111,6 @@ class AccountDetails extends React.Component {
         })
 
         Axios.get('/categories').then(res => {
-          console.log('workinggg')
-          console.log(res.data.data)
           this.setState({categories: res.data.data})
           })
       }
@@ -222,6 +221,25 @@ class AccountDetails extends React.Component {
       handleChekced = e => {
         this.setState({selectedValue:e.target.value});
       }
+       deleteMedia =(id, type)=> {
+        console.log('id', id)
+        console.log('type', type)
+      this.setState({showDeleteLoading: true})
+      Axios.delete(`/categories/${id}/media/${type}`)
+      .then(res=> {
+        this.setState({
+          type: '',
+          showDeleteLoading: false,
+          openSnackSucc: true,
+        })
+      })
+      .catch(err=> {
+        this.setState({
+          showDeleteLoading: false,
+          open500status:true,
+        })
+      })
+     }
     render() {
  
         const { t ,classes, data, update} = this.props;
@@ -233,15 +251,15 @@ class AccountDetails extends React.Component {
             >
             <Formik
                 initialValues={{
-                    name:data===undefined? '': data.name.en,
-                    arname: data===undefined? '': data.name.ar,
-                    description: data===undefined? '': data.description.en,
+                    name:!update? '': data.name.en,
+                    arname: !update? '': data.name.ar,
+                    description: !update? '': data.description.en,
                     icon: null,
                     cover:  null,
                     banner:  null,
                     img:  null,
-                    is_real_estate: '',
-                    select: ''
+                    is_real_estate: !update?'' : data.is_real_estate,
+                    select: !update?'' : data.parent_id,
                   }}
                   onSubmit={data => {
                     console.log(data)
@@ -249,19 +267,19 @@ class AccountDetails extends React.Component {
                         values.append('name[en]', data.name);
                         values.append('name[ar]', data.arname);
                         // values.append('description', data.description);
-                        values.append('parent', data.select);
+                        values.append('parent_id', data.select);
+                        update && values.append('_method', 'patch')
                         
                         !update && values.append('icon', data.icon);
                         !update && values.append('media[cover]', data.cover);
                         !update && values.append('media[banner]', data.banner);
                         !update && values.append('media[image]', data.img);
-                        !update && values.append('is_real_estate', data.is_real_estate);
+                        !update && values.append('is_real_estate', data.is_real_estate=== true? "1" : "0");
                         console.log(values)
-                        return;
                     this.setState({
                       showLoading:true
                     })
-                this.props.requist(values)
+                this.props.request(values)
                            .then(res =>{
                              console.log(res)
                              if(res.status === 201) {
@@ -297,8 +315,14 @@ class AccountDetails extends React.Component {
                            })
                   }
                   }
-                render={(props=> {
-                  console.log(props)
+                                    validationSchema={Yup.object().shape({
+                                      name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
+                                      .min(2, 'Seems a bit short...'),
+                                      arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+                                      .min(2, 'Seems a bit short...'),
+                                    })}
+                              >
+                                {(props=> {
                     return <form
                     autoComplete="off"
                      noValidate
@@ -357,8 +381,16 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
-                                    {data !==undefined&&<Button className={classes.deleteBtn} variant="contained" color="secondary" component="span">
-                                        delete
+                                    {update &&<Button 
+                                    onClick={()=>this.deleteMedia(data.id, "cover")}
+                                    className={classes.deleteBtn}
+                                    variant="contained" 
+                                    color="secondary" 
+                                    component="span">
+                                      {!this.state.showDeleteLoading&&t('delete')}
+                                        {this.state.showDeleteLoading&&<CircularProgress
+                                          size={23}
+                                        />}
                                       </Button>}
                                     </CardActions>
                                   </Card>
@@ -372,14 +404,6 @@ class AccountDetails extends React.Component {
                                           className={classes.avatar}
                                           src={this.state.icon}
                                         />
-                                         {/* {data !== undefined&&<Avatar
-                                          className={classes.avatar}
-                                          src={this.state.icon===''? data.icon: this.state.icon}
-                                        />}
-                                       {data === undefined && <Avatar
-                                          className={classes.avatar}
-                                          src={this.state.icon}
-                                        />} */}
                                         <Typography
                                         className={classes.TypographyMargin}
                                         gutterBottom
@@ -420,9 +444,6 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
-                                    {data !==undefined&&<Button className={classes.deleteBtn} variant="contained" color="secondary" component="span">
-                                        delete
-                                      </Button>}
                                     </CardActions>
                                   </Card>
                                 </Grid>
@@ -475,8 +496,16 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
-                                    {data !==undefined&&<Button className={classes.deleteBtn} variant="contained" color="secondary" component="span">
-                                        delete
+                                    {update &&<Button
+                                    onClick={()=>this.deleteMedia(data.id, "banner")}
+                                    className={classes.deleteBtn} 
+                                    variant="contained" 
+                                    color="secondary" 
+                                    component="span">
+                                       {!this.state.showDeleteLoading&&t('delete')}
+                                        {this.state.showDeleteLoading&&<CircularProgress
+                                          size={23}
+                                        />}
                                       </Button>}
                                     </CardActions>
                                   </Card>
@@ -530,8 +559,16 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
-                                    {data !==undefined&&<Button className={classes.deleteBtn} variant="contained" color="secondary" component="span">
-                                        delete
+                                    {update&&<Button
+                                    onClick={()=>this.deleteMedia(data.id, "image")}
+                                    className={classes.deleteBtn} 
+                                    variant="contained" 
+                                    color="secondary" 
+                                    component="span">
+                                       {!this.state.showDeleteLoading&&t('delete')}
+                                        {this.state.showDeleteLoading&&<CircularProgress
+                                          size={23}
+                                        />}
                                       </Button>}
                                     </CardActions>
                                   </Card>
@@ -554,7 +591,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data !== undefined? data.name.en : '' }
+                                                defaultValue={update ? data.name.en : '' }
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
@@ -570,7 +607,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                 defaultValue={data!== undefined? data.name.ar : ''}
+                                                 defaultValue={update ? data.name.ar : ''}
                                                 label={("arabic_name")}
                                                 name="arname"
                                                 onChange={props.handleChange}
@@ -586,7 +623,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data!== undefined? data.description.en : ''}
+                                                defaultValue={update? data.description.en : ''}
                                                 label={("category_discription")}
                                                 name="description"
                                                 onChange={props.handleChange}
@@ -601,23 +638,22 @@ class AccountDetails extends React.Component {
                                               sm={3}
                                               xs={12}
                                             >
-                                              <FormControl variant="filled" className={classes.formControl}>
-                                              <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
-                                              <Select
-                                              name="select"
-                                              autoWidth={true}
-                                                labelId="demo-simple-select-filled-label"
-                                                id="demo-simple-select-filled"
-                                                value=""
-                                                onChange={props.handleChange}
-                                              >
-                                                {
-                                                  this.state.categories.map(category => {
-                                                  return <MenuItem value={category.id}>{category.name.en}</MenuItem>
-                                                  })
-                                                }
-                                              </Select>
-                                            </FormControl>
+                                              <FormControl fullWidth
+                                                margin="dense" variant="filled"
+                                                >
+                                                  <InputLabel htmlFor="filled-age-native-simple">{t("category")}</InputLabel>
+                                                      <Select
+                                                      native
+                                                      onChange={props.handleChange}
+                                                      name="select"
+                                                      >
+                                                      {
+                                                      this.state.categories.map(category=> {
+                                                          return <option value={category.id}>{category.name.en}</option>
+                                                      })
+                                                      }
+                                                  </Select>
+                                              </FormControl>
                                             </Grid>
                                             <Grid container spacing={2}>
                                             <Grid item xs={12}>
@@ -645,9 +681,7 @@ class AccountDetails extends React.Component {
                                    </Card>
                                       <Button
                                       className={classes.btn}
-                                      disabled={!(props.isValid && props.dirty)}
-                                      // disabled={props.isValid}
-                                      // disabled={!props.dirty}
+                                      disabled={!update && !(props.isValid && props.dirty)}
                                         color="primary"
                                         variant="contained"
                                         type="submit"
@@ -717,13 +751,7 @@ class AccountDetails extends React.Component {
                                         </LayOut>
                                       </form>
                                     })}
-                                    validationSchema={Yup.object().shape({
-                                      name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
-                                      .min(2, 'Seems a bit short...'),
-                                      arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
-                                      .min(2, 'Seems a bit short...'),
-                                    })}
-                              />
+                              </Formik>
                               </div>
                             );
                       }  

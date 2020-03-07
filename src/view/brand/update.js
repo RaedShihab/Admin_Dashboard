@@ -5,16 +5,13 @@ import {Axios} from '../axiosConfig';
 const Update = (props)=> {
   const data = props.location.state.data;
   const id = data.id
-   const request =(values)=> {
+   const submitForm =(values)=> {
      console.log(values)
-    return Axios.post('/categories/'+id, values)}
+    return Axios.post('/categories/brands/'+id, values)}
 
-    const getCategory =(id)=> {
-     return Axios.get('/categories/'+id)}
-
-    const updateIconRequist =(values, media)=> {
-      console.log(values)
-     return Axios.post('/categories/'+id+`${media}`, values)}
+    const updateIcon =(values, id)=> {
+      console.log(values, id)
+     return Axios.post(`/categories/brands/${id}/icon`, values)}
 
      const updateMedia =(values, type)=> {
       console.log(values)
@@ -24,12 +21,11 @@ const Update = (props)=> {
       <div>
         <Form
         data={data}
-        response={"the_category_has_updated_successfuly"} 
+        response={"the_brand_has_updated_successfuly"} 
         patch={true}
-        request={request}
-        updateIconRequist={updateIconRequist}
+        submitForm={submitForm}
+        updateIcon={updateIcon}
         updateMedia={updateMedia}
-        getCategory={getCategory}
         update={true}
         />
       </div>

@@ -31,9 +31,9 @@ import AddCategory from './view/categories/add';
 import updateCategory from './view/categories/update';
 import CategoriesList from './view/categories/list';
 
-import AddBrand from './view/brands/add';
-import updateBrand from './view/brands/update';
-import brandList from './view/brands/list';
+import AddBrand from './view/brand/add';
+import updateBrand from './view/brand/update';
+import brandList from './view/brand/list';
 
 import AddModel from './view/models/add';
 import updateModel from './view/models/update';
