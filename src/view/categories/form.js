@@ -18,11 +18,9 @@ import {
   Checkbox,
   FormControlLabel,
   Snackbar,
-  Radio
 } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {Axios} from '../axiosConfig';
@@ -81,6 +79,7 @@ class AccountDetails extends React.Component {
           showLoading: false,
           showDeleteLoading: false,
           openSnackErr: false,
+          openCoverValidation: false,
           selectedFile: null,
           icon: '',
           iconFile: document.getElementById('icon'),
@@ -92,17 +91,31 @@ class AccountDetails extends React.Component {
           imgFile: {},
           checked: true,
           selectedValue: 'a',
-          categories: []
+          categories: [],
+          coverLoading: false,
+          iconLoading: false,
+          imageLoading: false,
+          bannerLoading: false
         };
       }
 
       componentDidMount() {
         const {update} = this.props
-
+    
         update &&
-        this.props.getCategory(this.props.data.id).then(res=>{
-          console.log('working')
+        this.setState({
+          coverLoading: true,
+          iconLoading: true,
+          imageLoading: true,
+          bannerLoading: true
+          })
+
+          update && this.props.getCategory(this.props.data.id).then(res=>{
           this.setState({
+            coverLoading: false,
+            iconLoading: false,
+            imageLoading: false,
+            bannerLoading: false,
             icon: res.data.data.icon,
             cover: res.data.data.media.cover,
             image: res.data.data.media.image,
@@ -130,16 +143,19 @@ class AccountDetails extends React.Component {
             if(type === 'cover'){
               this.setState({
                 cover: res.data.data,
+                coverLoading: false
                })
             }
             if(type === 'image'){
               this.setState({
                 image: res.data.data,
+                imageLoading: false,
                })
             }
             if(type === 'banner'){
               this.setState({
                 banner: res.data.data,
+                bannerLoading: false
                })
             }
            this.setState({
@@ -163,11 +179,18 @@ class AccountDetails extends React.Component {
              open500status:true,
            })
           }
+          this.setState({
+            iconLoading: false,
+            coverLoading: false,
+            bannerLoading: false,
+            imageLoading: false
+          })
         })
 
       }
 
       changeIcon = (media) => {
+        this.setState({iconLoading: true})
         this.props.updateIconRequist(media, '/icon')
         .then(res =>{
           console.log(res)
@@ -182,6 +205,7 @@ class AccountDetails extends React.Component {
            console.log(res)
            this.setState({
              icon: res.data.data,
+             iconLoading: false,
              showLoading: false,
              openSnackSucc: true,
            })
@@ -191,6 +215,7 @@ class AccountDetails extends React.Component {
           console.log(err.response)
           if(err.response.status === 422) {
            this.setState({
+             iconLoading: false,
              showLoading: false,
              openSnackErr:true,
            })
@@ -212,28 +237,39 @@ class AccountDetails extends React.Component {
           openSnackSucc: false,
           openSnackErr:false,
           open500status:false,
-          open422status: false 
+          open422status: false,
+          openCoverValidation: false
         })
       };
-     handleChange = event => {
-        this.setState({checked:event.target.checked});
-      };
-      handleChekced = e => {
-        this.setState({selectedValue:e.target.value});
-      }
        deleteMedia =(id, type)=> {
-        console.log('id', id)
-        console.log('type', type)
       this.setState({showDeleteLoading: true})
-      Axios.delete(`/categories/${id}/media/${type}`)
+      Axios.delete(`/categories/${id}/media/delete/${type}`)
       .then(res=> {
-        this.setState({
-          type: '',
-          showDeleteLoading: false,
-          openSnackSucc: true,
-        })
+        console.log(res)
+        if(type === 'cover') {
+          this.setState({
+            cover: '',
+            showDeleteLoading: false,
+            openSnackSucc: true,
+          })
+        }
+        if(type === 'banner') {
+          this.setState({
+            banner: '',
+            showDeleteLoading: false,
+            openSnackSucc: true,
+          })
+        }
+        if(type === 'image') {
+          this.setState({
+            image: '',
+            showDeleteLoading: false,
+            openSnackSucc: true,
+          })
+        }
       })
       .catch(err=> {
+        console.log(err.response)
         this.setState({
           showDeleteLoading: false,
           open500status:true,
@@ -243,7 +279,7 @@ class AccountDetails extends React.Component {
     render() {
  
         const { t ,classes, data, update} = this.props;
-
+        const {coverLoading, iconLoading, imageLoading, bannerLoading, cover, banner, image} = this.state
         return (
             <div
               // {...rest}
@@ -259,7 +295,7 @@ class AccountDetails extends React.Component {
                     banner:  null,
                     img:  null,
                     is_real_estate: !update?'' : data.is_real_estate,
-                    select: !update?'' : data.parent_id,
+                    select: !update? '' : data.parent_id,
                   }}
                   onSubmit={data => {
                     console.log(data)
@@ -267,14 +303,14 @@ class AccountDetails extends React.Component {
                         values.append('name[en]', data.name);
                         values.append('name[ar]', data.arname);
                         // values.append('description', data.description);
-                        values.append('parent_id', data.select);
+                        values.append('parent', data.select===""? null : data.select);
                         update && values.append('_method', 'patch')
                         
-                        !update && values.append('icon', data.icon);
-                        !update && values.append('media[cover]', data.cover);
-                        !update && values.append('media[banner]', data.banner);
-                        !update && values.append('media[image]', data.img);
-                        !update && values.append('is_real_estate', data.is_real_estate=== true? "1" : "0");
+                         values.append('icon', data.icon);
+                        !update && data.cover !== null && values.append('media[cover]', data.cover);
+                        !update && data.banner !== null&& values.append('media[banner]', data.banner);
+                        !update && data.img !== null && values.append('media[image]', data.img);
+                        values.append('is_real_estate', data.is_real_estate=== true? "1" : "0");
                         console.log(values)
                     this.setState({
                       showLoading:true
@@ -298,12 +334,33 @@ class AccountDetails extends React.Component {
                              }
                            })
                            .catch(err => {
-                             console.log(err.response)
+                            //  console.log(err.response.data["name.en"])
+                            console.log(err.response)
                              if(err.response.status === 422) {
-                              this.setState({
-                                showLoading: false,
-                                openSnackErr:true,
-                              })
+                               if(err.response.data.icon!== undefined){
+                                this.setState({
+                                  showLoading: false,
+                                  openSnackErr:true,
+                                })
+                               }
+                               if(err.response.data["media.cover"]!== undefined){
+                                this.setState({
+                                  showLoading: false,
+                                  openCoverValidation:true,
+                                })
+                               }
+                               if(err.response.data["media.banner"]!== undefined){
+                                this.setState({
+                                  showLoading: false,
+                                  openCoverValidation:true,
+                                })
+                               }
+                               if(err.response.data["media.image"]!== undefined){
+                                this.setState({
+                                  showLoading: false,
+                                  openCoverValidation:true,
+                                })
+                               }
                              }
                              if(err.response.status === 500) {
                               console.log(err.response)
@@ -335,10 +392,11 @@ class AccountDetails extends React.Component {
                                   <Card>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Avatar
+                                     {!coverLoading && <Avatar
                                           className={classes.avatar}
                                           src={this.state.cover}
-                                        />
+                                        />}
+                                          {coverLoading&&<CircularProgress style={{margin: 25}}/>}
                                         <Typography
                                         className={classes.TypographyMargin}
                                         gutterBottom
@@ -354,7 +412,7 @@ class AccountDetails extends React.Component {
                                       name='cover'
                                       onChange={
                                         (event) => {
-                                          if (event.target.files && event.target.files[0]) {
+                                          if (!update&&event.target.files && event.target.files[0]) {
                                             let reader = new FileReader();
                                             reader.onload = (e) => {
                                               this.setState({
@@ -368,6 +426,7 @@ class AccountDetails extends React.Component {
                                           media.append('image', event.currentTarget.files[0])
                                           media.append('_method', 'patch')
                                           update&&this.chengeMedia(media, 'cover')
+                                          update&&this.setState({coverLoading: true})
                                         }
                                       }
                                       accept="image/*"
@@ -381,7 +440,7 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
-                                    {update &&<Button 
+                                    {update && cover !== '' && cover !== null && cover !== undefined && <Button 
                                     onClick={()=>this.deleteMedia(data.id, "cover")}
                                     className={classes.deleteBtn}
                                     variant="contained" 
@@ -400,10 +459,11 @@ class AccountDetails extends React.Component {
                                   <Card className={classes.margin}>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Avatar
+                                      {!iconLoading&&<Avatar
                                           className={classes.avatar}
                                           src={this.state.icon}
-                                        />
+                                        />}
+                                          {iconLoading&&<CircularProgress style={{margin: 25}}/>}
                                         <Typography
                                         className={classes.TypographyMargin}
                                         gutterBottom
@@ -418,7 +478,7 @@ class AccountDetails extends React.Component {
                                     <input
                                     name='icon'
                                       onChange={(event) => {
-                                        if (event.target.files && event.target.files[0]) {
+                                        if (!update&&event.target.files && event.target.files[0]) {
                                           let reader = new FileReader();
                                           reader.onload = (e) => {
                                             this.setState({
@@ -451,10 +511,11 @@ class AccountDetails extends React.Component {
                                   <Card className={classes.margin}>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Avatar
+                                      {!bannerLoading&&<Avatar
                                           className={classes.avatar}
                                           src={this.state.banner}
-                                        />
+                                        />}
+                                          {bannerLoading&&<CircularProgress style={{margin: 25}}/>}
                                         <Typography
                                         className={classes.TypographyMargin}
                                         gutterBottom
@@ -469,7 +530,7 @@ class AccountDetails extends React.Component {
                                     <input
                                     name="banner"
                                       onChange={(event) => {
-                                        if (event.target.files && event.target.files[0]) {
+                                        if (!update&&event.target.files && event.target.files[0]) {
                                           let reader = new FileReader();
                                           reader.onload = (e) => {
                                             this.setState({
@@ -484,6 +545,7 @@ class AccountDetails extends React.Component {
                                         media.append('_method', 'patch')
                                         const type = 'banner'
                                         update&&this.chengeMedia(media, type)
+                                        update&& this.setState({bannerLoading: true})
                                       }}
                                       accept="image/*"
                                       id="banner"
@@ -496,11 +558,11 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
-                                    {update &&<Button
+                                    {update && banner !== '' && banner !== undefined && banner !== undefined && <Button
                                     onClick={()=>this.deleteMedia(data.id, "banner")}
                                     className={classes.deleteBtn} 
                                     variant="contained" 
-                                    color="secondary" 
+                                    color="secondary"
                                     component="span">
                                        {!this.state.showDeleteLoading&&t('delete')}
                                         {this.state.showDeleteLoading&&<CircularProgress
@@ -514,10 +576,11 @@ class AccountDetails extends React.Component {
                                 <Card className={classes.margin}>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Avatar
+                                      {!imageLoading&&<Avatar
                                           className={classes.avatar}
                                           src={this.state.image}
-                                        />
+                                        />}
+                                          {imageLoading&&<CircularProgress style={{margin: 25}}/>}
                                         <Typography
                                         className={classes.TypographyMargin}
                                         gutterBottom
@@ -532,7 +595,7 @@ class AccountDetails extends React.Component {
                                     <input
                                     name="image"
                                       onChange={(event) => {
-                                        if (event.target.files && event.target.files[0]) {
+                                        if (!update&&event.target.files && event.target.files[0]) {
                                           let reader = new FileReader();
                                           reader.onload = (e) => {
                                             this.setState({
@@ -547,6 +610,7 @@ class AccountDetails extends React.Component {
                                           media.append('_method', 'patch')
                                           const type = 'image'
                                           update&&this.chengeMedia(media, type)
+                                          update&&this.setState({imageLoading: true})
                                       }}
                                       accept="image/*"
                                       id="img"
@@ -559,7 +623,7 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
-                                    {update&&<Button
+                                    {update && image !== '' && image !== undefined && image !== null && <Button
                                     onClick={()=>this.deleteMedia(data.id, "image")}
                                     className={classes.deleteBtn} 
                                     variant="contained" 
@@ -647,6 +711,9 @@ class AccountDetails extends React.Component {
                                                       onChange={props.handleChange}
                                                       name="select"
                                                       >
+                                                        <option value="">
+                                                         
+                                                        </option>
                                                       {
                                                       this.state.categories.map(category=> {
                                                           return <option value={category.id}>{category.name.en}</option>
@@ -688,6 +755,7 @@ class AccountDetails extends React.Component {
                                         >
                                         {!this.state.showLoading&&t('done')}
                                         {this.state.showLoading&&<CircularProgress
+                                        color="white"
                                           size={23}
                                         />}
                                         </Button>
@@ -718,6 +786,19 @@ class AccountDetails extends React.Component {
                                                 style={{backgroundColor: 'red', color: 'white'}}
                                               >
                                                 {t("please_add_svg_icon")}
+                                              </Alert>
+                                            </Snackbar>
+                                            <Snackbar
+                                              autoHideDuration={3000}
+                                              onClose={this.handleClose}
+                                              open={this.state.openCoverValidation}
+                                            >
+                                              <Alert
+                                                onClose={this.handleClose}
+                                                severity="error"
+                                                style={{backgroundColor: 'red', color: 'white'}}
+                                              >
+                                                {t("media_sholud_be_svg")}
                                               </Alert>
                                             </Snackbar>
                                             <Snackbar

@@ -85,17 +85,21 @@ class AccountDetails extends React.Component {
           icon: '',
           checked: true,
           selectedValue: 'a',
-          categories: []
+          categories: [], 
+          iconLoading: false
         };
       }
 
       componentDidMount() {
         const {update, data} = this.props
+
+        update && this.setState({iconLoading: true})
+
         update &&
         Axios.get('/categories/brands/'+data.id).then(res=>{
-          // console.log(res)
           this.setState({
             icon: res.data.data.icon,
+            iconLoading: false
           })
         })
         .catch(err => console.log(err))
@@ -106,11 +110,13 @@ class AccountDetails extends React.Component {
       }
 
       changeIcon = (media, id) => {
+        this.setState({iconLoading: true})
         this.props.updateIcon(media, id)
         .then(res =>{
           console.log(res)
            this.setState({
              icon: res.data.message,
+             iconLoading: false,
              showLoading: false,
              openSnackSucc: true,
            })
@@ -121,6 +127,7 @@ class AccountDetails extends React.Component {
            this.setState({
              showLoading: false,
              openSnackErr:true,
+             iconLoading: false
            })
           }
           if(err.response.status === 500) {
@@ -166,11 +173,13 @@ class AccountDetails extends React.Component {
     render() {
  
         const { t ,classes, data, update} = this.props;
-        console.log(data)
+        const {iconLoading} = this.state
+
         const dataList = this.state.categories
+        const listedData = dataList.map(item => {return {name: item.name.en, id: item.id}});
         const defaultProps = {
-          options: dataList,
-          getOptionLabel: option => option.name.en,
+          options: listedData,
+          getOptionLabel: option => option.name,
         };
 
         return (
@@ -184,7 +193,7 @@ class AccountDetails extends React.Component {
                     arname: !update? '': data.name.ar,
                     order: !update? '': data.order,
                     icon: !update? null: data.icon_svg,
-                    category: !update? '': data.category_id
+                    category: !update? '': {id:data.category_id}
                   }}
                   onSubmit={data => {
                     console.log(data)
@@ -192,7 +201,7 @@ class AccountDetails extends React.Component {
                         values.append('name[en]', data.name);
                         values.append('name[ar]', data.arname);
                         values.append('order', data.order);
-                        values.append('category_id', data.category);
+                        values.append('category_id', data.category.id);
                         
                         !update&&values.append('icon', data.icon);
                         update&&values.append('_method', 'patch')
@@ -200,7 +209,6 @@ class AccountDetails extends React.Component {
                     this.setState({
                       showLoading:true
                     })
-                    return;
                 this.props.submitForm(values)
                            .then(res =>{
                              console.log(res)
@@ -261,10 +269,12 @@ class AccountDetails extends React.Component {
                                   <Card className={classes.margin}>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      <Avatar
+                                      {!iconLoading&&<Avatar
                                           className={classes.avatar}
                                           src={this.state.icon}
-                                        />
+                                        />} {
+                                          iconLoading && <CircularProgress style={{margin: 25}}/>
+                                        }
                                         <Typography
                                         className={classes.TypographyMargin}
                                         gutterBottom
@@ -279,7 +289,7 @@ class AccountDetails extends React.Component {
                                     <input
                                     name='icon'
                                       onChange={(event) => {
-                                        if (event.target.files && event.target.files[0]) {
+                                        if (!update && event.target.files && event.target.files[0]) {
                                           let reader = new FileReader();
                                           reader.onload = (e) => {
                                             this.setState({
@@ -378,7 +388,7 @@ class AccountDetails extends React.Component {
                                                 {...defaultProps}
                                                 id="disable-open-on-focus"
                                                 disableOpenOnFocus
-                                                helperText={(props.errors.category && props.touched.category) && props.errors.category}
+                                                helperText={!update && (props.errors.category && props.touched.category) && props.errors.category}
                                                 onChange={(e, value) => {props.setFieldValue("category", value); }}
                                                 renderInput={params => (
                                                   <TextField
