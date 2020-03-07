@@ -11,18 +11,10 @@ import CustomToolbarSelect from './CustomSelectToolBar';
 import CustomToolbar from './CustomToolbar';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import AddIcon from '@material-ui/icons/Add';
-import { act } from "react-dom/test-utils";
 
 import {
-  FormGroup,
-  FormLabel,
   FormControl,
-  ListItemText,
   TextField,
-  Checkbox,
-  FormControlLabel,
-  Grid,
   Select,
   InputLabel,
   MenuItem
@@ -34,7 +26,7 @@ class App extends React.Component {
     open: true,
     openAlert: false,
     page: 1,
-    rows: 5,
+    rows: 10,
     count: 100,
     data: [],
     searchText: '',
@@ -59,41 +51,11 @@ class App extends React.Component {
       this.setState({listedData: res.data.data})})
   }
   
-models = [
-  {
-    "_id": "5e4d32190e26001fd365b5d2",
-    "old_id": "1",
-    "name": {
-        "ar": "افانتي",
-        "en": "Avante"
-    },
-    "colors" : [
-      {"name": "red", "code": "#ff000"}
-    ],
-    "manf_year" : 2019,
-    "order" : 2,
-    "brand_id": "5e4d321820800027d97f2b93"
-},
-{
-  "_id": "5e4d32190e26001fd365b5d2",
-  "old_id": "1",
-  "name": {
-      "ar": "افانتي",
-      "en": "Avante"
-  },
-  "colors" : [
-    {"name": "red", "code": "#ff000"}
-  ],
-  "manf_year" : 2019,
-  "order" : 2,
-  "brand_id": "5e4d321820800027d97f2b93"
-},
-]
+
   // get data
   getData = (page, rows) => {
     console.log(page, rows)
     this.props.Axios(page, rows).then(res=> {
-      console.log(res.data.data)
       // this.setState({data: this.models})//this is for models
       this.setState({data: res.data.data})
       this.setState({isFetching: false})
@@ -105,9 +67,6 @@ models = [
         openAlert: true})
     }
       )
-    // this.xhrRequest().then(data => { 
-    //   this.setState({ data });
-    // });
   };
   getDataBySearch = (data)=> {
     console.log(data)
@@ -133,35 +92,6 @@ models = [
     })
     }
   }
-  // getFilterdData = ()=> {
-  //   axios.get('https://jsonplaceholder.typicode.com/users').then(res=>{
-  //     console.log('res2', res)
-  //     this.setState({data:res.data})
-  //   })
-  // }
-  // mock async function
-  xhrRequest = () => {
-    return new Promise((resolve, reject) => {
-      const srcData = [
-        ["Gabby George", "Business Analyst", "Minneapolis"],
-        ["Aiden Lloyd", "Business Consultant", "Dallas"],
-        ["Jaden Collins", "Attorney", "Santa Ana"],
-        ["Franky Rees", "Business Analyst", "St. Petersburg"],
-        ["Aaren Rose", "Business Analyst", "Toledo"]
-      ];
-
-      const maxRound = Math.floor(Math.random() * 2) + 1;
-      const data = [...Array(maxRound)].reduce(
-        acc => acc.push(...srcData) && acc,
-        []
-      );
-      data.sort((a, b) => 0.5 - Math.random());
-
-      setTimeout(() => {
-        resolve(data);
-      }, 250);
-    });
-  };
 
   changePage = page => {
     axios.get(`https://api.glowyhan.com/gateway/districts?page=${page}&per_page=5`).then(data => {
@@ -172,6 +102,7 @@ models = [
       });
     });
   };
+
   submitFilters = filterData => () => {
     console.log(filterData)
     this.setState({submitFilter: true})
@@ -203,7 +134,6 @@ models = [
 
     const {t, column, deleteURL} = this.props
     const {filterData, listedData} = this.state
-    console.log(listedData.map(item => {return {name: item.name.en, id: item.id}}))
     const dataList = listedData.map(item => {return {name: item.name.en, id: item.id}});
     const defaultProps = {
       options: dataList,
