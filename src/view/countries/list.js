@@ -32,7 +32,7 @@ class CustomizedTables extends React.Component {
       <LayOut>
         <TableContainer component={Paper}>
      <Table
-     deleteURL={'/countries'}
+     deleteURL={'/locations/countries'}
      Axios = {this.Axios}
      add={'COUNTRY'} 
      path={{update:'/countries/edit/', add: '/countries/create'}} 

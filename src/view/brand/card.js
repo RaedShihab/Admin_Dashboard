@@ -12,7 +12,6 @@ import {
   Card,
   CardContent,
   CardActions,
-  Typography,
   Grid,
   Divider,
   IconButton,
@@ -68,7 +67,6 @@ const ProductCard = props => {
   const { className, product, t, ...rest } = props;
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
   const [openErr, setOpenErr] = React.useState(false);
-  const [open404, setOpen404] = React.useState(false);
   const [softDeliting, setSoftDeliting] = React.useState(false);
   const [forceDeliting, setForceDeliting] = React.useState(false);
   const handleClose = (event, reason) => {

@@ -10,7 +10,6 @@ import {Axios} from '../axiosConfig';
   TableContainer, 
   Paper,
 } from '@material-ui/core';
-import ApiService from '../../services/apis'
 
 const useStyles = ({
   table: {
@@ -29,13 +28,13 @@ class CustomizedTables extends React.Component {
   }
   Axios = (page, rows)=> Axios.get(`/locations/cities/?page=${page}&per_page=${rows}`)
   getAxios = ()=> Axios.get(`/locations/countries`)
-  getById = (id)=> Axios.get(`https://api.glowyhan.com/gateway/locations/countries/${id}/cities`)
+  getById = (id)=> Axios.get(`/locations/countries/${id}/cities`)
   render() {
     return(
       <LayOut>
         <TableContainer component={Paper}>
      <CountriesTable
-     deleteURL={'/cities'}
+     deleteURL={'/locations/cities'}
      Axios = {this.Axios}
      getAxios={this.getAxios}
      path={{update:'/cities/edit/', add: '/cities/create'}} 

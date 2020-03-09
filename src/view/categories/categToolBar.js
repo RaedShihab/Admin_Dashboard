@@ -2,28 +2,20 @@ import React from 'react';
 import {compose} from 'redux';
 import { withTranslation } from "react-i18next";
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {Snackbar, Button, CircularProgress,TextField, 
-  Avatar,IconButton, MenuItem, Menu, FormControlLabel, Checkbox, Tooltip, Typography} from '@material-ui/core';
+  Avatar,IconButton, MenuItem, Menu,Tooltip} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MuiAlert from '@material-ui/lab/Alert';
 import {Axios} from '../axiosConfig';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import SearchIcon from '@material-ui/icons/Search';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
-import FormLabel from '@material-ui/core/FormLabel';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import Paper from '@material-ui/core/Paper';
-import SearchInput from './searchInput';
 import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme => ({

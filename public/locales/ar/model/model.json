@@ -2,5 +2,8 @@
     "model_form" : "تفاصيل العنصر",
     "name" : "اسم العنصر",
     "arabic_name" : "الاسم بالعربي",
-    "order_number" : "رقم الطلب"
+    "order_number" : "رقم الطلب",
+    "manf_year" : "سنة التصنيع",
+    "add" : "إضافة",
+    "choose_brand": "ماركة التصنيع"
 }

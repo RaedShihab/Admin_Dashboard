@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import {connect} from 'react-redux';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import MUIDataTable from "mui-datatables";
-import {Button, CircularProgress, IconButton, Avatar} from '@material-ui/core';
+import {Button, CircularProgress} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomSearchRender from './CustomSearchRender';
 import CustomToolbarSelect from './CustomSelectToolBar';
@@ -32,7 +32,8 @@ class App extends React.Component {
     searchText: '',
     textAlign: 'left',
     filterData: '',
-    listedData: []
+    listedData: [],
+    pagination: true
   };
   getMuiTheme = () => createMuiTheme({
     overrides: {
@@ -47,14 +48,12 @@ class App extends React.Component {
   componentDidMount() {
     this.getData(this.state.page, this.state.rows);
     this.props.showFilter && this.props.getAxios().then(res => {
-      console.log(res)
       this.setState({listedData: res.data.data})})
   }
   
 
   // get data
   getData = (page, rows) => {
-    console.log(page, rows)
     this.props.Axios(page, rows).then(res=> {
       // this.setState({data: this.models})//this is for models
       this.setState({data: res.data.data})
@@ -64,7 +63,8 @@ class App extends React.Component {
       console.log(err.response)
       this.setState({
         open: false,
-        openAlert: true})
+        openAlert: false
+      })
     }
       )
   };
@@ -77,19 +77,20 @@ class App extends React.Component {
         })
     }
     else {
-      this.setState({open: true})
-    axios.get(this.props.searchUrl, data).then(res=>{
-      console.log('res1', res)
-      this.setState({data:res.data})
-      this.setState({open: false,
-      })
-    })
-    .catch(err=> {
-      this.setState({
-        open: false,
-        openAlert: true
-        })
-    })
+      // console.log(data)
+    //   this.setState({open: true})
+    // axios.get(this.props.searchUrl, data).then(res=>{
+    //   console.log('res1', res)
+    //   this.setState({data:res.data})
+    //   this.setState({open: false,
+    //   })
+    // })
+    // .catch(err=> {
+    //   this.setState({
+    //     open: false,
+    //     openAlert: true
+    //     })
+    // })
     }
   }
 
@@ -104,20 +105,21 @@ class App extends React.Component {
   };
 
   submitFilters = filterData => () => {
-    console.log(filterData)
     this.setState({submitFilter: true})
     this.props.getById(filterData)
     .then(res=>{
-      console.log(res.data.data.models)
+      console.log(res)
       this.props.getBrands ? this.setState({
         submitFilter: false,
-        data: res.data.data.models
+        data: res.data.data.models,
+        pagination: false
       }) : this.setState({
         submitFilter: false,
         data: res.data.data
       });
     })
     .catch(err=> {
+      console.log(err.response)
       this.setState({
         open: false,
         submitFilter: false,
@@ -126,13 +128,16 @@ class App extends React.Component {
     })
   };
     handleFilterSelect = (e, values)=> {
-      console.log(values)
-      this.props.getBrands ? this.setState({filterData: values.id}) :
+      const {showAutoComplete} = this.props
+      showAutoComplete&&values!==null&&values!==undefined ? this.setState({
+        filterData: values.id,
+        pagination: false
+      }) :
       this.setState({filterData: e.target.value})
     }
   render() {
 
-    const {t, column, deleteURL} = this.props
+    const {t, column, deleteURL, showAutoComplete} = this.props
     const {filterData, listedData} = this.state
     const dataList = listedData.map(item => {return {name: item.name.en, id: item.id}});
     const defaultProps = {
@@ -148,17 +153,18 @@ class App extends React.Component {
       }
       this.setState({openAlert: false});
         };
-    const { data, page, count } = this.state;
+    const { data, page, count, pagination } = this.state;
     const options = {
       filter: this.props.showFilter ? true : false,
       search: false,
       print: false,
       download: false,
-      filterType: "dropdown",
+      // filterType: "dropdown",
       filterType: "custom",
       responsive: "stacked",
       searchText: this.state.searchText,
       serverSide: true,
+      pagination: pagination,
       count: count,
       page: page,
       onRowClick: (rowData, rowMeta, e) => {
@@ -173,7 +179,7 @@ class App extends React.Component {
       customFilterDialogFooter: filterList => {
         return (
           <div>
-          {this.props.getBrands ? <Autocomplete
+          {showAutoComplete? <Autocomplete
                       {...defaultProps}
                       id="disable-open-on-focus"
                       disableOpenOnFocus
@@ -214,9 +220,8 @@ class App extends React.Component {
         );
       },
       onTableChange: (action, tableState) => {
-        console.log(tableState.page, tableState.rowsPerPage)
         switch (action) {
-          case "changePage":  
+          case "changePage":
             this.getData(tableState.page, tableState.rowsPerPage);
             break;
             default:
@@ -313,7 +318,7 @@ class App extends React.Component {
       />
         </MuiThemeProvider>
         }
-      <Snackbar open={this.state.openAlert} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={this.state.openAlert} autoHideDuration={3000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error">
                 Somthing went wrong please refresh the page or check enternet connection..
             </Alert>

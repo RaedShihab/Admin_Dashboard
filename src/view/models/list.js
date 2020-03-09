@@ -10,7 +10,6 @@ import {Axios} from '../axiosConfig';
   TableContainer, 
   Paper,
 } from '@material-ui/core';
-import ApiService from '../../services/apis'
 
 const useStyles = ({
   table: {
@@ -29,7 +28,7 @@ class CustomizedTables extends React.Component {
   }
   Axios = (page, rows)=> Axios.get(`categories/models/?page=${page}&per_page=${rows}`)
   getAxios = ()=> Axios.get(`/categories/brands`)
-  getById = (id)=> Axios.get(`https://api.glowyhan.com/gateway/categories/brands/${id}`);
+  getById = (id)=> Axios.get(`/categories/brands/${id}`);
   render() {
     return(
       <LayOut>
@@ -45,7 +44,7 @@ class CustomizedTables extends React.Component {
      searchUrl={'https://jsonplaceholder.typicode.com/cuntries/'}
      filterUrl={'https://jsonplaceholder.typicode.com/ocuntries/'}
      showFilter={true}
-     getBrands={true}
+     showAutoComplete={true}
      list={"Brands"}
      />
     </TableContainer>

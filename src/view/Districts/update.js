@@ -4,17 +4,17 @@ import {Axios} from '../axiosConfig';
 
 const Update = (props)=> {
     const data = props.location.state.data[0]
-   const requist =(values)=> {
+   const request =(values)=> {
      console.log(values)
-    return Axios.post('/districts/'+data._id, values)}
+    return Axios.post('/locations/districts/'+data.id, values)}
     return(
       <div>
         <Form 
         data={data}
         response={"the_district_has_updated_successfuly"} 
         id={data._id} 
-        requist={requist}
-        patch={true}
+        request={request}
+        update={true}
         />
       </div>
     );

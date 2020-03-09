@@ -1,8 +1,7 @@
 import React from 'react';
 import Grow from '@material-ui/core/Grow';
 import TextField from '@material-ui/core/TextField';
-import {IconButton, Button} from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
+import {Button} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const defaultSearchStyles = theme => ({
@@ -27,11 +26,18 @@ const defaultSearchStyles = theme => ({
 
 class CustomSearchRender extends React.Component {
   state={
-    text : ''
+    text : '',
+    disabled: true
   }
   handleTextChange = event => {
     // this.props.onSearch(event.target.value);
-    this.setState({text: event.target.value})
+    if((event.target.value.length<1)) {this.setState({disabled: true})}
+    else{
+      this.setState({
+        text: event.target.value,
+        disabled: false,
+      })
+    }
   };
 
   // componentDidMount() {
@@ -50,7 +56,7 @@ class CustomSearchRender extends React.Component {
 
   render() {
     const {classes, getDataBySearch} = this.props
-    const {text} = this.state;
+    const {text, disabled} = this.state;
     // const { classes, options, onHide, searchText, getDataBySearch } = this.props;
     return (
       <Grow appear in={true} timeout={300}>
@@ -62,6 +68,7 @@ class CustomSearchRender extends React.Component {
             className={classes.searchText}
           />
           <Button
+          disabled={disabled}
           onClick={()=>getDataBySearch(text)}
             className={classes.btn}
             variant="contained" color="primary">

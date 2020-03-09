@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from 'yup';
 import { withStyles } from '@material-ui/styles';
 import { withTranslation } from "react-i18next";
-import {Formik, Field} from 'formik'
+import {Formik} from 'formik'
 import PropTypes from 'prop-types';
 import { CircularProgress, Avatar, Typography} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -16,16 +16,8 @@ import {
   Grid,
   Button,
   TextField,
-  Checkbox,
-  FormControlLabel,
   Snackbar,
-  Radio
 } from '@material-ui/core';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import {Axios} from '../axiosConfig';
 import LayOut from '../../layOut';
 
@@ -280,7 +272,7 @@ class AccountDetails extends React.Component {
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("icon")}
+                                        {t("brand_icon")}
                                       </Typography>
                                       </div>
                                     </CardContent>
@@ -323,7 +315,7 @@ class AccountDetails extends React.Component {
                                     <Grid item xs={10}>
                                     <Card className={classes.form}>
                               <CardHeader
-                                      title={t("category_form")}
+                                      title={t("brand_form")}
                                       />
                                       <Divider />
                                       <CardContent >
@@ -341,7 +333,7 @@ class AccountDetails extends React.Component {
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                label={("category_name")}
+                                                label={("name")}
                                                 name="name"
                                                 onChange={props.handleChange}
                                                 helperText={(props.errors.name && props.touched.name) && props.errors.name}
@@ -396,7 +388,7 @@ class AccountDetails extends React.Component {
                                                     {...params}
                                                     variant="standard"
                                                     label={this.props.list}
-                                                    placeholder="Favorites"
+                                                    placeholder={t("choose_category")}
                                                     margin="normal"
                                                     fullWidth
                                                   />
@@ -449,7 +441,7 @@ class AccountDetails extends React.Component {
                                               </Alert>
                                             </Snackbar>
                                             <Snackbar
-                                                // autoHideDuration={10000}
+                                                autoHideDuration={3000}
                                                 onClose={this.handleClose}
                                                 open={this.state.open422status}
                                             >
@@ -458,11 +450,11 @@ class AccountDetails extends React.Component {
                                                 severity="error"
                                                 style={{backgroundColor: 'red', color: 'white'}}
                                                 >
-                                                {t("Country Name, Phone Code, ISO Code, Should be uniqe! ")}
+                                                {t("Country Name, Should be uniqe! ")}
                                                 </Alert>
                                             </Snackbar>
                                             <Snackbar
-                                                // autoHideDuration={10000}
+                                                autoHideDuration={3000}
                                                 onClose={this.handleClose}
                                                 open={this.state.open500status}
                                             >
@@ -488,4 +480,4 @@ class AccountDetails extends React.Component {
 AccountDetails.propTypes = {
     classes: PropTypes.object.isRequired,
   };
-  export default withStyles(useStyles)(withTranslation(["categories/addUpdate", "countries/validations"])(AccountDetails));
+  export default withStyles(useStyles)(withTranslation(["brand/brand", "countries/validations"])(AccountDetails));

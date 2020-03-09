@@ -2,7 +2,6 @@ import React from 'react';
 import { withTranslation } from "react-i18next";
 import LayOut from '../../layOut';
 import Table from '../table';
-import ApiService from '../../services/apis';
 import {Axios} from '../axiosConfig';
  import 
  { 
@@ -29,23 +28,23 @@ class CustomizedTables extends React.Component {
   }
   Axios = (page, rows)=> Axios.get(`/locations/districts/?page=${page}&per_page=${rows}`);
   getAxios = ()=> Axios.get(`/locations/cities`)
-  getById = (id)=> Axios.get(`https://api.glowyhan.com/gateway/locations/cities/${id}/districts`);
+  getById = (id)=> Axios.get(`/locations/cities/${id}/districts`);
 
   render() {
     return(
       <LayOut>
         <TableContainer component={Paper}>
      <Table 
-     deleteURL={'/districts'}
+     deleteURL={'/locations/districts'}
      Axios = {this.Axios}
      getAxios={this.getAxios}
-      path={{update:'/districts-list/update-district/', add: '/districts-list/add-district/'}}
+      path={{update:'/districts/district/', add: '/districts/create/'}}
       column={"districts"} 
       url={'https://jsonplaceholder.typicode.com/users/'}
       searchUrl={'https://jsonplaceholder.typicode.com/countries/'}
       getById={this.getById}
       showFilter={true}
-      getBrands={false}
+      showAutoComplete={true}
       list={"Cities"}
       />
     </TableContainer>

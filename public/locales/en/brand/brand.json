@@ -8,5 +8,6 @@
     "brand_icon" : "Brand Icon",
     "name": "Name",
     "order" : "Order",
-    "arabic_name" : "Arabic Name"
+    "arabic_name" : "Arabic Name",
+    "choose_category": "Choose Category"
 }

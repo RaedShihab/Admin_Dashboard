@@ -132,7 +132,6 @@ class CustomToolbarSelect extends React.Component {
   }
   render() {
     const {t} = this.props
-    console.log(this.props)
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;
@@ -144,7 +143,8 @@ class CustomToolbarSelect extends React.Component {
         });
           };
     const { classes, selectedRows, data } = this.props;
-    const ids = selectedRows.data.map(d => data[d.dataIndex]._id);
+    const ids = selectedRows.data.map(d => data[d.dataIndex].id);
+    console.log(ids)
     const item = selectedRows.data.map(d => data[d.dataIndex]);
     return (
       <div className={classes.iconContainer}>
@@ -155,7 +155,7 @@ class CustomToolbarSelect extends React.Component {
           </IconButton>
         </Tooltip>
         {ids.length === 1 && <Tooltip title={"Edit"}>
-          <IconButton className={classes.iconButton} onClick={()=>console.log('edit')}>
+          <IconButton className={classes.iconButton}>
           <Link 
                 to={{
                     pathname: this.props.path +ids,

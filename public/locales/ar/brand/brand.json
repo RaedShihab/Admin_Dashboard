@@ -8,5 +8,6 @@
     "brand_icon" : "لوغو الشركة",
     "name": "اسم الشركة",
     "order" : "الطلب",
-    "arabic_name" : "الاسم بالعربية"
+    "arabic_name" : "الاسم بالعربية",
+    "choose_category": "اختيار تصنيف"
 }

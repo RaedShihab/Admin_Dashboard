@@ -10,7 +10,7 @@ export const userService = {
 
 function login(username, password) {
     const body = JSON.stringify({ login:username, password:password })
-    const data = { login:username, password:password }
+    // const data = { login:username, password:password }
 
     const requestOptions = {
         method: 'POST',

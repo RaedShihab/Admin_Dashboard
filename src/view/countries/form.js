@@ -18,6 +18,7 @@ import {
   TextField
 } from '@material-ui/core';
 import LayOut from '../../layOut';
+import {Axios} from '../axiosConfig';
 
 const useStyles = (() => ({
   root: {
@@ -59,6 +60,19 @@ class AccountDetails extends React.Component {
           image: '',
           file:{},
           data: {},
+          icon: '',
+          iconLoading: false,
+          formLoading: false,
+          enName: '',
+          arName: '',
+          isoCode: '',
+          phoneNumber: '',
+          order: '',
+          lat: '',
+          lon: '',
+          arCurrency: '',
+          engCurrency: '',
+          message: '',
         };
       }
       handleClose = (event, reason) => {
@@ -84,42 +98,107 @@ class AccountDetails extends React.Component {
           reader.readAsDataURL(event.target.files[0]);
         }
       }
-      // componentDidMount() {
-      //   if(this.props.data !== undefined) {
-      //     this.setState({data: this.props.data[0]})
-      //   }
-      // }
+      componentDidMount() {
+        const {update, data} = this.props;
+
+        update &&
+        this.setState({
+          formLoading: true,
+          iconLoading: true,
+          })
+
+       update && 
+       Axios.get(`/locations/countries/${data.id}`).then(res => {
+         console.log(res.data.data)
+        this.setState({
+          formLoading: false,
+          iconLoading: false,
+          icon: res.data.data.flag,
+          enName: res.data.data.name.en,
+          arName: res.data.data.name.ar,
+          isoCode: res.data.data.iso_code,
+          phoneNumber: res.data.data.phone_code,
+          arCurrency: res.data.data.currency.ar,
+          engCurrency: res.data.data.currency.en,
+          lat: res.data.data.geoloc.lat,
+          lon: res.data.data.geoloc.lon,
+          order: res.data.data.order
+        })
+       })
+       .catch(err => console.log(err))
+      }
+
+      changeFlag = (media) => {
+        const {t} = this.props
+        this.setState({iconLoading: true})
+        this.props.updateFlag(media)
+        .then(res =>{
+          console.log(res.data.message)
+          if(res.status === 201) {
+           this.setState({
+             showLoading: false,
+             openSnackSucc: true,
+           })
+          }
+          if(res.status === 200) {
+           console.log(res)
+           this.setState({
+             icon: res.data.message,
+             iconLoading: false,
+             showLoading: false,
+             openSnackSucc: true,
+           })
+          }
+        })
+        .catch(err => {
+          console.log(err.response)
+          if(err.response.status === 422) {
+            if(err.response.data.flag !== undefined) {
+              this.setState({
+                message: t("please add SVG file for Country flag"),
+                iconLoading: false,
+                showLoading: false,
+                open422status:true,
+              })
+             }
+          }
+          if(err.response.status === 500) {
+           console.log(err.response)
+           this.setState({
+             showLoading: false,
+             open500status:true,
+           })
+          }
+        })
+      }
+
     render() {
-        const { t, classes } = this.props;
-        const {data} = this.props
-        // const withTernary = () => (
-        //   (!conditionA)
-        //     ? valueC
-        //     : (conditionB)
-        //     ? valueA
-        //     : valueB
-        // );
-          return (
-            <Formik
+        const { t, classes, update, data} = this.props;
+        const {iconLoading, formLoading, enName, arName, isoCode, phoneNumber, lon, lat, engCurrency, arCurrency, order} = this.state
+          return ( 
+            <div>
+               {formLoading&&<LayOut>
+              <CircularProgress size={100} style={{margin: '300px 0px 0px 500px'}}/>
+            </LayOut>}
+           { !formLoading&&<Formik
                 initialValues={{
-                    name: data===undefined? '': data.name.en,
-                    arname: data===undefined? '': data.name.ar,
-                    isoCode: data===undefined? '': data.iso_code,
-                    phone: data===undefined? '': data.phone_code,
-                    // iconn: withTernary(),
-                    icon: data===undefined? this.state.file : data.flag,
-                    currency: data===undefined? '': data.currency.en,
-                    arCurrency: data===undefined? '': data.currency.ar,
-                    // lon: data===undefined? '': data.geoloc.lon,
-                    // lat: data===undefined? '':  data.geoloc.lat,
-                    order: data===undefined? '': data.order
+                  name:!update? '': enName,
+                  arname: !update? '': arName,
+                    isoCode: !update? '': isoCode,
+                    phone: !update? '': phoneNumber,
+                    icon: null,
+                    currency: !update? '': engCurrency,
+                    arCurrency: !update? '': arCurrency,
+                    lon: !update? '': lon,
+                    lat: !update? '':  lat,
+                    order: !update? '': order
                   }}
+                  
                   onSubmit={data => {
                     console.log(data)
                     this.setState({
                       showLoading:true
                     })
-                    console.log(data)
                     let values = new FormData();
                         values.append('name[en]', data.name);
                         values.append('name[ar]', data.name);
@@ -130,10 +209,9 @@ class AccountDetails extends React.Component {
                         values.append('geoloc[lon]', data.lon);
                         values.append('geoloc[lat]', data.lat);
                         values.append('order', data.order);
-                        values.append('flag', this.state.file==={}? data.flag : this.state.file);
-                        this.props.patch && values.append('_method', 'patch');
-                    console.log(values)
-                    this.props.requist(values)
+                        !update && values.append('flag', data.icon);
+                         update&&values.append('_method', 'patch');
+                    this.props.request(values)
                            .then(res =>{
                              console.log(res)
                              this.setState({
@@ -144,10 +222,27 @@ class AccountDetails extends React.Component {
                            .catch(err => {
                              console.log(err.response)
                              if(err.response.status === 422) {
-                              this.setState({
-                                open422status:true,
-                                showLoading: false,
-                                })
+                               if(err.response.data["name.ar"] !== undefined || err.response.data["name.en"] !== undefined) {
+                                this.setState({
+                                  message: t("Country Name, should be uniqe in English and Arabic!"),
+                                  open422status:true,
+                                  showLoading: false,
+                                  })
+                               }
+                               if(err.response.data.flag !== undefined) {
+                                this.setState({
+                                  message: t("please add SVG icon"),
+                                  open422status:true,
+                                  showLoading: false,
+                                  })
+                               }
+                               if(err.response.data.iso_code !== undefined) {
+                                this.setState({
+                                  message: t("Iso Code shuld be 2 characters"),
+                                  open422status:true,
+                                  showLoading: false,
+                                  })
+                               }
                             }
                             if(err.response.status === 500) {
                               this.setState({
@@ -185,15 +280,11 @@ class AccountDetails extends React.Component {
                                   <Card>
                                     <CardContent>
                                       <div className={classes.details}>
-                                      
-                                      {data !== undefined&&<Avatar
+                                      {!iconLoading&&<Avatar
                                           className={classes.avatar}
-                                          src={this.state.image===''? data.flag: this.state.image}
+                                          src={this.state.icon}
                                         />}
-                                       {data === undefined && <Avatar
-                                          className={classes.avatar}
-                                          src={this.state.image}
-                                        />}
+                                          {iconLoading&&<CircularProgress style={{margin: 25}}/>}
                                         <Typography
                                         style={{margin: 30}}
                                         gutterBottom
@@ -206,8 +297,24 @@ class AccountDetails extends React.Component {
                                     <Divider />
                                     <CardActions>
                                     <input
-                                    // helperText={(props.errors.icon && props.touched.icon) && props.errors.icon}
-                                      onChange={this.onImageChange}
+                                     name='icon'
+                                     onChange={(event) => {
+                                          if (!update && event.target.files && event.target.files[0]) {
+                                            let reader = new FileReader();
+                                            reader.onload = (e) => {
+                                              this.setState({
+                                                icon: e.target.result,
+                                              });
+                                            };
+                                            reader.readAsDataURL(event.target.files[0]);
+                                          }
+                                          props.setFieldValue("icon", event.currentTarget.files[0]);
+                                          const media = new FormData();
+                                          media.append('flag', event.currentTarget.files[0])
+                                          media.append('_method', 'patch')
+                                          update&&this.changeFlag(media)
+                                        }}
+
                                       accept="image/*"
                                       id="contained-button-file"
                                       multiple
@@ -222,7 +329,7 @@ class AccountDetails extends React.Component {
                                     </CardActions>
                                   </Card>
                                 </Grid>
-                                
+  
                                 <Grid
                                     item
                                     lg={8}
@@ -247,7 +354,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data !== undefined? data.name.en : '' }
+                                                defaultValue={update? enName : '' }
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
@@ -263,7 +370,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data!== undefined? data.name.ar : ''}
+                                                defaultValue={update? arName : ''}
                                                 label={t("arabic_name")}
                                                 name="arname"
                                                 onChange={props.handleChange}
@@ -279,7 +386,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data!== undefined? data.iso_code : ''}
+                                                defaultValue={update? isoCode : ''}
                                                 label={t("isoCode")}
                                                 name="isoCode"
                                                 onChange={props.handleChange}
@@ -295,7 +402,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data!==undefined? data.phone_code: ''}
+                                                defaultValue={update? phoneNumber : ''}
                                                 label={t("phone_code")}
                                                 name="phone"
                                                 onChange={props.handleChange}
@@ -311,7 +418,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data!== undefined? data.currency.en: ''}
+                                                defaultValue={update? engCurrency : ''}
                                                 label={t("currency")}
                                                 name="currency"
                                                 onChange={props.handleChange}
@@ -327,7 +434,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data!== undefined? data.currency.ar: ''}
+                                                defaultValue={update? arCurrency : ''}
                                                 label={t("currency_arabic")}
                                                 name="arCurrency"
                                                 onChange={props.handleChange}
@@ -343,7 +450,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                // defaultValue={data!== undefined? data.geoloc.lon: ''}
+                                                defaultValue={update? lon : ''}
                                                 label={t("lon")}
                                                 name="lon"
                                                 onChange={props.handleChange}
@@ -359,7 +466,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                // defaultValue={data!== undefined? data.geoloc.lat: ''}
+                                                defaultValue={update? lat: ''}
                                                 label={t("lat")}
                                                 name="lat"
                                                 onChange={props.handleChange}
@@ -375,7 +482,7 @@ class AccountDetails extends React.Component {
                                               xs={12}
                                             >
                                                 <TextField
-                                                defaultValue={data!== undefined? data.order : ''}
+                                                defaultValue={update? order : ''}
                                                 label={t("order_number")}
                                                 name="order"
                                                 onChange={props.handleChange}
@@ -437,7 +544,7 @@ class AccountDetails extends React.Component {
                                                 severity="error"
                                                 style={{backgroundColor: 'red', color: 'white'}}
                                                 >
-                                                {t("Country Name, Phone Code, ISO Code, Should be uniqe! ")}
+                                                {this.state.message}
                                                 </Alert>
                                             </Snackbar>
                                             <Snackbar
@@ -460,7 +567,7 @@ class AccountDetails extends React.Component {
                              </LayOut>
                     </form>
                   })} 
-                  validationSchema={data === undefined&&Yup.object().shape({
+                  validationSchema={Yup.object().shape({
                     name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
                     .min(2, 'Seems a bit short...'),
                     arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
@@ -475,7 +582,9 @@ class AccountDetails extends React.Component {
                     order: Yup.number().integer().required(t('countries/validations:required')),
                     // icon: Yup.mixed().required('A file is required')
                   })}
-            />
+            />}
+            </div>
+           
           );
         }
 };

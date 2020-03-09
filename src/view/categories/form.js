@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from 'yup';
 import { withStyles } from '@material-ui/styles';
 import { withTranslation } from "react-i18next";
-import {Formik, Field} from 'formik'
+import {Formik} from 'formik'
 import PropTypes from 'prop-types';
 import { CircularProgress, Avatar, Typography} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
@@ -20,7 +20,6 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {Axios} from '../axiosConfig';
@@ -191,7 +190,7 @@ class AccountDetails extends React.Component {
 
       changeIcon = (media) => {
         this.setState({iconLoading: true})
-        this.props.updateIconRequist(media, '/icon')
+        this.props.updateFlag(media, '/icon')
         .then(res =>{
           console.log(res)
           if(res.status === 201) {
@@ -402,7 +401,7 @@ class AccountDetails extends React.Component {
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("cover")}
+                                        {t("cover")}
                                       </Typography>
                                       </div>
                                     </CardContent>
@@ -469,7 +468,7 @@ class AccountDetails extends React.Component {
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("icon")}
+                                        {t("icon")}
                                       </Typography>
                                       </div>
                                     </CardContent>
@@ -521,7 +520,7 @@ class AccountDetails extends React.Component {
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("banner")}
+                                        {t("banner")}
                                       </Typography>
                                       </div>
                                     </CardContent>
@@ -586,7 +585,7 @@ class AccountDetails extends React.Component {
                                         gutterBottom
                                         variant="h6"
                                       >
-                                        {("image")}
+                                        {t("image")}
                                       </Typography>
                                       </div>
                                     </CardContent>
@@ -659,7 +658,7 @@ class AccountDetails extends React.Component {
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                label={("category_name")}
+                                                label={t("name")}
                                                 name="name"
                                                 onChange={props.handleChange}
                                                 helperText={(props.errors.name && props.touched.name) && props.errors.name}
@@ -672,7 +671,7 @@ class AccountDetails extends React.Component {
                                             >
                                                 <TextField
                                                  defaultValue={update ? data.name.ar : ''}
-                                                label={("arabic_name")}
+                                                label={t("arabic_name")}
                                                 name="arname"
                                                 onChange={props.handleChange}
                                                 fullWidth
@@ -688,7 +687,7 @@ class AccountDetails extends React.Component {
                                             >
                                                 <TextField
                                                 defaultValue={update? data.description.en : ''}
-                                                label={("category_discription")}
+                                                label={t("category_discription")}
                                                 name="description"
                                                 onChange={props.handleChange}
                                                 fullWidth
@@ -737,7 +736,7 @@ class AccountDetails extends React.Component {
                                                           value={true}
                                                           inputProps={{ 'aria-label': 'primary checkbox' }} />
                                                       }
-                                                      label={t("it_is_real_estate")}
+                                                      label={t("is_it_a_real_estate")}
                                                       />
                                              </Grid>
                                              </Grid>
@@ -802,20 +801,7 @@ class AccountDetails extends React.Component {
                                               </Alert>
                                             </Snackbar>
                                             <Snackbar
-                                                // autoHideDuration={10000}
-                                                onClose={this.handleClose}
-                                                open={this.state.open422status}
-                                            >
-                                                <Alert
-                                                onClose={this.handleClose}
-                                                severity="error"
-                                                style={{backgroundColor: 'red', color: 'white'}}
-                                                >
-                                                {t("Country Name, Phone Code, ISO Code, Should be uniqe! ")}
-                                                </Alert>
-                                            </Snackbar>
-                                            <Snackbar
-                                                // autoHideDuration={10000}
+                                                autoHideDuration={3000}
                                                 onClose={this.handleClose}
                                                 open={this.state.open500status}
                                             >
@@ -824,7 +810,7 @@ class AccountDetails extends React.Component {
                                                 severity="error"
                                                 style={{backgroundColor: 'red', color: 'white'}}
                                                 >
-                                                {t("Server Error Please try again!")}
+                                                {t("server_err")}
                                                 </Alert>
                                             </Snackbar>
                                           </div>

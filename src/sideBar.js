@@ -16,7 +16,6 @@ import PeopleIcon from '@material-ui/icons/People';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import EmojiTransportationIcon from '@material-ui/icons/EmojiTransportation';
 import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import CategoryIcon from '@material-ui/icons/Category';
 import ExtensionIcon from '@material-ui/icons/Extension';

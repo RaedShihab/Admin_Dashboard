@@ -3,16 +3,16 @@ import Form from './formm';
 import {Axios} from '../axiosConfig';
 
 const Add = ()=> {
-   const requist =(values)=> {
+   const request =(values)=> {
      console.log(values)
-    return Axios.post('/cities', values)
+    return Axios.post('/locations/cities', values)
   }
     return(
       <div>
         <Form 
         response={"the_city_has_added_successfuly"} 
-        requist={requist}
-        patch={false}
+        request={request}
+        update={false}
         />
       </div>
     );
