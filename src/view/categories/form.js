@@ -24,6 +24,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {Axios} from '../axiosConfig';
 import LayOut from '../../layOut';
+import FormDialog from './spesification'
 
 const useStyles = (() => ({
   root: {
@@ -52,7 +53,7 @@ const useStyles = (() => ({
     backgroundColor: 'white', borderRadius: 5, marginTop: 10
     },
     btn: {
-      marginTop: 20, width: '25%'
+      margin: 14, width: '25%'
     },
     margin: {
       marginTop: 15
@@ -110,6 +111,7 @@ class AccountDetails extends React.Component {
           })
 
           update && this.props.getCategory(this.props.data.id).then(res=>{
+            console.log(res.data.data)
           this.setState({
             coverLoading: false,
             iconLoading: false,
@@ -190,9 +192,9 @@ class AccountDetails extends React.Component {
 
       changeIcon = (media) => {
         this.setState({iconLoading: true})
-        this.props.updateFlag(media, '/icon')
+        this.props.updateIconRequist(media, '/icon')
         .then(res =>{
-          console.log(res)
+          console.log(res.data.data)
           if(res.status === 201) {
            console.log(res)
            this.setState({
@@ -557,7 +559,7 @@ class AccountDetails extends React.Component {
                                         Upload
                                       </Button>
                                     </label>
-                                    {update && banner !== '' && banner !== undefined && banner !== undefined && <Button
+                                    {update && banner !== '' && banner !== undefined && banner !== null && <Button
                                     onClick={()=>this.deleteMedia(data.id, "banner")}
                                     className={classes.deleteBtn} 
                                     variant="contained" 
@@ -639,9 +641,11 @@ class AccountDetails extends React.Component {
                                     </div>
                                     <Grid item xs={9}>
                                     <Card className={classes.form}>
-                              <CardHeader
+                              {/* <CardHeader
+                              className={classes.CardHeader}
                                       title={t("category_form")}
-                                      />
+                                      /> */}
+                                      <FormDialog/>
                                       <Divider />
                                       <CardContent >
                                           <Grid
@@ -828,3 +832,141 @@ AccountDetails.propTypes = {
     classes: PropTypes.object.isRequired,
   };
   export default withStyles(useStyles)(withTranslation(["categories/addUpdate", "countries/validations"])(AccountDetails));
+// import React from 'react';
+// import { makeStyles } from '@material-ui/core/styles';
+// import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+// import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+// import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+// import Typography from '@material-ui/core/Typography';
+// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+// import TextField from '@material-ui/core/TextField';
+// import {Grid,CardContent,} from '@material-ui/core';
+// import FormGroup from '@material-ui/core/FormGroup';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import {Checkbox, Divider, Button, DialogContent, Dialog} from '@material-ui/core';
+
+// const useStyles = makeStyles(theme => ({
+//   root: {
+//     width: '100%',
+//   },
+//   heading: {
+//     fontSize: theme.typography.pxToRem(15),
+//     flexBasis: '33.33%',
+//     flexShrink: 0,
+//   },
+//   secondaryHeading: {
+//     fontSize: theme.typography.pxToRem(15),
+//     color: theme.palette.text.secondary,
+//   },
+// }));
+
+// export default function ControlledExpansionPanels() {
+//   const classes = useStyles();
+//   const [expanded, setExpanded] = React.useState(false);
+
+//   const handleChange = panel => (event, isExpanded) => {
+//     setExpanded(isExpanded ? panel : false);
+//   };
+
+//   return (
+//     <Dialog open={true}>
+//       <DialogContent>
+//       <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+//         <ExpansionPanelSummary
+//           expandIcon={<ExpandMoreIcon />}
+//           aria-controls="panel1bh-content"
+//           id="panel1bh-header"
+//         >
+//           <Typography className={classes.heading}>General settings</Typography>
+//         </ExpansionPanelSummary>
+//         <ExpansionPanelDetails>
+//         <form>
+//                          <CardContent>
+//                             <Grid
+//                             container
+//                             spacing={3}
+//                             >
+//                                 <Grid
+//                                 item
+//                                 sm={12}
+//                                 xs={12}
+//                             >
+//                                 <Typography variant='h5'>Text Specification</Typography>
+//                             </Grid>
+//                             <Grid
+//                                 item
+//                                 sm={12}
+//                                 xs={12}
+//                             >
+//                                 <TextField
+//                                 // defaultValue={update ? data.name.en : '' }
+//                                 fullWidth
+//                                 margin="dense"
+//                                 variant="outlined"
+//                                 label={("name")}
+//                                 name="name"
+//                                 // onChange={props.handleChange}
+//                                 // helperText={(props.errors.name && props.touched.name) && props.errors.name}
+//                                 />
+//                             </Grid>
+//                             <Grid
+//                                 item
+//                                 sm={6}
+//                                 xs={12}
+//                             >
+//                                 <TextField
+//                                     // defaultValue={update ? data.name.ar : ''}
+//                                 label={("lable")}
+//                                 name="arname"
+//                                 // onChange={props.handleChange}
+//                                 fullWidth
+//                                 margin="dense"
+//                                 variant="outlined"
+//                                 // helperText={(props.errors.arname && props.touched.arname) && props.errors.arname}
+//                                 />
+//                             </Grid>
+//                             <Grid
+//                                 item
+//                                 sm={6}
+//                                 xs={12}
+//                             >
+//                                 <TextField
+//                                 // defaultValue={update? data.description.en : ''}
+//                                 label={("lable")}
+//                                 name="description"
+//                                 // onChange={props.handleChange}
+//                                 fullWidth
+//                                 margin="dense"
+//                                 variant="outlined"
+//                                 // helperText={(props.errors.description && props.touched.description) && props.errors.description}
+//                                 />
+//                             </Grid>
+//                                         </Grid>
+//                                 </CardContent>
+//                                 <FormGroup row>
+//                                 <FormControlLabel
+//                                     control={
+//                                     <Checkbox
+//                                         // checked={state.checkedB}
+//                                         // onChange={handleChange('checkedB')}
+//                                         value="checkedB"
+//                                         color="primary"
+//                                     />
+//                                     }
+//                                     label="Required"
+//                                 />
+//                                 </FormGroup>
+//                                 <Divider/>
+//                                     <Button 
+//                                     className={classes.AddBtn}
+//                                     // onClick={mainProps.handleClose}
+//                                      variant="contained" color="primary">
+//                                         add
+//                                 </Button>
+//                                     </form>
+//         </ExpansionPanelDetails>
+//       </ExpansionPanel>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// }
