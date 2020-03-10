@@ -1,4 +1,6 @@
 import React from 'react';
+import *  as Yup from 'yup';
+import { withTranslation } from "react-i18next";
 import {Formik} from 'formik';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -17,18 +19,33 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TextFormDialog(props) {
+function TextFormDialog(props) {
   const mainProps = props
+  const {t, update} = props
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleChange = panel => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
 
   return (
         <React.Fragment>
-            <Formik>
+            <Formik
+                initialValues={{
+                    name:'',
+                    lable: '',
+                    arLable: '',
+                    select: '',
+                    required: ''
+                  }}
+                  onSubmit={data => {
+                    console.log(data)
+                  }}
+                  validationSchema={Yup.object().shape({
+                    name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
+                    .min(2, 'Seems a bit short...'),
+                    lable: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+                    .min(2, 'Seems a bit short...'),
+                    arLable: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+                    .min(2, 'Seems a bit short...'),
+                  })}
+            >
             {(props=> {
                     return <form>
                          <CardContent>
@@ -49,7 +66,7 @@ export default function TextFormDialog(props) {
                                 label={("name")}
                                 name="name"
                                 onChange={props.handleChange}
-                                // helperText={(props.errors.name && props.touched.name) && props.errors.name}
+                                helperText={(props.errors.name && props.touched.name) && props.errors.name}
                                 />
                             </Grid>
                             <Grid
@@ -60,12 +77,12 @@ export default function TextFormDialog(props) {
                                 <TextField
                                     // defaultValue={update ? data.name.ar : ''}
                                 label={("lable")}
-                                name="arname"
+                                name="lable"
                                 onChange={props.handleChange}
                                 fullWidth
                                 margin="dense"
                                 variant="outlined"
-                                // helperText={(props.errors.arname && props.touched.arname) && props.errors.arname}
+                                helperText={(props.errors.lable && props.touched.lable) && props.errors.lable}
                                 />
                             </Grid>
                             <Grid
@@ -75,13 +92,13 @@ export default function TextFormDialog(props) {
                             >
                                 <TextField
                                 // defaultValue={update? data.description.en : ''}
-                                label={("lable")}
-                                name="description"
+                                label={("arabic_lable")}
+                                name="arLable"
                                 onChange={props.handleChange}
                                 fullWidth
                                 margin="dense"
                                 variant="outlined"
-                                // helperText={(props.errors.description && props.touched.description) && props.errors.description}
+                                helperText={(props.errors.arLable && props.touched.arLable) && props.errors.arLable}
                                 />
                             </Grid>
                                         </Grid>
@@ -90,9 +107,9 @@ export default function TextFormDialog(props) {
                                 <FormControlLabel
                                     control={
                                     <Checkbox
-                                        // checked={state.checkedB}
-                                        // onChange={handleChange('checkedB')}
-                                        value="checkedB"
+                                        name="required"
+                                        onChange={props.handleChange('required')}
+                                        value={true}
                                         color="primary"
                                     />
                                     }
@@ -100,9 +117,10 @@ export default function TextFormDialog(props) {
                                 />
                                 </FormGroup>
                                 <Divider/>
-                                    <Button 
+                                    <Button
+                                    type="submit"
                                     className={classes.AddBtn}
-                                    onClick={mainProps.handleClose} variant="contained" color="primary">
+                                    variant="contained" color="primary">
                                         add
                                 </Button>
                                     </form>}
@@ -111,3 +129,5 @@ export default function TextFormDialog(props) {
                 </React.Fragment>
                 );
                 }
+        
+       export default withTranslation(["countries/addApdate", "countries/validations"])(TextFormDialog)

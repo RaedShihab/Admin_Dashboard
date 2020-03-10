@@ -24,6 +24,7 @@ const useStyles = makeStyles({
 });
 
 export default function FormDialog(props) {
+  const {update} = props
   const [open, setOpen] = React.useState(false);
 
   const classes = useStyles();
@@ -88,13 +89,11 @@ export default function FormDialog(props) {
         </Toolbar>
       </AppBar>
         </DialogTitle>
-        
         {showDefault&&<DialogContent>
             <DialogContentText>
                 Please Choose spesification type to show the form that you need
             </DialogContentText>
         </DialogContent>}
-
 
         {showTextForm &&<DialogContent>
             <ExpansionPanel expanded={expanded === 'text'} onChange={expandText('text')}>
@@ -106,11 +105,11 @@ export default function FormDialog(props) {
           <Typography variant='h6'>Text Specification</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-        <TextForm handleClose={handleClose}/>
+        <TextForm update={update} handleClose={handleClose}/>
         </ExpansionPanelDetails>
             </ExpansionPanel>
         </DialogContent>}
-
+        
 
         {showNumberForm &&<DialogContent>
             <ExpansionPanel expanded={expanded === 'number'} onChange={expandNumber('number')}>
@@ -122,7 +121,7 @@ export default function FormDialog(props) {
           <Typography variant='h6'>Number Specification</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-        <NumberForm handleClose={handleClose}/>
+        <NumberForm update={update} handleClose={handleClose}/>
         </ExpansionPanelDetails>
             </ExpansionPanel>
         </DialogContent>}
