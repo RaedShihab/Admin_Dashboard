@@ -24,8 +24,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {Axios} from '../axiosConfig';
 import LayOut from '../../layOut';
-import SpacificationForm from './spesification';
-import UpdateSpacification from './updateSpesification';
+import SpacificationForm from './specifications/createSpesification';
+import UpdateSpacification from './specifications/updateSpesification';
 
 const useStyles = (() => ({
   root: {

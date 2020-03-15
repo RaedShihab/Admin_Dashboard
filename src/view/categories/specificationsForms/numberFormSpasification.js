@@ -10,7 +10,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {Checkbox, Divider, Snackbar, CircularProgress} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import {Axios} from '../axiosConfig';
+import {Axios} from '../../axiosConfig';
 
 const useStyles = makeStyles({
   btn: {
@@ -19,13 +19,15 @@ const useStyles = makeStyles({
   AddBtn: {
     margin: 5,
   },
+  circularProgress: {
+    margin: '50px 0px 0px 150px'
+  }
 });
 
 function TextFormDialog(props) {
-  const {t, update, categoryId, updateSpecification, textSpacification, addSpecification} = props
+  const {t, update, categoryId, updateSpecification, numberSpacification, addSpecification} = props
   const classes = useStyles();
-  const id = update? textSpacification._id: categoryId
-
+  const id = update? numberSpacification._id: categoryId
   const [openSnackSucc, setopenSnackSucc] = React.useState(false);
   const [openSnackErr, setopenSnackErr] = React.useState(false);
   const[message, setMessage] = React.useState('');
@@ -35,15 +37,19 @@ function TextFormDialog(props) {
   const[name, setname] = React.useState([])
   const[label, setLabel] = React.useState([])
   const[arLabel, setArLabel] = React.useState([])
+  const[min, setMin] = React.useState([])
+  const[max, setMax] = React.useState([])
   const[is_required, set_is_required] = React.useState([])
 
   const showSpecification = ()=> {
     setGettingData(true)
-    Axios.get(`/categories/specifications/${textSpacification._id}`)
+    Axios.get(`/categories/specifications/${numberSpacification._id}`)
     .then(res=> {
         setname(res.data.data.name)
         setLabel(res.data.data.label.en)
         setArLabel(res.data.data.label.ar)
+        setMin(res.data.data.constraints.min)
+        setMax(res.data.data.constraints.max)
         set_is_required(res.data.data.is_required==='1'?true: false)
         setGettingData(false)
         console.log(res.data.data)
@@ -66,20 +72,22 @@ function TextFormDialog(props) {
     setopenSnackSucc(false)
   };
 
-  const handleCheck = (e)=> {
+  const handleCheck = ()=> {
     set_is_required(!is_required)
   }
 
   return (
         <React.Fragment>
-          {gettingData&&
-              <CircularProgress size={100} style={{margin: '300px 0px 0px 500px'}}/>
+             {gettingData&&
+              <CircularProgress size="70px" className={classes.circularProgress}/>
             }
             {!gettingData&&<Formik
                 initialValues={{
                     name: !update? '': name,
                     lable: !update? '': label,
                     arLable: !update? '': arLabel,
+                    from: !update? '': min,
+                    to: !update? '': max,
                     required: !update? '': is_required,
                   }}
                   onSubmit={data => {
@@ -90,7 +98,9 @@ function TextFormDialog(props) {
                     values.append('name', data.name);
                     values.append('label[en]', data.lable);
                     values.append('label[ar]', data.arLable);
-                    !update&&values.append('type', 'text');
+                    values.append('constraints[min]', parseInt(data.from))
+                    values.append('constraints[max]', parseInt(data.to))
+                    !update && values.append('type', 'number');
                     values.append('is_required', booleanToInt);
                     const request = update? updateSpecification : addSpecification
                     request(id, values)
@@ -118,12 +128,14 @@ function TextFormDialog(props) {
                   }}
 
                   validationSchema={Yup.object().shape({
-                    name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
+                    name: Yup.string('Enter a name').required(t('required'))
                     .min(2, 'Seems a bit short...'),
-                    lable: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+                    lable: Yup.string('Enter a name').required(t('required'))
                     .min(2, 'Seems a bit short...'),
-                    arLable: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
+                    arLable: Yup.string('Enter a name').required(t('required'))
                     .min(2, 'Seems a bit short...'),
+                    from: Yup.number().min(0).max(1000).required(t('required')),
+                    to: Yup.number().min(0).max(1000).required(t('required')),
                   })}
             >
             {(props=> {
@@ -182,6 +194,38 @@ function TextFormDialog(props) {
                                 margin="dense"
                                 variant="outlined"
                                 helperText={(props.errors.arLable && props.touched.arLable) && props.errors.arLable}
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                sm={6}
+                                xs={12}
+                            >
+                                <TextField
+                                defaultValue={update ? min : ''}
+                                label={("from")}
+                                name="from"
+                                onChange={props.handleChange}
+                                fullWidth
+                                margin="dense"
+                                variant="outlined"
+                                helperText={(props.errors.from && props.touched.from) && props.errors.from}
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                sm={6}
+                                xs={12}
+                            >
+                                <TextField
+                                defaultValue={update ? max : ''}
+                                label={("to")}
+                                name="to"
+                                onChange={props.handleChange}
+                                fullWidth
+                                margin="dense"
+                                variant="outlined"
+                                helperText={(props.errors.to && props.touched.to) && props.errors.to}
                                 />
                             </Grid>
                                         </Grid>

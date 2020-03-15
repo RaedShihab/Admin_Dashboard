@@ -11,9 +11,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import TextForm from './textFormSpacification';
-import NumberForm from './numberFormSpasification';
-import {Axios} from '../axiosConfig';
+import TextForm from '../specificationsForms/textFormSpacification';
+import NumberForm from '../specificationsForms/numberFormSpasification';
 
 const useStyles = makeStyles({
   btn: {
@@ -24,19 +23,13 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UpdateSpacification(props) {
-  const {update, categoryId, updateSpecification} = props
+export default function SpacificationForm(props) {
+  const {update, categoryId, addSpecification} = props
   const [open, setOpen] = React.useState(false);
-  const [spacificationArray, setSpacArray] = React.useState([]);
 
   const classes = useStyles()
 
   const handleClickOpen = () => {
-    Axios.get(`/categories/${categoryId}/specifications`)
-  .then(res => {
-    setSpacArray(res.data.data)
-    console.log(res.data.data)
-  })
     setOpen(true);
   };
 
@@ -66,20 +59,10 @@ export default function UpdateSpacification(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const textsSpacArray = spacificationArray.filter((spac)=> {
-    return spac.type === 'text'
-})
-console.log(textsSpacArray)
-
-  const numberSpacArray = spacificationArray.filter((spac)=> {
-      return spac.type === 'number'
-  })
-  console.log(numberSpacArray)
-
   return (
     <div>
       <Button className={classes.btn} variant="contained" color="primary" onClick={handleClickOpen}>
-        update specification
+        add specification
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">
@@ -113,8 +96,7 @@ console.log(textsSpacArray)
         </DialogContent>}
 
         {showTextForm &&<DialogContent>
-          {textsSpacArray.map(spacification =>
-             <ExpansionPanel expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
+            <ExpansionPanel expanded={expanded === 'text'} onChange={expandText('text')}>
             <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
@@ -123,17 +105,14 @@ console.log(textsSpacArray)
           <Typography variant='h6'>Text Specification</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-         <TextForm update={update} updateSpecification={updateSpecification} textSpacification={spacification}/>
+        <TextForm addSpecification={addSpecification} categoryId={categoryId} update={update}/>
         </ExpansionPanelDetails>
             </ExpansionPanel>
-            )}
-
         </DialogContent>}
-
+        
 
         {showNumberForm &&<DialogContent>
-          {numberSpacArray.map(spacification =>
-             <ExpansionPanel expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
+            <ExpansionPanel expanded={expanded === 'number'} onChange={expandNumber('number')}>
             <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
@@ -142,11 +121,9 @@ console.log(textsSpacArray)
           <Typography variant='h6'>Number Specification</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-         <NumberForm update={update} updateSpecification={updateSpecification} numberSpacification={spacification}/>
+        <NumberForm addSpecification={addSpecification} categoryId={categoryId} update={update}/>
         </ExpansionPanelDetails>
             </ExpansionPanel>
-            )}
-
         </DialogContent>}
 
       </Dialog>
