@@ -69,7 +69,7 @@ function TextFormDialog(props) {
     setopenSnackSucc(false)
   };
 
-  const handleCheck = (e)=> {
+  const handleCheck = ()=> {
     set_is_required(!is_required)
   }
 
