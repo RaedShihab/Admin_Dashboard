@@ -24,7 +24,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {Axios} from '../axiosConfig';
 import LayOut from '../../layOut';
-import FormDialog from './spesification'
+import SpacificationForm from './spesification';
+import UpdateSpacification from './updateSpesification';
 
 const useStyles = (() => ({
   root: {
@@ -111,7 +112,6 @@ class AccountDetails extends React.Component {
           })
 
           update && this.props.getCategory(this.props.data.id).then(res=>{
-            console.log(res.data.data)
           this.setState({
             coverLoading: false,
             iconLoading: false,
@@ -279,7 +279,7 @@ class AccountDetails extends React.Component {
      }
     render() {
  
-        const { t ,classes, data, update} = this.props;
+        const { t ,classes, data, update, updateSpecification, addSpecification} = this.props;
         const {coverLoading, iconLoading, imageLoading, bannerLoading, cover, banner, image} = this.state
         return (
             <div
@@ -641,11 +641,18 @@ class AccountDetails extends React.Component {
                                     </div>
                                     <Grid item xs={9}>
                                     <Card className={classes.form}>
-                              {/* <CardHeader
+                                    <Grid
+                                      container
+                                      // spacing={1}
+                                    >
+                                    
+                                      {update&&<SpacificationForm update={false} addSpecification={addSpecification}  categoryId={data.id}/>}
+                                      {update&&<UpdateSpacification update={true} updateSpecification={updateSpecification}  categoryId={data.id}/>}
+                                      </Grid>
+                              {!update&&<CardHeader
                               className={classes.CardHeader}
                                       title={t("category_form")}
-                                      /> */}
-                                      <FormDialog update={update}/>
+                                      />}
                                       <Divider />
                                       <CardContent >
                                           <Grid

@@ -8,7 +8,9 @@ import {Grid,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import {Checkbox, Divider, Typography} from '@material-ui/core';
+import {Checkbox, Divider, Snackbar, CircularProgress} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import {Axios} from '../axiosConfig';
 
 const useStyles = makeStyles({
   btn: {
@@ -20,23 +22,101 @@ const useStyles = makeStyles({
 });
 
 function TextFormDialog(props) {
-  const mainProps = props
-  const {t, update} = props
+  const {t, update, categoryId, updateSpecification, textSpacification, addSpecification} = props
   const classes = useStyles();
+  const id = update? textSpacification._id: categoryId
+
+  const [openSnackSucc, setopenSnackSucc] = React.useState(false);
+  const [openSnackErr, setopenSnackErr] = React.useState(false);
+  const[message, setMessage] = React.useState('');
+  const[loading, setLoading] = React.useState(false);
+  const[gettingData, setGettingData] = React.useState(false);
+
+  const[name, setname] = React.useState([])
+  const[label, setLabel] = React.useState([])
+  const[arLabel, setArLabel] = React.useState([])
+  const[is_required, set_is_required] = React.useState([])
+
+  const showSpecification = ()=> {
+    setGettingData(true)
+    Axios.get(`/categories/specifications/${textSpacification._id}`)
+    .then(res=> {
+        setname(res.data.data.name)
+        setLabel(res.data.data.label.en)
+        setArLabel(res.data.data.label.ar)
+        set_is_required(res.data.data.is_required==='1'?true: false)
+        setGettingData(false)
+        console.log(res.data.data)
+    })
+    .catch(err => {
+        setGettingData(false)
+        console.log(err.response)
+    })
+  }
+
+  React.useEffect(()=> {
+      update&&showSpecification()
+  }, [])
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setopenSnackErr(false)
+    setopenSnackSucc(false)
+  };
+
+  const handleCheck = (e)=> {
+    set_is_required(!is_required)
+  }
 
   return (
         <React.Fragment>
-            <Formik
+          {gettingData&&
+              <CircularProgress size={100} style={{margin: '300px 0px 0px 500px'}}/>
+            }
+            {!gettingData&&<Formik
                 initialValues={{
-                    name:'',
-                    lable: '',
-                    arLable: '',
-                    select: '',
-                    required: ''
+                    name: !update? '': name,
+                    lable: !update? '': label,
+                    arLable: !update? '': arLabel,
+                    required: !update? '': is_required,
                   }}
                   onSubmit={data => {
-                    console.log(data)
+                      console.log(data)
+                      setLoading(true)
+                    const booleanToInt = data.required? '1': '0'
+                    const values = new FormData()
+                    values.append('name', data.name);
+                    values.append('label[en]', data.lable);
+                    values.append('label[ar]', data.arLable);
+                    !update&&values.append('type', 'text');
+                    values.append('is_required', booleanToInt);
+                    const request = update? updateSpecification : addSpecification
+                    request(id, values)
+                    .then(res => {
+                      console.log(res)
+                      if(res.status === 200 || res.status === 201) {
+                        setopenSnackSucc(true)
+                        setMessage('the spacification has added successfuly')
+                        setLoading(false)
+                      }
+                    })
+                    .catch(err=> {
+                      console.log(err.response)
+                      if(err.response.status === 244) {
+                        setopenSnackErr(true)
+                        setMessage('please add unique name')
+                        setLoading(false)
+                      }
+                      if(err.response.status === 404) {
+                        setopenSnackErr(true)
+                        setMessage('404 Page not found')
+                        setLoading(false)
+                      }
+                    })
                   }}
+
                   validationSchema={Yup.object().shape({
                     name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
                     .min(2, 'Seems a bit short...'),
@@ -47,7 +127,10 @@ function TextFormDialog(props) {
                   })}
             >
             {(props=> {
-                    return <form>
+                    return <form
+                            autoComplete="off"
+                            noValidate
+                            onSubmit={props.handleSubmit}>
                          <CardContent>
                             <Grid
                             container
@@ -59,7 +142,7 @@ function TextFormDialog(props) {
                                 xs={12}
                             >
                                 <TextField
-                                // defaultValue={update ? data.name.en : '' }
+                                defaultValue={update ? name: '' }
                                 fullWidth
                                 margin="dense"
                                 variant="outlined"
@@ -75,7 +158,7 @@ function TextFormDialog(props) {
                                 xs={12}
                             >
                                 <TextField
-                                    // defaultValue={update ? data.name.ar : ''}
+                                    defaultValue={update ? label : ''}
                                 label={("lable")}
                                 name="lable"
                                 onChange={props.handleChange}
@@ -91,7 +174,7 @@ function TextFormDialog(props) {
                                 xs={12}
                             >
                                 <TextField
-                                // defaultValue={update? data.description.en : ''}
+                                defaultValue={update? arLabel : ''}
                                 label={("arabic_lable")}
                                 name="arLable"
                                 onChange={props.handleChange}
@@ -106,9 +189,19 @@ function TextFormDialog(props) {
                                 <FormGroup row>
                                 <FormControlLabel
                                     control={
+                                    update?
+                                    <Checkbox
+                                    checked={is_required}
+                                    onClick={handleCheck}
+                                        name="required"
+                                        onChange={props.handleChange}
+                                        value={true}
+                                        color="primary"
+                                    />
+                                    :
                                     <Checkbox
                                         name="required"
-                                        onChange={props.handleChange('required')}
+                                        onChange={props.handleChange}
                                         value={true}
                                         color="primary"
                                     />
@@ -121,13 +214,42 @@ function TextFormDialog(props) {
                                     type="submit"
                                     className={classes.AddBtn}
                                     variant="contained" color="primary">
-                                        add
-                                </Button>
+                                        {!loading&&'add'}
+                                        {loading&&<CircularProgress color="white" size="25px"/>}
+                                  </Button>
+                                  <div>
+                                            <Snackbar
+                                              autoHideDuration={3000}
+                                              onClose={handleClose}
+                                              open={openSnackSucc}
+                                            >
+                                              <Alert
+                                                onClose={handleClose}
+                                                severity="success"
+                                                style={{backgroundColor: 'green', color: 'white'}}
+                                              >
+                                                {message}
+                                              </Alert>
+                                            </Snackbar>
+                                            <Snackbar
+                                              autoHideDuration={3000}
+                                              onClose={handleClose}
+                                              open={openSnackErr}
+                                            >
+                                              <Alert
+                                                onClose={handleClose}
+                                                severity="error"
+                                                style={{backgroundColor: 'red', color: 'white'}}
+                                              >
+                                                {message}
+                                              </Alert>
+                                            </Snackbar>
+                                          </div>
                                     </form>}
                              )}
-                    </Formik>
+                    </Formik>}
                 </React.Fragment>
                 );
                 }
         
-       export default withTranslation(["countries/addApdate", "countries/validations"])(TextFormDialog)
+export default withTranslation(["countries/addApdate", "countries/validations"])(TextFormDialog)

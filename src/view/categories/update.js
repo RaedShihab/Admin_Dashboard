@@ -18,7 +18,19 @@ const Update = (props)=> {
 
      const updateMedia =(values, type)=> {
       console.log(values)
-     return Axios.post('/categories/'+id+'/media/update/'+`${type}`, values)}
+     return Axios.post('/categories/'+id+'/media/update/'+`${type}`, values)
+    }
+
+     const updateSpecification =(spacificationId, values)=> {
+      console.log(spacificationId,values)
+      values.append('_method', 'patch');
+     return Axios.post(`/categories/specifications/${spacificationId}`, values)
+   }
+
+    const addSpecification =(categoryId, values)=> {
+      console.log(categoryId,values)
+    return Axios.post(`/categories/${categoryId}/specifications`, values)
+  }
 
     return(
       <div>
@@ -30,6 +42,8 @@ const Update = (props)=> {
         updateIconRequist={updateIconRequist}
         updateMedia={updateMedia}
         getCategory={getCategory}
+        addSpecification={addSpecification}
+        updateSpecification={updateSpecification}
         update={true}
         />
       </div>

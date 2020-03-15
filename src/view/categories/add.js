@@ -7,12 +7,14 @@ const Add = ()=> {
      console.log(values)
     return Axios.post('/categories', values)
   }
+
     return(
       <div> 
         <Form
         response={"the_category_has_added_successfuly"}
-        patch={false}
-        request={request}/>
+        request={request}
+        update={false}
+        />
       </div>
     );
 }

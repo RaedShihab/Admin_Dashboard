@@ -1,7 +1,6 @@
 import React from 'react';
 import {compose} from 'redux'
 import { withTranslation } from "react-i18next";
-// import ReactHtmlParser from "react-html-parser";
 import {connect} from 'react-redux';
 import {deleteCategoriesAction} from '../../auth/Actions/deleteCategoriesAction'
 import {Link} from 'react-router-dom';
@@ -22,7 +21,6 @@ import {
   CircularProgress
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import {Axios} from '../axiosConfig';
@@ -47,21 +45,14 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center'
   },
-  statsIcon: {
-    color: theme.palette.icon,
-    marginRight: theme.spacing(1)
-  },
   title: {
     fontWeight: 'bold'
+  },
+  link:{
+    margin: '0px 20px', textDecoration: 'none', color: 'black'
   }
 }));
 const idsArray = [];
-
-// function unescapeHTML(html) {
-//   var escapeEl = document.createElement("textarea");
-//   escapeEl.innerHTML = html;
-//   return escapeEl.textContent;
-// }
 
 const ProductCard = props => {
   const { className, product, t, ...rest } = props;
@@ -140,19 +131,23 @@ const ProductCard = props => {
           // label="Top"
           // labelPlacement="top"
         />
-      <div className={classes.imageContainer}>
+        <Link
+          className={classes.link}
+          to={{
+            pathname: '/categories/category/'+product.id,
+            state: {
+            data: product
+            }
+        }}
+          >
+            <div className={classes.imageContainer}>
         <img
           alt="Product"
           className={classes.image}
           src={product.icon}
         />
-        <div >
-        {/* {
-         ReactHtmlParser(unescapeHTML(product.icon))
-      } */}
-        </div>
       </div>
-      <p
+         <p
         align="center"
         className={classes.title}
         // gutterBottom
@@ -160,6 +155,8 @@ const ProductCard = props => {
       >
         {product.name.en}
       </p>
+          </Link>
+     
     </CardContent>
     <Divider />
     <CardActions>
@@ -176,7 +173,7 @@ const ProductCard = props => {
           <IconButton
           onClick={()=>deleteCategory(product.id)}
           >
-           <DeleteIcon className={classes.statsIcon} />
+           <DeleteIcon/>
           </IconButton>
           </Tooltip>}
 
@@ -186,23 +183,9 @@ const ProductCard = props => {
           onClick={()=>forceDeleteCategory(product.id)}
           >
            <DeleteForeverIcon
-           color="secondary"
-           className={classes.statsIcon} />
+           color="secondary"/>
           </IconButton>
           </Tooltip>}
-          <Tooltip title={"Edit"}>
-          <Link
-          style={{margin: '0px 20px'}}
-          to={{
-            pathname: '/categories/category/'+product.id,
-            state: {
-            data: product
-            }
-        }}
-          >
-            <EditIcon className={classes.statsIcon} />
-          </Link>
-          </Tooltip>
           {/* <Typography
             display="inline"
             variant="body2"
