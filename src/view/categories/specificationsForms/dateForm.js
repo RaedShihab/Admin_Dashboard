@@ -9,6 +9,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {Checkbox, Divider, Snackbar, CircularProgress} from '@material-ui/core';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 import { Alert } from '@material-ui/lab';
 import {Axios} from '../../axiosConfig';
 
@@ -24,10 +29,11 @@ const useStyles = makeStyles({
   }
 });
 
-function NumberForm(props) {
-  const {t, update, categoryId, updateSpecification, numberSpacification, addSpecification} = props
+function DateForm(props) {
+  const {t, update, categoryId, updateSpecification, dateSpecification, addSpecification} = props
   const classes = useStyles();
-  const id = update? numberSpacification._id: categoryId
+  const id = update? dateSpecification._id: categoryId
+
   const [openSnackSucc, setopenSnackSucc] = React.useState(false);
   const [openSnackErr, setopenSnackErr] = React.useState(false);
   const[message, setMessage] = React.useState('');
@@ -37,19 +43,19 @@ function NumberForm(props) {
   const[name, setname] = React.useState([])
   const[label, setLabel] = React.useState([])
   const[arLabel, setArLabel] = React.useState([])
-  const[min, setMin] = React.useState([])
-  const[max, setMax] = React.useState([])
+  const[from, setFrom] = React.useState(update?[]: new Date())
+  const[to, setTo] = React.useState(update?[]: new Date())
   const[is_required, set_is_required] = React.useState([])
 
   const showSpecification = ()=> {
     setGettingData(true)
-    Axios.get(`/categories/specifications/${numberSpacification._id}`)
+    Axios.get(`/categories/specifications/${dateSpecification._id}`)
     .then(res=> {
         setname(res.data.data.name)
         setLabel(res.data.data.label.en)
         setArLabel(res.data.data.label.ar)
-        setMin(res.data.data.constraints.min)
-        setMax(res.data.data.constraints.max)
+        setFrom(res.data.data.constraints.from)
+        setTo(res.data.data.constraints.to)
         set_is_required(res.data.data.is_required==='1'?true: false)
         setGettingData(false)
         console.log(res.data.data)
@@ -72,13 +78,18 @@ function NumberForm(props) {
     setopenSnackSucc(false)
   };
 
-  const handleCheck = ()=> {
+  const handleCheck = (e)=> {
     set_is_required(!is_required)
   }
 
+  const handleDateChange = (type, date) => {
+    if(type === 'from') {setFrom(date)};
+    if(type === 'to') {setTo(date)};
+  };
+
   return (
         <React.Fragment>
-             {gettingData&&
+          {gettingData&&
               <CircularProgress size="70px" className={classes.circularProgress}/>
             }
             {!gettingData&&<Formik
@@ -86,9 +97,9 @@ function NumberForm(props) {
                     name: !update? '': name,
                     lable: !update? '': label,
                     arLable: !update? '': arLabel,
-                    from: !update? '': min,
-                    to: !update? '': max,
                     required: !update? '': is_required,
+                    from: !update? '': from,
+                    to: !update? '': to
                   }}
                   onSubmit={data => {
                       console.log(data)
@@ -98,9 +109,9 @@ function NumberForm(props) {
                     values.append('name', data.name);
                     values.append('label[en]', data.lable);
                     values.append('label[ar]', data.arLable);
-                    values.append('constraints[min]', parseInt(data.from))
-                    values.append('constraints[max]', parseInt(data.to))
-                    !update && values.append('type', 'number');
+                    values.append('constraints[from]', data.from)
+                    values.append('constraints[to]', data.to)
+                    !update&&values.append('type', 'date');
                     values.append('is_required', booleanToInt);
                     const request = update? updateSpecification : addSpecification
                     request(id, values)
@@ -134,8 +145,8 @@ function NumberForm(props) {
                     .min(2, 'Seems a bit short...'),
                     arLable: Yup.string('Enter a name').required(t('required'))
                     .min(2, 'Seems a bit short...'),
-                    from: Yup.number().min(0).max(1000).required(t('required')),
-                    to: Yup.number().min(0).max(1000).required(t('required')),
+                    from:  Yup.string('Enter a name').required(t('required')),
+                    to: Yup.string('Enter a name').required(t('required')),
                   })}
             >
             {(props=> {
@@ -201,32 +212,49 @@ function NumberForm(props) {
                                 sm={6}
                                 xs={12}
                             >
-                                <TextField
-                                defaultValue={update ? min : ''}
-                                label={("from")}
-                                name="from"
-                                onChange={props.handleChange}
-                                fullWidth
-                                margin="dense"
-                                variant="outlined"
-                                helperText={(props.errors.from && props.touched.from) && props.errors.from}
-                                />
+                              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                              <KeyboardDatePicker
+                                    margin="normal"
+                                    id="date-picker-dialog"
+                                    label="From"
+                                    format="MM/dd/yyyy"
+                                    value={from}
+                                    name='from'
+                                    onChange={(value, date) => {
+                                        handleDateChange('from',date)
+                                        console.log(date)
+                                        props.setFieldValue("from", date);
+                                      }}
+                                    KeyboardButtonProps={{
+                                      'aria-label': 'change date',
+                                    }}
+                                    helperText={(props.errors.from && props.touched.from) && props.errors.from}
+                                  />
+                              </MuiPickersUtilsProvider>
                             </Grid>
                             <Grid
                                 item
                                 sm={6}
                                 xs={12}
                             >
-                                <TextField
-                                defaultValue={update ? max : ''}
-                                label={("to")}
-                                name="to"
-                                onChange={props.handleChange}
-                                fullWidth
-                                margin="dense"
-                                variant="outlined"
-                                helperText={(props.errors.to && props.touched.to) && props.errors.to}
-                                />
+                              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                              <KeyboardDatePicker
+                                    margin="normal"
+                                    id="date-picker-dialog"
+                                    label="To"
+                                    format="MM/dd/yyyy"
+                                    value={to}
+                                    name='to'
+                                    onChange={(value, date) => {
+                                        handleDateChange('to',date)
+                                        props.setFieldValue("to", date);
+                                      }}
+                                    KeyboardButtonProps={{
+                                      'aria-label': 'change date',
+                                    }}
+                                    helperText={(props.errors.to && props.touched.to) && props.errors.to}
+                                  />
+                              </MuiPickersUtilsProvider>
                             </Grid>
                                         </Grid>
                                 </CardContent>
@@ -296,4 +324,4 @@ function NumberForm(props) {
                 );
                 }
         
-export default withTranslation(["countries/addApdate", "countries/validations"])(NumberForm)
+export default withTranslation(["countries/addApdate", "countries/validations"])(DateForm)

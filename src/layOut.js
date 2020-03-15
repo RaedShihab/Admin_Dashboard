@@ -111,7 +111,7 @@ const useStyles = makeStyles(theme => ({
     props.i18n.changeLanguage(newlang);
     props.TextAlignAction(props.data.reducer[0])
   };
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     if(open)  {setOpen(false);}
     else {setOpen(true);}

@@ -13,6 +13,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextForm from '../specificationsForms/textFormSpacification';
 import NumberForm from '../specificationsForms/numberFormSpasification';
+import DateForm from '../specificationsForms/dateForm';
+import ListForm from '../specificationsForms/listForm';
 import {Axios} from '../../axiosConfig';
 
 const useStyles = makeStyles({
@@ -35,7 +37,7 @@ export default function UpdateSpacification(props) {
     Axios.get(`/categories/${categoryId}/specifications`)
   .then(res => {
     setSpacArray(res.data.data)
-    console.log(res.data.data)
+    // console.log(res.data.data)
   })
     setOpen(true);
   };
@@ -46,6 +48,8 @@ export default function UpdateSpacification(props) {
   const [showTextForm, setShowTextForm] = React.useState(false);
   const [showDefault, setShowDefault] = React.useState(true);
   const [showNumberForm, setShowNumberForm] = React.useState(false);
+  const [showDateForm, setShowDateForm] = React.useState(false);
+  const [showListForm, setShowListForm] = React.useState(false);
 
   const showTextFormAction = () => {
       setShowTextForm(!showTextForm)
@@ -55,6 +59,16 @@ export default function UpdateSpacification(props) {
   const showNumberFormAction = () => {
     setShowNumberForm(!showNumberForm)
     setShowDefault(false)
+}
+
+const showDateFormAction = () => {
+  setShowDateForm(!showDateForm)
+  setShowDefault(false)
+}
+
+const showListFormAction = () => {
+  setShowListForm(!showDateForm)
+  setShowDefault(false)
 }
 
   const [expanded, setExpanded] = React.useState(false);
@@ -69,12 +83,15 @@ export default function UpdateSpacification(props) {
   const textsSpacArray = spacificationArray.filter((spac)=> {
     return spac.type === 'text'
 })
-console.log(textsSpacArray)
 
   const numberSpacArray = spacificationArray.filter((spac)=> {
       return spac.type === 'number'
   })
-  console.log(numberSpacArray)
+
+  const dateSpacArray = spacificationArray.filter((spac)=> {
+    return spac.type === 'date'
+  })
+  // console.log(dateSpacArray)
 
   return (
     <div>
@@ -97,10 +114,13 @@ console.log(textsSpacArray)
           variant="contained" color="secondary">number</Button>
         </Grid>
         <Grid item xs={6} sm={3}>
-          <Button variant="contained" color="secondary">list</Button>
+          <Button
+          variant="contained" color="secondary">list</Button>
         </Grid>
         <Grid item xs={6} sm={3}>
-          <Button variant="contained" color="secondary">date</Button>
+          <Button 
+          onClick={showDateFormAction}
+          variant="contained" color="secondary">date</Button>
         </Grid>
       </Grid>
         </Toolbar>
@@ -143,6 +163,42 @@ console.log(textsSpacArray)
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
          <NumberForm update={update} updateSpecification={updateSpecification} numberSpacification={spacification}/>
+        </ExpansionPanelDetails>
+            </ExpansionPanel>
+            )}
+
+        </DialogContent>}
+
+        {showDateForm &&<DialogContent>
+          {dateSpacArray.map(spacification =>
+             <ExpansionPanel expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
+            <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <Typography variant='h6'>Date Specification</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+         <DateForm update={update} updateSpecification={updateSpecification} dateSpecification={spacification}/>
+        </ExpansionPanelDetails>
+            </ExpansionPanel>
+            )}
+
+        </DialogContent>}
+
+        {showListForm &&<DialogContent>
+          {dateSpacArray.map(spacification =>
+             <ExpansionPanel expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
+            <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <Typography variant='h6'>List Specification</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+         <ListForm update={update} updateSpecification={updateSpecification} listSpecification={spacification}/>
         </ExpansionPanelDetails>
             </ExpansionPanel>
             )}

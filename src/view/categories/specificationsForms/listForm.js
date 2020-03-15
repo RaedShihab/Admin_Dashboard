@@ -8,7 +8,8 @@ import {Grid,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import {Checkbox, Divider, Snackbar, CircularProgress} from '@material-ui/core';
+import {Checkbox, Divider, Snackbar, CircularProgress, IconButton} from '@material-ui/core';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { Alert } from '@material-ui/lab';
 import {Axios} from '../../axiosConfig';
 
@@ -24,10 +25,11 @@ const useStyles = makeStyles({
   }
 });
 
-function NumberForm(props) {
-  const {t, update, categoryId, updateSpecification, numberSpacification, addSpecification} = props
+function ListForm(props) {
+  const {t, update, categoryId, updateSpecification, listSpacification, addSpecification} = props
   const classes = useStyles();
-  const id = update? numberSpacification._id: categoryId
+  const id = update? listSpacification._id: categoryId
+
   const [openSnackSucc, setopenSnackSucc] = React.useState(false);
   const [openSnackErr, setopenSnackErr] = React.useState(false);
   const[message, setMessage] = React.useState('');
@@ -37,19 +39,15 @@ function NumberForm(props) {
   const[name, setname] = React.useState([])
   const[label, setLabel] = React.useState([])
   const[arLabel, setArLabel] = React.useState([])
-  const[min, setMin] = React.useState([])
-  const[max, setMax] = React.useState([])
   const[is_required, set_is_required] = React.useState([])
 
   const showSpecification = ()=> {
     setGettingData(true)
-    Axios.get(`/categories/specifications/${numberSpacification._id}`)
+    Axios.get(`/categories/specifications/${listSpacification._id}`)
     .then(res=> {
         setname(res.data.data.name)
         setLabel(res.data.data.label.en)
         setArLabel(res.data.data.label.ar)
-        setMin(res.data.data.constraints.min)
-        setMax(res.data.data.constraints.max)
         set_is_required(res.data.data.is_required==='1'?true: false)
         setGettingData(false)
         console.log(res.data.data)
@@ -72,13 +70,13 @@ function NumberForm(props) {
     setopenSnackSucc(false)
   };
 
-  const handleCheck = ()=> {
+  const handleCheck = (e)=> {
     set_is_required(!is_required)
   }
 
   return (
         <React.Fragment>
-             {gettingData&&
+          {gettingData&&
               <CircularProgress size="70px" className={classes.circularProgress}/>
             }
             {!gettingData&&<Formik
@@ -86,8 +84,6 @@ function NumberForm(props) {
                     name: !update? '': name,
                     lable: !update? '': label,
                     arLable: !update? '': arLabel,
-                    from: !update? '': min,
-                    to: !update? '': max,
                     required: !update? '': is_required,
                   }}
                   onSubmit={data => {
@@ -98,9 +94,7 @@ function NumberForm(props) {
                     values.append('name', data.name);
                     values.append('label[en]', data.lable);
                     values.append('label[ar]', data.arLable);
-                    values.append('constraints[min]', parseInt(data.from))
-                    values.append('constraints[max]', parseInt(data.to))
-                    !update && values.append('type', 'number');
+                    !update&&values.append('type', 'list');
                     values.append('is_required', booleanToInt);
                     const request = update? updateSpecification : addSpecification
                     request(id, values)
@@ -128,14 +122,12 @@ function NumberForm(props) {
                   }}
 
                   validationSchema={Yup.object().shape({
-                    name: Yup.string('Enter a name').required(t('required'))
+                    name: Yup.string('Enter a name').required(t('countries/validations:name_is_required'))
                     .min(2, 'Seems a bit short...'),
-                    lable: Yup.string('Enter a name').required(t('required'))
+                    lable: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
                     .min(2, 'Seems a bit short...'),
-                    arLable: Yup.string('Enter a name').required(t('required'))
+                    arLable: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
                     .min(2, 'Seems a bit short...'),
-                    from: Yup.number().min(0).max(1000).required(t('required')),
-                    to: Yup.number().min(0).max(1000).required(t('required')),
                   })}
             >
             {(props=> {
@@ -170,7 +162,7 @@ function NumberForm(props) {
                                 xs={12}
                             >
                                 <TextField
-                                    defaultValue={update ? label : ''}
+                                defaultValue={update ? label : ''}
                                 label={("lable")}
                                 name="lable"
                                 onChange={props.handleChange}
@@ -198,36 +190,44 @@ function NumberForm(props) {
                             </Grid>
                             <Grid
                                 item
-                                sm={6}
+                                sm={5}
                                 xs={12}
                             >
                                 <TextField
-                                defaultValue={update ? min : ''}
-                                label={("from")}
-                                name="from"
+                                defaultValue={update ? label : ''}
+                                label={("value")}
+                                name="lable"
                                 onChange={props.handleChange}
                                 fullWidth
                                 margin="dense"
                                 variant="outlined"
-                                helperText={(props.errors.from && props.touched.from) && props.errors.from}
                                 />
                             </Grid>
                             <Grid
                                 item
-                                sm={6}
+                                sm={5}
                                 xs={12}
                             >
                                 <TextField
-                                defaultValue={update ? max : ''}
-                                label={("to")}
-                                name="to"
+                                defaultValue={update? arLabel : ''}
+                                label={("arabic_value")}
+                                name="arLable"
                                 onChange={props.handleChange}
                                 fullWidth
                                 margin="dense"
                                 variant="outlined"
-                                helperText={(props.errors.to && props.touched.to) && props.errors.to}
                                 />
                             </Grid>
+                            <Grid
+                                item
+                                sm={2}
+                                xs={12}
+                            >
+                              <IconButton>
+                                  <AddCircleOutlineIcon fontSize='large' color='primary'/>
+                              </IconButton>
+                            </Grid>
+                            
                                         </Grid>
                                 </CardContent>
                                 <FormGroup row>
@@ -296,4 +296,4 @@ function NumberForm(props) {
                 );
                 }
         
-export default withTranslation(["countries/addApdate", "countries/validations"])(NumberForm)
+export default withTranslation(["countries/addApdate", "countries/validations"])(ListForm)

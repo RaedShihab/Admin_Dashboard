@@ -13,6 +13,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextForm from '../specificationsForms/textFormSpacification';
 import NumberForm from '../specificationsForms/numberFormSpasification';
+import DateForm from '../specificationsForms/dateForm';
+import ListForm from '../specificationsForms/listForm';
 
 const useStyles = makeStyles({
   btn: {
@@ -39,6 +41,8 @@ export default function SpacificationForm(props) {
   const [showTextForm, setShowTextForm] = React.useState(false);
   const [showDefault, setShowDefault] = React.useState(true);
   const [showNumberForm, setShowNumberForm] = React.useState(false);
+  const [showDateForm, setShowDateForm] = React.useState(false);
+  const [showListForm, setShowListForm] = React.useState(false);
 
   const showTextFormAction = () => {
       setShowTextForm(!showTextForm)
@@ -48,6 +52,16 @@ export default function SpacificationForm(props) {
   const showNumberFormAction = () => {
     setShowNumberForm(!showNumberForm)
     setShowDefault(false)
+}
+
+const showDateFormAction = () => {
+  setShowDateForm(!showDateForm)
+  setShowDefault(false)
+}
+
+const showListFormAction = () => {
+  setShowListForm(!showListForm)
+  setShowDefault(false)
 }
 
   const [expanded, setExpanded] = React.useState(false);
@@ -80,10 +94,14 @@ export default function SpacificationForm(props) {
           variant="contained" color="secondary">number</Button>
         </Grid>
         <Grid item xs={6} sm={3}>
-          <Button variant="contained" color="secondary">list</Button>
+          <Button 
+          onClick={showListFormAction}
+          variant="contained" color="secondary">list</Button>
         </Grid>
         <Grid item xs={6} sm={3}>
-          <Button variant="contained" color="secondary">date</Button>
+          <Button
+          onClick={showDateFormAction}
+          variant="contained" color="secondary">date</Button>
         </Grid>
       </Grid>
         </Toolbar>
@@ -122,6 +140,36 @@ export default function SpacificationForm(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
         <NumberForm addSpecification={addSpecification} categoryId={categoryId} update={update}/>
+        </ExpansionPanelDetails>
+            </ExpansionPanel>
+        </DialogContent>}
+
+        {showDateForm &&<DialogContent>
+            <ExpansionPanel expanded={expanded === 'date'} onChange={expandNumber('date')}>
+            <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <Typography variant='h6'>Date Specification</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+        <DateForm addSpecification={addSpecification} categoryId={categoryId} update={update}/>
+        </ExpansionPanelDetails>
+            </ExpansionPanel>
+        </DialogContent>}
+
+        {showListForm &&<DialogContent>
+            <ExpansionPanel expanded={expanded === 'list'} onChange={expandNumber('list')}>
+            <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <Typography variant='h6'>List Specification</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+        <ListForm addSpecification={addSpecification} categoryId={categoryId} update={update}/>
         </ExpansionPanelDetails>
             </ExpansionPanel>
         </DialogContent>}
