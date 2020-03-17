@@ -194,7 +194,7 @@ const ProductsToolbar = props => {
         >
           {
             categories.map(category => {
-            return <MenuItem value={category.id}>{category.name.en}</MenuItem>
+            return <MenuItem key={category.id} value={category.id}>{category.name.en}</MenuItem>
             })
           }
         </Select>
@@ -266,7 +266,7 @@ const ProductsToolbar = props => {
               </IconButton>
               </Tooltip>
               <Menu
-              onClick={props.handelChoose}
+              onClick={props.handelchoose}
                 id="long-menu"
                 anchorEl={anchorEl}
                 // keepMounted
@@ -281,6 +281,7 @@ const ProductsToolbar = props => {
               >
                 {categories.map(option => (
                   <option
+                  key={option.id}
                   className={classes.option}
                   value={option.id}
                   // key={option} 

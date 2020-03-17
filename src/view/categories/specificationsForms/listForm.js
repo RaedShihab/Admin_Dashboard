@@ -10,6 +10,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {Checkbox, Divider, Snackbar, CircularProgress, IconButton} from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import { Alert } from '@material-ui/lab';
 import {Axios} from '../../axiosConfig';
 
@@ -74,9 +75,37 @@ function ListForm(props) {
     set_is_required(!is_required)
   }
 
+  const [valuesArray, setValuesArray] = React.useState([]);
+  const [value, setValue] = React.useState([]);
+  const [arValue, setArValue] = React.useState([]);
+
+  const handleArValueChange = (e)=> {
+    setArValue(e.target.value)
+  }
+  const handleEnValueChange = (e)=> {
+    setValue(e.target.value)
+  }
+
+  const pushingValues = (arValue, value)=> {
+    if(arValue!== ''&& value!== '') {
+      setValuesArray([...valuesArray, {ar:arValue, en: value}])
+      setValue('')
+      setArValue('')
+      console.log(valuesArray)
+    }
+  }
+  
+  const removeValue = (value)=> {
+    const index = valuesArray.indexOf(value)
+    const newArr = valuesArray.filter((val, i)=> {
+      return i !== index
+    })
+    setValuesArray(newArr)
+  }
+
   return (
         <React.Fragment>
-          {gettingData&&
+          {gettingData &&
               <CircularProgress size="70px" className={classes.circularProgress}/>
             }
             {!gettingData&&<Formik
@@ -85,9 +114,12 @@ function ListForm(props) {
                     lable: !update? '': label,
                     arLable: !update? '': arLabel,
                     required: !update? '': is_required,
+                    arValue: '',
+                    value: ''
                   }}
                   onSubmit={data => {
                       console.log(data)
+                      console.log(valuesArray)
                       setLoading(true)
                     const booleanToInt = data.required? '1': '0'
                     const values = new FormData()
@@ -194,10 +226,10 @@ function ListForm(props) {
                                 xs={12}
                             >
                                 <TextField
-                                defaultValue={update ? label : ''}
+                                value={update ? label : value}
                                 label={("value")}
-                                name="lable"
-                                onChange={props.handleChange}
+                                name="value"
+                                onChange={handleEnValueChange}
                                 fullWidth
                                 margin="dense"
                                 variant="outlined"
@@ -209,10 +241,10 @@ function ListForm(props) {
                                 xs={12}
                             >
                                 <TextField
-                                defaultValue={update? arLabel : ''}
+                                value={update? arLabel : arValue}
                                 label={("arabic_value")}
-                                name="arLable"
-                                onChange={props.handleChange}
+                                name="arValue"
+                                onChange={handleArValueChange}
                                 fullWidth
                                 margin="dense"
                                 variant="outlined"
@@ -223,10 +255,59 @@ function ListForm(props) {
                                 sm={2}
                                 xs={12}
                             >
-                              <IconButton>
+                              <IconButton
+                              onClick={()=>pushingValues(arValue, value)}
+                              >
                                   <AddCircleOutlineIcon fontSize='large' color='primary'/>
                               </IconButton>
                             </Grid>
+                            {
+                              valuesArray.map(value => {
+                              return <React.Fragment key={Math.random()}>
+                                      <Grid
+                              item
+                              sm={4}
+                              xs={12}
+                          >
+                              <TextField
+                              defaultValue={value.en}
+                              label={("value")}
+                              name="value"
+                              onChange={props.handleChange}
+                              fullWidth
+                              margin="dense"
+                              variant='filled'
+                              />
+                          </Grid>
+                          <Grid
+                              item
+                              sm={4}
+                              xs={12}
+                          >
+                              <TextField
+                              defaultValue={value.ar}
+                              label={("arabic_value")}
+                              name="arValue"
+                              onChange={props.handleChange}
+                              fullWidth
+                              margin="dense"
+                              variant='filled'
+                              />
+                          </Grid>
+                          <Grid
+                                item
+                                sm={2}
+                                xs={12}
+                            >
+                              <IconButton
+                              onClick={()=>removeValue(value)}
+                              >
+                                  <RemoveCircleOutlineIcon fontSize='large' color='primary'/>
+                              </IconButton>
+                            </Grid>
+                              </React.Fragment>
+                              })
+                            }
                             
                                         </Grid>
                                 </CardContent>
@@ -259,7 +340,7 @@ function ListForm(props) {
                                     className={classes.AddBtn}
                                     variant="contained" color="primary">
                                         {!loading&&'add'}
-                                        {loading&&<CircularProgress color="white" size="25px"/>}
+                                        {loading&&<CircularProgress size="25px"/>}
                                   </Button>
                                   <div>
                                             <Snackbar
@@ -270,7 +351,7 @@ function ListForm(props) {
                                               <Alert
                                                 onClose={handleClose}
                                                 severity="success"
-                                                style={{backgroundColor: 'green', color: 'white'}}
+                                                class
                                               >
                                                 {message}
                                               </Alert>
@@ -283,7 +364,7 @@ function ListForm(props) {
                                               <Alert
                                                 onClose={handleClose}
                                                 severity="error"
-                                                style={{backgroundColor: 'red', color: 'white'}}
+                                                class
                                               >
                                                 {message}
                                               </Alert>

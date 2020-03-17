@@ -2,7 +2,7 @@ import React from 'react';
 import {compose} from 'redux'
 import { withTranslation } from "react-i18next";
 import {connect} from 'react-redux';
-import {deleteCategoriesAction} from '../../auth/Actions/deleteCategoriesAction'
+import {deletecategories} from '../../auth/Actions/deleteCategoriesAction'
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -18,7 +18,8 @@ import {
   Checkbox,
   Snackbar,
   Tooltip,
-  CircularProgress
+  CircularProgress,
+  Typography
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -80,7 +81,7 @@ const ProductCard = props => {
       index = idsArray.indexOf(e.target.value)
       idsArray.splice(index, 1)
     }
-    props.deleteCategoriesAction(idsArray, e.target.checked)
+    props.deleteCategories(idsArray, e.target.checked)
     
   }
   
@@ -150,13 +151,10 @@ const ProductCard = props => {
          <p
         align="center"
         className={classes.title}
-        // gutterBottom
-        // variant="h6"
       >
         {product.name.en}
       </p>
           </Link>
-     
     </CardContent>
     <Divider />
     <CardActions>
@@ -230,4 +228,4 @@ function mapStateToProps(state) {
     data: state
   }
 }
-export default compose(withTranslation(["categories/addUpdate", "countries/validations"]) , connect(mapStateToProps, {deleteCategoriesAction}))(ProductCard);
+export default compose(withTranslation(["categories/addUpdate", "countries/validations"]) , connect(mapStateToProps, {deletecategories}))(ProductCard);

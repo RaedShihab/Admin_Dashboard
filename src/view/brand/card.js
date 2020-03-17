@@ -3,7 +3,7 @@ import {compose} from 'redux'
 import { withTranslation } from "react-i18next";
 // import ReactHtmlParser from "react-html-parser";
 import {connect} from 'react-redux';
-import {deleteCategoriesAction} from '../../auth/Actions/deleteCategoriesAction'
+import {deletecategories} from '../../auth/Actions/deleteCategoriesAction'
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -64,7 +64,7 @@ const idsArray = [];
 // }
 
 const ProductCard = props => {
-  const { className, product, t, ...rest } = props;
+  const { className, product, t, deletecategories, ...rest } = props;
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
   const [openErr, setOpenErr] = React.useState(false);
   const [softDeliting, setSoftDeliting] = React.useState(false);
@@ -89,7 +89,7 @@ const ProductCard = props => {
       index = idsArray.indexOf(e.target.value)
       idsArray.splice(index, 1)
     }
-    props.deleteCategoriesAction(idsArray, e.target.checked)
+    deletecategories(idsArray, e.target.checked)
     
   }
   
@@ -247,4 +247,4 @@ function mapStateToProps(state) {
     data: state
   }
 }
-export default compose(withTranslation(["categories/addUpdate", "countries/validations"]) , connect(mapStateToProps, {deleteCategoriesAction}))(ProductCard);
+export default compose(withTranslation(["categories/addUpdate", "countries/validations"]) , connect(mapStateToProps, {deletecategories}))(ProductCard);

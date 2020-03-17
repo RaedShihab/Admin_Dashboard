@@ -28,19 +28,19 @@ const useStyles = makeStyles(theme => ({
 let page = 1;
 
 const ProductList = () => {
+  
   const classes = useStyles();
   const [open, setOpen] = useState();
   const [openAlert, setOpenAlrt] = useState();
   const [categories, setCategories] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [allCtegories, setAllCategories] = useState([])
-  const [hidepagination, setHidepagination] = useState(false) 
+  const [hidepagination, setHidepagination] = useState(false)
  
 
   const categoriesAxios = (page, itemsPerPage)=> 
   Axios.get(`/categories/?page=${page}&per_page=${itemsPerPage}`)
   .then(res=>{
-    console.log(res)
     setCategories(res.data.data)
     setOpen(false)  
   })
@@ -53,7 +53,6 @@ const ProductList = () => {
   const getAllCategories = ()=>
   Axios.get('/categories')
   .then(res=>{
-    console.log(res.data.data)
     setAllCategories(res.data.data)
     setOpen(false)
   })
@@ -111,7 +110,7 @@ const ProductList = () => {
           })
       }
 
-      const handelChoose = (e)=> {
+      const handelchoose = (e)=> {
         console.log(e.target.value)
         const parentId = e.target.value
         Axios.get(`/categories/${parentId}`)
@@ -134,7 +133,7 @@ const ProductList = () => {
           <div className={classes.root}>
       <CategToolbar
       categories={allCtegories} 
-      handelChoose={handelChoose}
+      handelchoose={handelchoose}
       handleParentCategorySelect={handleParentCategorySelect}
       path={{add:'/categories/create'}} />
       <div className={classes.content}>

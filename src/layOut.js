@@ -141,12 +141,12 @@ const useStyles = makeStyles(theme => ({
       >
         <Toolbar>
           <IconButton
+          onClick={handleDrawerOpen}
             color="inherit"
             aria-label="open drawer"            
             edge="start"
           >
             <MenuIcon
-            onClick={handleDrawerOpen}
             />
           </IconButton>
           <IconButton
@@ -174,7 +174,7 @@ const useStyles = makeStyles(theme => ({
       <SideBar open={open}/>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph>
+        <Typography component={'span'} variant={'body2'} paragraph>
           {props.children}
         </Typography>
       </main>

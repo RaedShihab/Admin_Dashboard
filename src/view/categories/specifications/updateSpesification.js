@@ -4,7 +4,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Dialog from '@material-ui/core/Dialog';
-import {DialogContent, DialogContentText, Typography, IconButton, Tooltip} from '@material-ui/core';
+import {DialogContent, DialogContentText, Typography} from '@material-ui/core';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {Grid,} from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
@@ -45,6 +45,7 @@ export default function UpdateSpacification(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
   const [showTextForm, setShowTextForm] = React.useState(false);
   const [showDefault, setShowDefault] = React.useState(true);
   const [showNumberForm, setShowNumberForm] = React.useState(false);
@@ -134,7 +135,7 @@ const showListFormAction = () => {
 
         {showTextForm &&<DialogContent>
           {textsSpacArray.map(spacification =>
-             <ExpansionPanel expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
+             <ExpansionPanel key={spacification._id} expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
             <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
@@ -153,7 +154,7 @@ const showListFormAction = () => {
 
         {showNumberForm &&<DialogContent>
           {numberSpacArray.map(spacification =>
-             <ExpansionPanel expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
+             <ExpansionPanel key={spacification._id} expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
             <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
@@ -171,7 +172,7 @@ const showListFormAction = () => {
 
         {showDateForm &&<DialogContent>
           {dateSpacArray.map(spacification =>
-             <ExpansionPanel expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
+             <ExpansionPanel key={spacification._id} expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
             <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
@@ -189,7 +190,7 @@ const showListFormAction = () => {
 
         {showListForm &&<DialogContent>
           {dateSpacArray.map(spacification =>
-             <ExpansionPanel expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
+             <ExpansionPanel key={spacification._id} expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
             <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"

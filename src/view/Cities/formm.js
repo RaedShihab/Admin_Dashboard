@@ -117,7 +117,6 @@ class AccountDetails extends React.Component {
         const { t, classes, update, data} = this.props;
         const { formLoading, enName, arName, lon, lat, order, countries, select} = this.state;
         
-        console.log(this.state)
         return (
           <div>
             {formLoading&&<LayOut>
@@ -235,7 +234,7 @@ class AccountDetails extends React.Component {
                                                 label={t("country_name")}
                                                 name="name"
                                                 onChange={props.handleChange}
-                                                helperText={(props.errors.name && props.touched.name) && props.errors.name}
+                                                helpertext={(props.errors.name && props.touched.name) && props.errors.name}
                                                 />
                                             </Grid>
                                           <Grid
@@ -251,7 +250,7 @@ class AccountDetails extends React.Component {
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                helperText={(props.errors.arname && props.touched.arname) && props.errors.arname}
+                                                helpertext={(props.errors.arname && props.touched.arname) && props.errors.arname}
                                                 />
                                             </Grid>
                                             <Grid
@@ -267,7 +266,7 @@ class AccountDetails extends React.Component {
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                helperText={(props.errors.lon && props.touched.lon) && props.errors.lon}
+                                                helpertext={(props.errors.lon && props.touched.lon) && props.errors.lon}
                                                 />
                                             </Grid>
                                             <Grid
@@ -283,7 +282,7 @@ class AccountDetails extends React.Component {
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                helperText={(props.errors.lat && props.touched.lat) && props.errors.lat}
+                                                helpertext={(props.errors.lat && props.touched.lat) && props.errors.lat}
                                                 />
                                             </Grid>
                                             <Grid
@@ -299,7 +298,7 @@ class AccountDetails extends React.Component {
                                                 fullWidth
                                                 margin="dense"
                                                 variant="outlined"
-                                                helperText={(props.errors.order && props.touched.order) && props.errors.order}
+                                                helpertext={(props.errors.order && props.touched.order) && props.errors.order}
                                                 />
                                             </Grid>
                                             <Grid
@@ -314,7 +313,7 @@ class AccountDetails extends React.Component {
                                                       <Select
                                                       native
                                                       onChange={props.handleChange}
-                                                      helperText={(props.errors.select && props.touched.select) && props.errors.select}
+                                                      helpertext={(props.errors.select && props.touched.select) && props.errors.select}
                                                       name="select"
                                                       >
                                                         <option value="">
@@ -322,7 +321,7 @@ class AccountDetails extends React.Component {
                                                         </option>
                                                       {
                                                         countries.map(category=> {
-                                                          return <option value={category.id}>{category.name.en}</option>
+                                                          return <option key={category.id} value={category.id}>{category.name.en}</option>
                                                       })
                                                       }
                                                   </Select>

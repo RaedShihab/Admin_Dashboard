@@ -33,7 +33,7 @@ const Update = (props)=> {
   }
 
     return(
-      <div>
+      // <div>
         <Form
         data={data}
         response={"the_category_has_updated_successfuly"} 
@@ -45,8 +45,9 @@ const Update = (props)=> {
         addSpecification={addSpecification}
         updateSpecification={updateSpecification}
         update={true}
-        />
-      </div>
+        >
+          </Form>
+      // </div>
     );
 }
 export default Update

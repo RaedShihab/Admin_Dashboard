@@ -282,10 +282,7 @@ class AccountDetails extends React.Component {
         const { t ,classes, data, update, updateSpecification, addSpecification} = this.props;
         const {coverLoading, iconLoading, imageLoading, bannerLoading, cover, banner, image} = this.state
         return (
-            <div
-              // {...rest}
-              // className={classes.root}
-            >
+            <div>
             <Formik
                 initialValues={{
                     name:!update? '': data.name.en,
@@ -726,7 +723,7 @@ class AccountDetails extends React.Component {
                                                         </option>
                                                       {
                                                       this.state.categories.map(category=> {
-                                                          return <option value={category.id}>{category.name.en}</option>
+                                                          return <option key={category.id} value={category.id}>{category.name.en}</option>
                                                       })
                                                       }
                                                   </Select>
@@ -830,7 +827,7 @@ class AccountDetails extends React.Component {
                                       </form>
                                     })}
                               </Formik>
-                              </div>
+                               </div>
                             );
                       }  
 };
