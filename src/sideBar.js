@@ -22,6 +22,7 @@ import ExtensionIcon from '@material-ui/icons/Extension';
 import FlagIcon from '@material-ui/icons/Flag';
 import PlaceIcon from '@material-ui/icons/Place';
 import PublicIcon from '@material-ui/icons/Public';
+import SpeedIcon from '@material-ui/icons/Speed';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -96,23 +97,19 @@ const useStyles = makeStyles(theme => ({
     }
   }));
  const SideBar = (props)=> {
-  // const [anchorEl, setAnchorEl] = React.useState(null);
-  // const open = Boolean(anchorEl);
-  // const handleClick = event => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
 
   const [open, setOpen] = React.useState(false);
   const [openCountries, setOpenCountries] = React.useState(false);
+  const [openAdsList, setOpenAdsList] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
   const handleClickCountries = () => {
     setOpenCountries(!openCountries);
+  };
+  const handleClickAds = () => {
+    setOpenAdsList(!openAdsList);
   };
 
         const classes = useStyles();
@@ -252,7 +249,7 @@ const useStyles = makeStyles(theme => ({
 
     </List>
         {/* <Divider /> */}
-        <List component="div" disablePadding>
+        {/* <List component="div" disablePadding>
         <a className={classes.link} href='/users'>
         <ListItem button>
               <ListItemIcon>
@@ -263,19 +260,40 @@ const useStyles = makeStyles(theme => ({
               <ListItemText primary={t('users')} />
             </ListItem>
         </a>
-        </List>
+        </List> */}
+        <ListItem button onClick={handleClickAds}>
+        <ListItemIcon>
+        <Tooltip title={t("Ads")}>
+          {openAdsList ? <ExpandMore /> : <PostAddIcon color="primary"/>}
+        </Tooltip>
+        </ListItemIcon>
+        <ListItemText primary="Categories" />
+      </ListItem>
+      <Collapse in={openAdsList} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
         <a className={classes.link} href='/ads'>
-        <ListItem button>
-              <ListItemIcon>
-                <Tooltip title={t("posts")}>
-                <PostAddIcon color="primary"/>
-                </Tooltip>
-                </ListItemIcon>
-              <ListItemText primary={t('ads')} />
-            </ListItem>
+        <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <Tooltip title={t("Ads")}>
+              <PostAddIcon color="action"/>
+              </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="Main cagtegoris" />
+          </ListItem>
+        </a> 
+        <a className={classes.link} href='/packages'>
+        <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <Tooltip title={t("Packages")}>
+              <SpeedIcon color="action"/>
+              </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="Brands"/>
+          </ListItem>
         </a>
         </List>
+      </Collapse>
+        
       </Drawer>
          );
      }

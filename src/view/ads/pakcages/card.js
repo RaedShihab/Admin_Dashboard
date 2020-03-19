@@ -1,8 +1,9 @@
 import React from 'react';
 import {compose} from 'redux'
 import { withTranslation } from "react-i18next";
+// import ReactHtmlParser from "react-html-parser";
 import {connect} from 'react-redux';
-import {multiDelete} from '../../auth/Actions/multiDelete'
+import {multiDelete} from '../../../auth/Actions/multiDelete'
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -18,13 +19,12 @@ import {
   Checkbox,
   Snackbar,
   Tooltip,
-  CircularProgress,
-  Typography
+  CircularProgress
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import {Axios} from '../axiosConfig';
+import {Axios} from '../../axiosConfig';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -46,6 +46,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center'
   },
+  statsIcon: {
+    color: theme.palette.icon,
+    marginRight: theme.spacing(1)
+  },
   title: {
     fontWeight: 'bold'
   },
@@ -55,8 +59,14 @@ const useStyles = makeStyles(theme => ({
 }));
 const idsArray = [];
 
+// function unescapeHTML(html) {
+//   var escapeEl = document.createElement("textarea");
+//   escapeEl.innerHTML = html;
+//   return escapeEl.textContent;
+// }
+
 const ProductCard = props => {
-  const { className, product, t } = props;
+  const { className, product, t, multiDelete, ...rest } = props;
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
   const [openErr, setOpenErr] = React.useState(false);
   const [softDeliting, setSoftDeliting] = React.useState(false);
@@ -81,76 +91,78 @@ const ProductCard = props => {
       index = idsArray.indexOf(e.target.value)
       idsArray.splice(index, 1)
     }
-    props.multiDelete(idsArray, e.target.checked)
+    multiDelete(idsArray, e.target.checked)
     
   }
   
   const deleteCategory = (id)=> {
     setSoftDeliting(true)
-    console.log('/categories/'+id+'/soft')
-    Axios.delete('/categories/'+id+'/soft')
-    .then(res=> {
-      if(res.status === 200) {
-        console.log(res)
-        setSoftDeliting(false)
-        setOpenSuccess(true)
-      window.location.reload(false)
-      }
-    })
-    .catch(err=> {
-      setOpenErr(true)
-      setSoftDeliting(false)
-      console.log(err.response)
-    })
+    console.log(`/ads/packages/${id}/soft`)
+    // Axios.delete('/categories/'+id+'/soft')
+    // .then(res=> {
+    //   if(res.status === 200) {
+    //     console.log(res)
+    //     setSoftDeliting(false)
+    //     setOpenSuccess(true)
+    //   window.location.reload(false)
+    //   }
+    // })
+    // .catch(err=> {
+    //   setOpenErr(true)
+    //   setSoftDeliting(false)
+    //   console.log(err.response)
+    // })
   }
   const forceDeleteCategory = (id)=> {
     setForceDeliting(true)
-    console.log('/categories/'+id+'/soft')
-    Axios.delete('/categories/'+id+'/soft').then(res=> {
-      console.log(res)
-      setForceDeliting(false)
-      setOpenSuccess(true)
-      window.location.reload(false)
-    })
-    .catch(err=> {
-      setForceDeliting(false)
-      setOpenErr(true)
-      console.log(err.response)
-    })
+    console.log(`/ads/packages/${id}/soft`)
+    // Axios.delete('/categories/'+id+'/soft').then(res=> {
+    //   console.log(res)
+    //   setForceDeliting(false)
+    //   setOpenSuccess(true)
+    //   window.location.reload(false)
+    // })
+    // .catch(err=> {
+    //   setForceDeliting(false)
+    //   setOpenErr(true)
+    //   console.log(err.response)
+    // })
   }
 
   return (
     <Card
-    // {...rest}
+    {...rest}
     className={clsx(classes.root, className)}
   >
     <CardContent>
     <FormControlLabel
          onChange={handleCheckBox}
-          value={product.id}
+          value={product._id}
           control={<Checkbox color="primary" />}
           // label="Top"
           // labelPlacement="top"
         />
-        <Link
+          <Link
           className={classes.link}
           to={{
-            pathname: '/categories/category/'+product.id,
+            pathname: '/packages/package/'+product._id,
             state: {
             data: product
             }
         }}
           >
-            <div className={classes.imageContainer}>
+             <div className={classes.imageContainer}>
         <img
           alt="Product"
           className={classes.image}
           src={product.icon}
         />
       </div>
-         <p
+      <p
         align="center"
         className={classes.title}
+        // gutterBottom
+        // variant="h6"
       >
         {product.name.en}
       </p>
@@ -169,21 +181,23 @@ const ProductCard = props => {
           {softDeliting&& <CircularProgress />}
          {!softDeliting && <Tooltip title={t("soft_delete")}>
           <IconButton
-          onClick={()=>deleteCategory(product.id)}
+          onClick={()=>deleteCategory(product._id)}
           >
-           <DeleteIcon/>
+           <DeleteIcon className={classes.statsIcon} />
           </IconButton>
           </Tooltip>}
 
           {forceDeliting&& <CircularProgress />}
          {!forceDeliting && <Tooltip title={t("force_delete")}>
           <IconButton
-          onClick={()=>forceDeleteCategory(product.id)}
+          onClick={()=>forceDeleteCategory(product._id)}
           >
            <DeleteForeverIcon
-           color="secondary"/>
+           color="secondary"
+           className={classes.statsIcon} />
           </IconButton>
           </Tooltip>}
+          
           {/* <Typography
             display="inline"
             variant="body2"

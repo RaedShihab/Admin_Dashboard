@@ -68,7 +68,7 @@ const showDateFormAction = () => {
 }
 
 const showListFormAction = () => {
-  setShowListForm(!showDateForm)
+  setShowListForm(!showListForm)
   setShowDefault(false)
 }
 
@@ -94,6 +94,11 @@ const showListFormAction = () => {
   })
   // console.log(dateSpacArray)
 
+  const ListSpacArray = spacificationArray.filter((spac)=> {
+    return spac.type === 'list'
+  })
+  // console.log(ListSpacArray)
+
   return (
     <div>
       <Button className={classes.btn} variant="contained" color="primary" onClick={handleClickOpen}>
@@ -116,6 +121,7 @@ const showListFormAction = () => {
         </Grid>
         <Grid item xs={6} sm={3}>
           <Button
+          onClick={showListFormAction}
           variant="contained" color="secondary">list</Button>
         </Grid>
         <Grid item xs={6} sm={3}>
@@ -189,7 +195,7 @@ const showListFormAction = () => {
         </DialogContent>}
 
         {showListForm &&<DialogContent>
-          {dateSpacArray.map(spacification =>
+          {ListSpacArray.map(spacification =>
              <ExpansionPanel key={spacification._id} expanded={expanded === spacification._id} onChange={expandText(spacification._id)}>
             <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}

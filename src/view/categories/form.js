@@ -51,10 +51,18 @@ const useStyles = (() => ({
     display: 'none',
   },
   form: {
-    backgroundColor: 'white', borderRadius: 5, marginTop: 10
+    backgroundColor: 'white', borderRadius: 5, marginTop: 10,
+    ['@media (max-width:900px)']: {
+      width: '80%',
+      position: 'absolute',
     },
+  },
     btn: {
-      margin: 14, width: '25%'
+      margin: 14, width: '25%',
+      ['@media (max-width:900px)']: {
+        top: '290px',
+        // position: 'absolute'
+      },
     },
     margin: {
       marginTop: 15

@@ -5,11 +5,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {Snackbar, Button, CircularProgress,TextField, 
-  Avatar,IconButton, MenuItem, Menu, Tooltip} from '@material-ui/core';
+       Avatar,IconButton, MenuItem, Menu, Tooltip} 
+  from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MuiAlert from '@material-ui/lab/Alert';
-import {Axios} from '../axiosConfig';
+import {Axios} from '../../axiosConfig';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -103,40 +104,40 @@ const ProductsToolbar = props => {
   // const [spacing, setSpacing] = React.useState(2);
   const multiDelete = ()=> {
     const ids = props.data.multiDelete[0]
-    console.log('/categories/'+ids+'/soft')
+    console.log(`/ads/packages/${ids}/soft`)
     setloading(true)
-    Axios.delete('/categories/'+ids+'/soft')
-    .then(res=> {
-      // setOpen(true);
-      setloading(false)
-      setOpenSuccess(true)
-       console.log(res)
-       window.location.reload(false)
-      })
-      .catch(err => {
-        console.log(err.response)
-        setOpenErr(true)
-        setloading(false) 
-      })
+    // Axios.delete('/categories/'+ids+'/soft')
+    // .then(res=> {
+    //   // setOpen(true);
+    //   setloading(false)
+    //   setOpenSuccess(true)
+    //    console.log(res)
+    //    window.location.reload(false)
+    //   })
+    //   .catch(err => {
+    //     console.log(err.response)
+    //     setOpenErr(true)
+    //     setloading(false) 
+    //   })
   }
   const multiForceDelete = ()=> {
     const ids = props.data.multiDelete[0]
-    console.log('/categories/'+ids+'/force')
+    console.log(`/ads/packages/${ids}/soft`)
     // Axios.delete('/categories')
     setWaiting(true)
-    Axios.delete('/categories/'+ids+'/force')
-    .then(res=> {
-      // setOpen(true);
-      setWaiting(false)
-      setOpenSuccess(true)
-       console.log(res)
-       window.location.reload(false)
-      })
-      .catch(err => {
-        console.log(err.response)
-        setOpenErr(true)
-        setWaiting(false)
-      })
+    // Axios.delete('/categories/'+ids+'/force')
+    // .then(res=> {
+    //   // setOpen(true);
+    //   setWaiting(false)
+    //   setOpenSuccess(true)
+    //    console.log(res)
+    //    window.location.reload(false)
+    //   })
+    //   .catch(err => {
+    //     console.log(err.response)
+    //     setOpenErr(true)
+    //     setWaiting(false)
+    //   })
   }
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenueList = Boolean(anchorEl);
@@ -173,7 +174,7 @@ const ProductsToolbar = props => {
         justify="center"
          spacing={6}
          >
-            <Grid  item>
+            {/* <Grid  item>
               <TextField
               onChange={handelSearchField}
               variant='filled'
@@ -183,8 +184,8 @@ const ProductsToolbar = props => {
               className={classes.btn}
               color="primary"
               variant="contained">search</Button>
-            </Grid>
-            <Grid item>
+            </Grid> */}
+            {/* <Grid item>
             
       <FormControl variant="filled" className={classes.formControl}>
         <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
@@ -201,7 +202,7 @@ const ProductsToolbar = props => {
           }
         </Select>
       </FormControl>
-            </Grid>
+            </Grid> */}
             <Grid item>
             <div className={classes.row2}>
   {/* <span className={classes.spacer} /> */}
@@ -244,7 +245,7 @@ const ProductsToolbar = props => {
             </Grid>
             <Grid className={classes.paper4}  item>
             {/* <div className={classes.paper3} > */}
-            <PopupState variant="popover" popupId="demo-popup-menu">
+            {/* <PopupState variant="popover" popupId="demo-popup-menu">
       {popupState => (
       <React.Fragment>
       <Tooltip title="filter">
@@ -298,9 +299,9 @@ const ProductsToolbar = props => {
         </Menu>
         </React.Fragment>
         )}
-        </PopupState>
+        </PopupState> */}
         
-            <IconButton href={'/brands/create'}>
+            <IconButton href={'/packages/create'}>
             <Avatar>
                 <AddIcon/>
                 </Avatar>

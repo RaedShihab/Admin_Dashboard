@@ -46,7 +46,8 @@ const useStyles = (() => ({
     display: 'none',
   },
   form: {
-  backgroundColor: 'white', borderRadius: 5
+  backgroundColor: 'white', borderRadius: 5, 
+  // width: '100%', position: 'absolute'
   }
 }));
 

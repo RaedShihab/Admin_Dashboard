@@ -102,7 +102,7 @@ const ProductsToolbar = props => {
 
   // const [spacing, setSpacing] = React.useState(2);
   const deleteCategories = ()=> {
-    const ids = props.data.deleteCategories[0]
+    const ids = props.data.multiDelete[0]
     console.log('/categories/'+ids+'/soft')
     setloading(true)
     Axios.delete('/categories/'+ids+'/soft')
@@ -120,7 +120,7 @@ const ProductsToolbar = props => {
       })
   }
   const forceDeleteCategories = ()=> {
-    const ids = props.data.deleteCategories[0]
+    const ids = props.data.multiDelete[0]
     console.log('/categories/'+ids+'/force')
     // Axios.delete('/categories')
     setWaiting(true)
@@ -164,7 +164,7 @@ const ProductsToolbar = props => {
   }
   return (
     <div
-      {...rest}
+      // {...rest}
       // className={clsx(classes.root, className)}
     >
       <Grid container className={classes.root} spacing={2}>
@@ -190,7 +190,7 @@ const ProductsToolbar = props => {
           labelId="demo-simple-select-filled-label"
           id="demo-simple-select-filled"
           value={""}
-          onChange={props.handleParentCategorySelect}
+          onChange={props.handle_select}
         >
           {
             categories.map(category => {
@@ -206,7 +206,7 @@ const ProductsToolbar = props => {
   {loading&&
 <CircularProgress />}
 
-    {props.data.deleteCategories[1]>0 && <div>
+    {props.data.multiDelete[1]>0 && <div>
     {!loading&&
 <Tooltip title={t("soft_delete")}>
 <IconButton onClick={deleteCategories}>
@@ -223,7 +223,7 @@ const ProductsToolbar = props => {
 <CircularProgress/>}
     </div>}
 
-{props.data.deleteCategories[1]>0 &&<div>
+{props.data.multiDelete[1]>0 &&<div>
 {!waiting&&
 <Tooltip title={t("force_delete")}>
 <IconButton onClick={forceDeleteCategories}>

@@ -27,9 +27,9 @@ const useStyles = makeStyles({
 });
 
 function ListForm(props) {
-  const {t, update, categoryId, updateSpecification, listSpacification, addSpecification} = props
+  const {t, update, categoryId, updateSpecification, listSpecification, addSpecification} = props
   const classes = useStyles();
-  const id = update? listSpacification._id: categoryId
+  const id = update? listSpecification._id: categoryId
 
   const [openSnackSucc, setopenSnackSucc] = React.useState(false);
   const [openSnackErr, setopenSnackErr] = React.useState(false);
@@ -40,11 +40,11 @@ function ListForm(props) {
   const[name, setname] = React.useState([])
   const[label, setLabel] = React.useState([])
   const[arLabel, setArLabel] = React.useState([])
-  const[is_required, set_is_required] = React.useState([])
+  const[is_required, set_is_required] = React.useState(false)
 
   const showSpecification = ()=> {
     setGettingData(true)
-    Axios.get(`/categories/specifications/${listSpacification._id}`)
+    Axios.get(`/categories/specifications/${listSpecification._id}`)
     .then(res=> {
         setname(res.data.data.name)
         setLabel(res.data.data.label.en)
@@ -77,7 +77,7 @@ function ListForm(props) {
 
   const [valuesArray, setValuesArray] = React.useState([]);
   const [value, setValue] = React.useState([]);
-  const [arValue, setArValue] = React.useState([]);
+  const [arValue, setArValue] = React.useState('');
 
   const handleArValueChange = (e)=> {
     setArValue(e.target.value)
@@ -128,6 +128,7 @@ function ListForm(props) {
                     values.append('label[ar]', data.arLable);
                     !update&&values.append('type', 'list');
                     values.append('is_required', booleanToInt);
+                    values.append('constraints[values]', valuesArray);
                     const request = update? updateSpecification : addSpecification
                     request(id, values)
                     .then(res => {
@@ -140,9 +141,9 @@ function ListForm(props) {
                     })
                     .catch(err=> {
                       console.log(err.response)
-                      if(err.response.status === 244) {
+                      if(err.response.status === 422) {
                         setopenSnackErr(true)
-                        setMessage('please add unique name')
+                        setMessage('Check validation')
                         setLoading(false)
                       }
                       if(err.response.status === 404) {
@@ -226,7 +227,7 @@ function ListForm(props) {
                                 xs={12}
                             >
                                 <TextField
-                                value={update ? label : value}
+                                value={value}
                                 label={("value")}
                                 name="value"
                                 onChange={handleEnValueChange}
@@ -241,7 +242,7 @@ function ListForm(props) {
                                 xs={12}
                             >
                                 <TextField
-                                value={update? arLabel : arValue}
+                                value={arValue}
                                 label={("arabic_value")}
                                 name="arValue"
                                 onChange={handleArValueChange}
@@ -264,7 +265,11 @@ function ListForm(props) {
                             {
                               valuesArray.map(value => {
                               return <React.Fragment key={Math.random()}>
-                                      <Grid
+                            <Grid
+                            container
+                            spacing={3}
+                            >
+                               <Grid
                               item
                               sm={4}
                               xs={12}
@@ -304,6 +309,7 @@ function ListForm(props) {
                               >
                                   <RemoveCircleOutlineIcon fontSize='large' color='primary'/>
                               </IconButton>
+                            </Grid>
                             </Grid>
                               </React.Fragment>
                               })
@@ -351,7 +357,7 @@ function ListForm(props) {
                                               <Alert
                                                 onClose={handleClose}
                                                 severity="success"
-                                                class
+                                                style={{backgroundColor: 'green', color: 'white'}}
                                               >
                                                 {message}
                                               </Alert>
@@ -364,7 +370,7 @@ function ListForm(props) {
                                               <Alert
                                                 onClose={handleClose}
                                                 severity="error"
-                                                class
+                                                style={{backgroundColor: 'red', color: 'white'}}
                                               >
                                                 {message}
                                               </Alert>

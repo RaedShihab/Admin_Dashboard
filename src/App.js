@@ -39,6 +39,10 @@ import AddModel from './view/models/add';
 import updateModel from './view/models/update';
 import ModeslList from './view/models/list';
 
+import AddPackage from './view/ads/pakcages/add';
+import updatePackage from './view/ads/pakcages/update';
+import PakcagesList from './view/ads/pakcages/list';
+
 import LoginPage from './auth/LoginPage/loginPage';
 
 import theme from './theme';
@@ -102,6 +106,10 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/models/create" component={AddModel} />
                                 <PrivateRoute exact path="/models/model/:id" component={updateModel} />    
                                 <PrivateRoute exact path="/models" component={ModeslList} />
+
+                                <PrivateRoute exact path="/packages/create" component={AddPackage} />
+                                <PrivateRoute exact path="/packages/package/:id" component={updatePackage} />    
+                                <PrivateRoute exact path="/packages" component={PakcagesList} />
 
                                 <Route path="/login" component={LoginPage} />
                             </div>

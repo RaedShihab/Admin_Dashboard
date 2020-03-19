@@ -93,7 +93,7 @@ const ProductList = () => {
     setOpenAlrt(false)
       };
 
-      const handleParentCategorySelect = (e)=> {
+      const handle_select = (e)=> {
         console.log(e.target.value)
         const parentId = e.target.value
         Axios.get(`/categories/${parentId}`)
@@ -134,7 +134,7 @@ const ProductList = () => {
       <CategToolbar
       categories={allCtegories} 
       handelchoose={handelchoose}
-      handleParentCategorySelect={handleParentCategorySelect}
+      handle_select={handle_select}
       path={{add:'/categories/create'}} />
       <div className={classes.content}>
         <Grid

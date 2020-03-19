@@ -6,6 +6,8 @@ import {Formik} from 'formik'
 import PropTypes from 'prop-types';
 import { CircularProgress, Avatar, Typography} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import {
   Card,
   CardHeader,
@@ -18,10 +20,11 @@ import {
   Checkbox,
   FormControlLabel,
   Snackbar,
+  IconButton
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import {Axios} from '../axiosConfig';
-import LayOut from '../../layOut';
+import {Axios} from '../../axiosConfig';
+import LayOut from '../../../layOut';
 
 const useStyles = ((theme) => ({
   root: {
@@ -86,8 +89,10 @@ class AccountDetails extends React.Component {
           iconLoading: false,
           enName: '',
           arName: '',
-          order: '',
-          category_id: ''
+          category_id: '',
+          arrayValues: [],
+          quote: '',
+          n_days: '',
         };
       }
 
@@ -176,6 +181,38 @@ class AccountDetails extends React.Component {
 
     render() {
 
+      const handleDaysChange = (e)=> {
+        this.setState({
+          n_days: e.target.value
+        })
+  }
+      const handleEnValueChange = (e)=> {
+        this.setState({
+          quote: e.target.value
+        })
+      }
+
+      const pushingValues = (n_days, quote)=> {
+      if(n_days!== ''&& quote!== '') {
+        this.setState({
+          arrayValues: [...arrayValues, {n_days:n_days, quote: quote}],
+          quote: '',
+          n_days: '',
+        })
+      }
+      console.log(arrayValues)
+    }
+    
+    const removeValue = (value)=> {
+      const index = arrayValues.indexOf(value)
+      const newArr = arrayValues.filter((val, i)=> {
+        return i !== index
+      })
+      this.setState({
+        arrayValues: newArr
+      })
+    }
+
       const dataList = this.state.categories
         const listedData = dataList.map(item => {return {name: item.name.en, id: item.id}});
         const defaultProps = {
@@ -184,7 +221,7 @@ class AccountDetails extends React.Component {
         };
  
         const { t ,classes, data, update, submitForm} = this.props;
-        const {iconLoading, message, formLoading, enName, arName, order, category_id} = this.state
+        const {iconLoading, message, formLoading, enName, arName, order, category_id, arrayValues, quote, n_days} = this.state
         return (
             <div>
               {formLoading&&<LayOut>
@@ -195,17 +232,18 @@ class AccountDetails extends React.Component {
                     name:!update? '': enName,
                     arname: !update? '': arName,
                     description: !update? '':'',
-                    order: !update? '': order,
                     icon: null,
-                    category: !update? '': category_id
+                    category: !update? '': category_id,
                   }}
                   onSubmit={data => {
                     console.log(data)
+                    console.log(arrayValues)
                       let values = new FormData();
                         values.append('name[en]', data.name);
                         values.append('name[ar]', data.arname);
                         values.append('order', data.order);
                         // values.append('description', data.description);
+                        values.append('prices', arrayValues);
                         values.append('category_id', data.category.id);
                         update && values.append('_method', 'patch')
                         
@@ -220,7 +258,7 @@ class AccountDetails extends React.Component {
                               console.log(res)
                               this.setState({
                                 showLoading: false,
-                                message: t('the_brand_has_added_successfuly'),
+                                message: t('the_package_has_added_successfuly'),
                                 openSnackSucc: true,
                               })
                              }
@@ -228,7 +266,7 @@ class AccountDetails extends React.Component {
                               console.log(res)
                               this.setState({
                                 showLoading: false,
-                                message: t('the_brand_has_added_successfuly'),
+                                message: t('the_package_has_added_successfuly'),
                                 openSnackSucc: true,
                               })
                              }
@@ -240,7 +278,7 @@ class AccountDetails extends React.Component {
                                if(err.response.data.icon !== undefined){
                                 this.setState({
                                   showLoading: false,
-                                  message: t('please_add_category_svg'),
+                                  message: t('please_add_svg_file'),
                                   openSnackErr:true,
                                 })
                                }
@@ -261,7 +299,6 @@ class AccountDetails extends React.Component {
                                       .min(2, 'Seems a bit short...'),
                                       arname: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
                                       .min(2, 'Seems a bit short...'),
-                                      order: Yup.number().integer().required(t('countries/validations:required')),
                                       category: Yup.string('Enter a name').required(t('countries/validations:arabic_name_is_required'))
                                     })}
                               >
@@ -337,7 +374,7 @@ class AccountDetails extends React.Component {
                                     </Grid>
                               {!update&&<CardHeader
                               className={classes.CardHeader}
-                                      title={t("category_form")}
+                                      title={t("package_form")}
                                       />}
                                       <Divider />
                                       <CardContent >
@@ -377,38 +414,99 @@ class AccountDetails extends React.Component {
                                                 helperText={(props.errors.arname && props.touched.arname) && props.errors.arname}
                                                 />
                                             </Grid>
-                                            <Grid
-                                              item
-                                              sm={8}
-                                              xs={12}
-                                            >
-                                                <TextField
-                                                defaultValue={update? '' : ''}
-                                                label={t("category_discription")}
-                                                name="description"
-                                                onChange={props.handleChange}
-                                                fullWidth
-                                                margin="dense"
-                                                variant="outlined"
-                                                helperText={(props.errors.description && props.touched.description) && props.errors.description}
-                                                />
-                                                </Grid>
-                                                <Grid
-                                              item
-                                              sm={4}
-                                              xs={12}
-                                            >
-                                                <TextField
-                                                defaultValue={update? order : ''}
-                                                label={("order_number")}
-                                                name="order"
-                                                onChange={props.handleChange}
-                                                fullWidth
-                                                margin="dense"
-                                                variant="outlined"
-                                                helperText={(props.errors.order && props.touched.order) && props.errors.order}
-                                                />
-                                            </Grid>
+                                              <Grid
+                                item
+                                sm={5}
+                                xs={12}
+                            >
+                                <TextField
+                                value={quote}
+                                label={("quote")}
+                                name="quote"
+                                onChange={handleEnValueChange}
+                                fullWidth
+                                margin="dense"
+                                variant="outlined"
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                sm={5}
+                                xs={12}
+                            >
+                                <TextField
+                                value={n_days}
+                                label={("n_days")}
+                                name="n_days"
+                                onChange={handleDaysChange}
+                                fullWidth
+                                margin="dense"
+                                variant="outlined"
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                sm={2}
+                                xs={12}
+                            >
+                              <IconButton
+                              onClick={()=>pushingValues(n_days, quote)}
+                              >
+                                  <AddCircleOutlineIcon fontSize='large' color='primary'/>
+                              </IconButton>
+                            </Grid>
+                            {
+                              arrayValues.map(value => {
+                              return <React.Fragment key={Math.random()}>
+                            <Grid
+                            container
+                            spacing={3}
+                            >
+                               <Grid
+                              item
+                              sm={4}
+                              xs={12}
+                          >
+                              <TextField
+                              defaultValue={value.quote}
+                              label={("quote")}
+                              name="quote"
+                              onChange={props.handleChange}
+                              fullWidth
+                              margin="dense"
+                              variant='filled'
+                              />
+                          </Grid>
+                          <Grid
+                              item
+                              sm={4}
+                              xs={12}
+                          >
+                              <TextField
+                              defaultValue={value.n_days}
+                              label={("number_of_days")}
+                              name="n_days"
+                              onChange={props.handleChange}
+                              fullWidth
+                              margin="dense"
+                              variant='filled'
+                              />
+                          </Grid>
+                          <Grid
+                                item
+                                sm={2}
+                                xs={12}
+                            >
+                              <IconButton
+                              onClick={()=>removeValue(value)}
+                              >
+                                  <RemoveCircleOutlineIcon fontSize='large' color='primary'/>
+                              </IconButton>
+                            </Grid>
+                            </Grid>
+                              </React.Fragment>
+                              })
+                            }
                                             <Grid
                                               item
                                               sm={12}

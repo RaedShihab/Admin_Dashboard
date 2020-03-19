@@ -3,7 +3,7 @@ import {compose} from 'redux'
 import { withTranslation } from "react-i18next";
 // import ReactHtmlParser from "react-html-parser";
 import {connect} from 'react-redux';
-import {deletecategories} from '../../auth/Actions/deleteCategoriesAction'
+import {multiDelete} from '../../auth/Actions/multiDelete'
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -53,6 +53,9 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     fontWeight: 'bold'
+  },
+  link:{
+    margin: '0px 20px', textDecoration: 'none', color: 'black'
   }
 }));
 const idsArray = [];
@@ -64,7 +67,7 @@ const idsArray = [];
 // }
 
 const ProductCard = props => {
-  const { className, product, t, deletecategories, ...rest } = props;
+  const { className, product, t, multiDelete, ...rest } = props;
   const [openSnackSucc, setOpenSuccess] = React.useState(false);
   const [openErr, setOpenErr] = React.useState(false);
   const [softDeliting, setSoftDeliting] = React.useState(false);
@@ -89,42 +92,42 @@ const ProductCard = props => {
       index = idsArray.indexOf(e.target.value)
       idsArray.splice(index, 1)
     }
-    deletecategories(idsArray, e.target.checked)
+    multiDelete(idsArray, e.target.checked)
     
   }
   
   const deleteCategory = (id)=> {
     setSoftDeliting(true)
     console.log('/categories/'+id+'/soft')
-    Axios.delete('/categories/'+id+'/soft')
-    .then(res=> {
-      if(res.status === 200) {
-        console.log(res)
-        setSoftDeliting(false)
-        setOpenSuccess(true)
-      window.location.reload(false)
-      }
-    })
-    .catch(err=> {
-      setOpenErr(true)
-      setSoftDeliting(false)
-      console.log(err.response)
-    })
+    // Axios.delete('/categories/'+id+'/soft')
+    // .then(res=> {
+    //   if(res.status === 200) {
+    //     console.log(res)
+    //     setSoftDeliting(false)
+    //     setOpenSuccess(true)
+    //   window.location.reload(false)
+    //   }
+    // })
+    // .catch(err=> {
+    //   setOpenErr(true)
+    //   setSoftDeliting(false)
+    //   console.log(err.response)
+    // })
   }
   const forceDeleteCategory = (id)=> {
     setForceDeliting(true)
     console.log('/categories/'+id+'/soft')
-    Axios.delete('/categories/'+id+'/soft').then(res=> {
-      console.log(res)
-      setForceDeliting(false)
-      setOpenSuccess(true)
-      window.location.reload(false)
-    })
-    .catch(err=> {
-      setForceDeliting(false)
-      setOpenErr(true)
-      console.log(err.response)
-    })
+    // Axios.delete('/categories/'+id+'/soft').then(res=> {
+    //   console.log(res)
+    //   setForceDeliting(false)
+    //   setOpenSuccess(true)
+    //   window.location.reload(false)
+    // })
+    // .catch(err=> {
+    //   setForceDeliting(false)
+    //   setOpenErr(true)
+    //   console.log(err.response)
+    // })
   }
 
   return (
@@ -140,17 +143,21 @@ const ProductCard = props => {
           // label="Top"
           // labelPlacement="top"
         />
-      <div className={classes.imageContainer}>
+          <Link
+          className={classes.link}
+          to={{
+            pathname: '/brands/brand/'+product.id,
+            state: {
+            data: product
+            }
+        }}
+          >
+             <div className={classes.imageContainer}>
         <img
           alt="Product"
           className={classes.image}
           src={product.icon}
         />
-        <div >
-        {/* {
-         ReactHtmlParser(unescapeHTML(product.icon))
-      } */}
-        </div>
       </div>
       <p
         align="center"
@@ -160,6 +167,7 @@ const ProductCard = props => {
       >
         {product.name.en}
       </p>
+          </Link>
     </CardContent>
     <Divider />
     <CardActions>
@@ -190,19 +198,7 @@ const ProductCard = props => {
            className={classes.statsIcon} />
           </IconButton>
           </Tooltip>}
-          <Tooltip title={"Edit"}>
-          <Link
-          style={{margin: '0px 20px'}}
-          to={{
-            pathname: '/brands/brand/'+product.id,
-            state: {
-            data: product
-            }
-        }}
-          >
-            <EditIcon className={classes.statsIcon} />
-          </Link>
-          </Tooltip>
+          
           {/* <Typography
             display="inline"
             variant="body2"
@@ -247,4 +243,4 @@ function mapStateToProps(state) {
     data: state
   }
 }
-export default compose(withTranslation(["categories/addUpdate", "countries/validations"]) , connect(mapStateToProps, {deletecategories}))(ProductCard);
+export default compose(withTranslation(["categories/addUpdate", "countries/validations"]) , connect(mapStateToProps, {multiDelete}))(ProductCard);

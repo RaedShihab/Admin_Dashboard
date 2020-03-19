@@ -1,6 +1,6 @@
 import React from 'react';
 import Form from './form';
-import {Axios} from '../axiosConfig';
+import {Axios} from '../../axiosConfig';
 
 const Update = (props)=> {
   const data = props.location.state.data;
